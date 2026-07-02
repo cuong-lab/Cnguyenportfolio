@@ -95,6 +95,27 @@ if (navToggles.length) {
       setActiveNavToggle(pageToggle || (activeIndex !== -1 ? anchorToggles[activeIndex] : anchorToggles[0]));
     }
 
+    // Clicking a tab should light it up immediately rather than waiting for
+    // html's scroll-behavior: smooth to actually finish scrolling there —
+    // recomputeActiveSection would otherwise keep showing the *previous*
+    // tab active for the whole scroll animation. Suppress the position-based
+    // recompute while that animation is still in flight (refreshed on every
+    // scroll tick so it keeps holding for as long as the scroll is still
+    // moving) and let it resume once scrolling has actually settled.
+    let suppressSpy = false;
+    let suppressSpyTimer = null;
+    function holdSpySuppression() {
+      suppressSpy = true;
+      clearTimeout(suppressSpyTimer);
+      suppressSpyTimer = setTimeout(() => { suppressSpy = false; }, 700);
+    }
+    anchorToggles.forEach((toggle) => {
+      toggle.addEventListener('click', () => {
+        setActiveNavToggle(toggle);
+        holdSpySuppression();
+      });
+    });
+
     let navSpyTicking = false;
     window.addEventListener(
       'scroll',
@@ -102,7 +123,8 @@ if (navToggles.length) {
         if (navSpyTicking) return;
         navSpyTicking = true;
         window.requestAnimationFrame(() => {
-          recomputeActiveSection();
+          if (suppressSpy) holdSpySuppression();
+          else recomputeActiveSection();
           navSpyTicking = false;
         });
       },
