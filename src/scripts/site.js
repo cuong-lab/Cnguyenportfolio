@@ -74,13 +74,30 @@ if (navToggles.length) {
   });
 
   if (navSections.length) {
+    // Tracks each section's latest boundingClientRect.top while it's
+    // intersecting (null once it scrolls out). Picking "active" by highest
+    // intersectionRatio breaks down once sections have very different
+    // heights (e.g. a short teaser section can hit 100% visible and beat
+    // out a taller section that's only partially scrolled into view) -
+    // comparing by top position instead picks whichever intersecting
+    // section has scrolled furthest up toward the header, which is the
+    // one actually "current" regardless of section height.
+    const sectionTops = new Map();
     const navObserver = new IntersectionObserver(
       (entries) => {
-        const visible = entries.filter((entry) => entry.isIntersecting);
-        if (!visible.length) return;
-        const topMost = visible.reduce((a, b) => (a.intersectionRatio > b.intersectionRatio ? a : b));
-        const index = navSections.indexOf(topMost.target);
-        if (index !== -1) setActiveNavToggle(anchorToggles[index]);
+        entries.forEach((entry) => {
+          sectionTops.set(entry.target, entry.isIntersecting ? entry.boundingClientRect.top : null);
+        });
+        let best = null;
+        navSections.forEach((section) => {
+          const top = sectionTops.get(section);
+          if (top === null || top === undefined) return;
+          if (best === null || top < best.top) best = { section, top };
+        });
+        if (best) {
+          const index = navSections.indexOf(best.section);
+          if (index !== -1) setActiveNavToggle(anchorToggles[index]);
+        }
       },
       { threshold: 0.4, rootMargin: `-${(header ? header.offsetHeight : 76) + 20}px 0px -30% 0px` }
     );
