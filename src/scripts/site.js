@@ -172,6 +172,28 @@ if (isLowEndDevice || isReducedMotion) {
   createObserver();
 }
 
+// Lightweight parallax for the two decorative background-glow blobs — purely
+// cosmetic, so it's skipped under the same reduced-motion/low-power gate as
+// the reveal animations rather than adding a separate check.
+if (!isReducedMotion && !isLowEndDevice) {
+  const glow1 = document.querySelector('.glow-1');
+  const glow2 = document.querySelector('.glow-2');
+  if (glow1 || glow2) {
+    let parallaxTicking = false;
+    function onParallaxScroll() {
+      if (parallaxTicking) return;
+      parallaxTicking = true;
+      window.requestAnimationFrame(() => {
+        const y = window.scrollY;
+        if (glow1) glow1.style.transform = `translateY(${y * 0.08}px)`;
+        if (glow2) glow2.style.transform = `translateY(${y * -0.06}px)`;
+        parallaxTicking = false;
+      });
+    }
+    window.addEventListener('scroll', onParallaxScroll, { passive: true });
+  }
+}
+
 // Admin inline editing (triple-tap logo to toggle)
 const logo = document.getElementById('logo');
 const adminBar = document.getElementById('admin-bar');
