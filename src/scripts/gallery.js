@@ -80,6 +80,11 @@ function iconButton(label, title, onClick) {
 }
 
 async function fetchCategory(category) {
+  // Fail fast instead of waiting on a real network request (DNS lookup on
+  // the placeholder your-project-ref.supabase.co domain) to time out — that
+  // wait was the actual cause of pages feeling slow to load before Supabase
+  // is configured for real.
+  if (!SUPABASE_CONFIGURED) throw new Error('Supabase not configured');
   const { data, error } = await supabase
     .from('media_items')
     .select('*')

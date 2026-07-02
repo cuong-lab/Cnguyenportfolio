@@ -86,10 +86,16 @@ if (navToggles.length) {
     );
     navSections.forEach((section) => navObserver.observe(section));
 
-    // Default to the first anchor tab so the pill is never empty (Hero/Showreel
-    // come before any tracked section, and the observer won't fire until one
-    // of them scrolls into view otherwise) unless we're on another tab's own page.
-    setActiveNavToggle(pageToggle || anchorToggles[0]);
+    // Prefer whatever section the URL hash points at (e.g. landing directly
+    // on /resume/#resume-experience) as the initial active tab. The browser's
+    // own scroll-to-fragment and this IntersectionObserver's first async
+    // callback aren't guaranteed to race in our favor, so without this the
+    // pill can default to and stick on the first anchor tab (Giới thiệu)
+    // until the user manually scrolls enough to force a new intersection
+    // change. Falls back to the first anchor tab so the pill is never empty
+    // (Hero/Showreel come before any tracked section on a hash-less visit).
+    const hashIndex = location.hash ? navSections.findIndex((s) => '#' + s.id === location.hash) : -1;
+    setActiveNavToggle(pageToggle || (hashIndex !== -1 ? anchorToggles[hashIndex] : anchorToggles[0]));
   } else if (pageToggle) {
     setActiveNavToggle(pageToggle);
   }
