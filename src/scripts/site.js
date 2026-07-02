@@ -74,53 +74,52 @@ if (navToggles.length) {
   });
 
   if (navSections.length) {
-    // Tracks each section's latest boundingClientRect.top while it's
-    // intersecting (null once it scrolls out). Picking "active" by highest
-    // intersectionRatio breaks down once sections have very different
-    // heights (e.g. a short teaser section can hit 100% visible and beat
-    // out a taller section that's only partially scrolled into view) -
-    // comparing by top position instead picks whichever intersecting
-    // section has scrolled furthest up toward the header, which is the
-    // one actually "current" regardless of section height.
-    const sectionTops = new Map();
-    const navObserver = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          sectionTops.set(entry.target, entry.isIntersecting ? entry.boundingClientRect.top : null);
-        });
-        let best = null;
-        navSections.forEach((section) => {
-          const top = sectionTops.get(section);
-          if (top === null || top === undefined) return;
-          if (best === null || top < best.top) best = { section, top };
-        });
-        if (best) {
-          const index = navSections.indexOf(best.section);
-          if (index !== -1) setActiveNavToggle(anchorToggles[index]);
-        }
-      },
-      { threshold: 0.4, rootMargin: `-${(header ? header.offsetHeight : 76) + 20}px 0px -30% 0px` }
-    );
-    navSections.forEach((section) => navObserver.observe(section));
+    // Position-based scroll-spy: on every scroll tick, find the last section
+    // (in document order) whose top has scrolled above the header line -
+    // that's the section currently in view. This replaced two earlier
+    // IntersectionObserver-based attempts (ratio comparison, then a tracked-
+    // top-per-section Map) that both broke down on sections of very
+    // different heights: a short teaser section could hit 100% visible and
+    // beat a taller one only partially in view, and the #intro wrapper
+    // (Hero + Showreel combined, taller than a viewport) could never cross
+    // its intersection threshold at all when scrolled back to the very top,
+    // leaving the pill stuck on whatever was last active instead of
+    // returning to "Giới thiệu". Checking real-time position on every scroll
+    // sidesteps threshold/ratio edge cases entirely.
+    function recomputeActiveSection() {
+      const line = (header ? header.offsetHeight : 76) + 20;
+      let activeIndex = -1;
+      navSections.forEach((section, i) => {
+        if (section.getBoundingClientRect().top <= line) activeIndex = i;
+      });
+      setActiveNavToggle(pageToggle || (activeIndex !== -1 ? anchorToggles[activeIndex] : anchorToggles[0]));
+    }
 
-    // Prefer whatever section the URL hash points at (e.g. landing directly
-    // on /resume/#resume-experience) as the initial active tab. The browser's
-    // own scroll-to-fragment and this IntersectionObserver's first async
-    // callback aren't guaranteed to race in our favor, so without this the
-    // pill can default to and stick on the first anchor tab (Giới thiệu)
-    // until the user manually scrolls enough to force a new intersection
-    // change. Falls back to the first anchor tab so the pill is never empty
-    // (Hero/Showreel come before any tracked section on a hash-less visit).
-    const hashIndex = location.hash ? navSections.findIndex((s) => '#' + s.id === location.hash) : -1;
-    setActiveNavToggle(pageToggle || (hashIndex !== -1 ? anchorToggles[hashIndex] : anchorToggles[0]));
+    let navSpyTicking = false;
+    window.addEventListener(
+      'scroll',
+      () => {
+        if (navSpyTicking) return;
+        navSpyTicking = true;
+        window.requestAnimationFrame(() => {
+          recomputeActiveSection();
+          navSpyTicking = false;
+        });
+      },
+      { passive: true }
+    );
+
+    recomputeActiveSection();
+
+    window.addEventListener('resize', recomputeActiveSection);
   } else if (pageToggle) {
     setActiveNavToggle(pageToggle);
-  }
 
-  window.addEventListener('resize', () => {
-    const active = document.querySelector('.nav-toggle.active');
-    if (active) setActiveNavToggle(active);
-  });
+    window.addEventListener('resize', () => {
+      const active = document.querySelector('.nav-toggle.active');
+      if (active) setActiveNavToggle(active);
+    });
+  }
 }
 
 // Reveal animations with offset for sticky header
