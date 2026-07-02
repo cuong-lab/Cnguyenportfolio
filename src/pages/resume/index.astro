@@ -1,0 +1,200 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+---
+
+<BaseLayout
+  title="Resume | Cường Nguyễn Showreel"
+  description="Resume của Cường Nguyễn Showreel: giới thiệu bản thân, kỹ năng và hành trình nghề nghiệp trong lĩnh vực quay phim, chụp ảnh và dựng phim."
+  page="resume"
+  initFn="initResume"
+>
+  <main>
+    <section id="about-me" class="section about reveal">
+      <div class="section-heading">
+        <p class="eyebrow">Về tôi</p>
+        <h2 class="editable" data-key="about-title">Tôi kể chuyện bằng ánh sáng, nhịp điệu và cảm xúc.</h2>
+      </div>
+      <div class="about-grid">
+        <div class="about-copy">
+          <p class="editable" data-key="about-p1">
+            Tôi là một freelancer chuyên quay phim, chụp ảnh và dựng hình ảnh cho các dự án thương hiệu,
+            cá nhân và sự kiện. Mỗi khung hình đều được chăm chút để giữ lại vẻ đẹp thật, cảm xúc thật và
+            phong cách thật.
+          </p>
+          <p class="editable" data-key="about-p2">
+            Từ concept ban đầu đến sản phẩm cuối cùng, tôi ưu tiên sự mượt mà, tinh tế và đúng tinh thần
+            của thương hiệu bạn muốn truyền tải.
+          </p>
+        </div>
+        <div class="about-card">
+          <h3>Điểm mạnh</h3>
+          <ul>
+            <li>Storytelling mạnh mẽ</li>
+            <li>Chùm hình aesthetic, nhẹ và hiện đại</li>
+            <li>Dựng phim đúng nhịp cảm xúc</li>
+            <li>Phối hợp tốt với brand & creator</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section class="section skills-section reveal">
+      <div class="section-heading">
+        <p class="eyebrow">Kỹ năng</p>
+        <h2>Công cụ làm việc hằng ngày.</h2>
+      </div>
+      <div class="skills-pills">
+        <span class="skill-pill">Premiere Pro</span>
+        <span class="skill-pill">After Effects</span>
+        <span class="skill-pill">Photoshop</span>
+        <span class="skill-pill">Illustrator</span>
+        <span class="skill-pill">InDesign</span>
+        <span class="skill-pill">Adobe Audition</span>
+        <span class="skill-pill">DaVinci Resolve</span>
+      </div>
+    </section>
+
+    <section id="resume-experience" class="section resume-section reveal">
+      <div class="section-heading">
+        <p class="eyebrow">Kinh nghiệm</p>
+        <h2>Hành trình nghề nghiệp qua từng vị trí.</h2>
+      </div>
+      <div class="resume-pin-section" id="resume-pin-section">
+        <div class="resume-pin-inner">
+          <article class="resume-entry active" data-index="0">
+            <div class="resume-entry-header">
+              <p class="resume-entry-eyebrow">Kinh nghiệm 01</p>
+              <h3 class="resume-entry-company editable" data-key="resume-1-company">Làm việc độc lập</h3>
+            </div>
+            <div class="resume-entry-visual">
+              <div class="resume-entry-visual-scale">
+                <div class="resume-entry-visual-clip"></div>
+              </div>
+            </div>
+            <div class="resume-entry-meta">
+              <div class="resume-field-block">
+                <p class="resume-field-label">Vai trò</p>
+                <p class="resume-field-value editable" data-key="resume-1-role">Freelance Filmmaker &amp; Photographer</p>
+              </div>
+              <div class="resume-field-block">
+                <p class="resume-field-label">Kỹ năng</p>
+                <div class="resume-entry-tags">
+                  <span class="editable" data-key="resume-1-tag-1">Quay phim</span>
+                  <span class="editable" data-key="resume-1-tag-2">Dựng phim</span>
+                  <span class="editable" data-key="resume-1-tag-3">Chụp ảnh</span>
+                </div>
+              </div>
+              <div class="resume-field-block">
+                <p class="resume-field-label">Thành tựu</p>
+                <p class="resume-field-value editable" data-key="resume-1-outcomes">+50 dự án hoàn thành, hợp tác cùng 10+ thương hiệu và creator.</p>
+              </div>
+            </div>
+            <div class="resume-entry-desc">
+              <p class="resume-field-label">Mô tả</p>
+              <p class="resume-field-value editable" data-key="resume-1-desc">Nhận dự án quay dựng và chụp ảnh trực tiếp cho thương hiệu, creator và sự kiện, phụ trách toàn bộ quy trình từ concept đến sản phẩm cuối.</p>
+            </div>
+            <div class="resume-entry-footer">
+              <p class="resume-entry-hint">(Cuộn xuống)</p>
+              <p class="resume-entry-year">© <span class="editable" data-key="resume-1-year">2023 — Hiện tại</span></p>
+            </div>
+          </article>
+          <article class="resume-entry" data-index="1">
+            <div class="resume-entry-header">
+              <p class="resume-entry-eyebrow">Kinh nghiệm 02</p>
+              <h3 class="resume-entry-company editable" data-key="resume-2-company">Studio Sáng Tạo ABC</h3>
+            </div>
+            <div class="resume-entry-visual">
+              <div class="resume-entry-visual-scale">
+                <div class="resume-entry-visual-clip"></div>
+              </div>
+            </div>
+            <div class="resume-entry-meta">
+              <div class="resume-field-block">
+                <p class="resume-field-label">Vai trò</p>
+                <p class="resume-field-value editable" data-key="resume-2-role">Video Editor</p>
+              </div>
+              <div class="resume-field-block">
+                <p class="resume-field-label">Kỹ năng</p>
+                <div class="resume-entry-tags">
+                  <span class="editable" data-key="resume-2-tag-1">Color grading</span>
+                  <span class="editable" data-key="resume-2-tag-2">Sound design</span>
+                  <span class="editable" data-key="resume-2-tag-3">Biên tập</span>
+                </div>
+              </div>
+              <div class="resume-field-block">
+                <p class="resume-field-label">Thành tựu</p>
+                <p class="resume-field-value editable" data-key="resume-2-outcomes">Biên tập hơn 100 video quảng cáo, tăng 40% lượt tương tác trung bình.</p>
+              </div>
+            </div>
+            <div class="resume-entry-desc">
+              <p class="resume-field-label">Mô tả</p>
+              <p class="resume-field-value editable" data-key="resume-2-desc">Biên tập video quảng cáo và nội dung social cho nhiều nhãn hàng, phối hợp cùng đội quay dựng để giữ đúng nhịp kể chuyện thương hiệu.</p>
+            </div>
+            <div class="resume-entry-footer">
+              <p class="resume-entry-hint">(Cuộn xuống)</p>
+              <p class="resume-entry-year">© <span class="editable" data-key="resume-2-year">2021 — 2023</span></p>
+            </div>
+          </article>
+          <article class="resume-entry" data-index="2">
+            <div class="resume-entry-header">
+              <p class="resume-entry-eyebrow">Kinh nghiệm 03</p>
+              <h3 class="resume-entry-company editable" data-key="resume-3-company">XYZ Media</h3>
+            </div>
+            <div class="resume-entry-visual">
+              <div class="resume-entry-visual-scale">
+                <div class="resume-entry-visual-clip"></div>
+              </div>
+            </div>
+            <div class="resume-entry-meta">
+              <div class="resume-field-block">
+                <p class="resume-field-label">Vai trò</p>
+                <p class="resume-field-value editable" data-key="resume-3-role">Junior Videographer</p>
+              </div>
+              <div class="resume-field-block">
+                <p class="resume-field-label">Kỹ năng</p>
+                <div class="resume-entry-tags">
+                  <span class="editable" data-key="resume-3-tag-1">Quay phim sự kiện</span>
+                  <span class="editable" data-key="resume-3-tag-2">Hỗ trợ sản xuất</span>
+                </div>
+              </div>
+              <div class="resume-field-block">
+                <p class="resume-field-label">Thành tựu</p>
+                <p class="resume-field-value editable" data-key="resume-3-outcomes">Tham gia quay hơn 30 sự kiện, hỗ trợ sản xuất cho 5+ chiến dịch lớn.</p>
+              </div>
+            </div>
+            <div class="resume-entry-desc">
+              <p class="resume-field-label">Mô tả</p>
+              <p class="resume-field-value editable" data-key="resume-3-desc">Bắt đầu sự nghiệp với vai trò trợ lý quay phim, học hỏi quy trình sản xuất chuyên nghiệp từ tiền kỳ đến hậu kỳ.</p>
+            </div>
+            <div class="resume-entry-footer">
+              <p class="resume-entry-hint">(Cuộn xuống)</p>
+              <p class="resume-entry-year">© <span class="editable" data-key="resume-3-year">2019 — 2021</span></p>
+            </div>
+          </article>
+        </div>
+        <div class="resume-pagination-list">
+          <button type="button" class="resume-pagination-item active" data-index="0">
+            <span class="resume-pagination-item-label">Làm việc độc lập</span>
+            <span class="resume-pagination-item-thumb"></span>
+            <span class="resume-pagination-item-progress-bg"><span class="resume-pagination-item-progress-fill"></span></span>
+          </button>
+          <button type="button" class="resume-pagination-item" data-index="1">
+            <span class="resume-pagination-item-label">Studio Sáng Tạo ABC</span>
+            <span class="resume-pagination-item-thumb"></span>
+            <span class="resume-pagination-item-progress-bg"><span class="resume-pagination-item-progress-fill"></span></span>
+          </button>
+          <button type="button" class="resume-pagination-item" data-index="2">
+            <span class="resume-pagination-item-label">XYZ Media</span>
+            <span class="resume-pagination-item-thumb"></span>
+            <span class="resume-pagination-item-progress-bg"><span class="resume-pagination-item-progress-fill"></span></span>
+          </button>
+        </div>
+        <div class="resume-controls">
+          <button type="button" class="resume-arrow prev" aria-label="Kinh nghiệm trước">‹</button>
+          <span class="resume-pagination-count"><span class="resume-current">01</span> / 03</span>
+          <button type="button" class="resume-arrow next" aria-label="Kinh nghiệm sau">›</button>
+        </div>
+      </div>
+    </section>
+  </main>
+</BaseLayout>

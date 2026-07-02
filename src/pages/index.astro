@@ -1,0 +1,143 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout
+  title="Cường Nguyễn Showreel | Portfolio"
+  description="Portfolio aesthetic cho freelancer làm quay phim, chụp ảnh và dựng phim. Cường Nguyễn Showreel tạo nên câu chuyện hình ảnh cinematic cho thương hiệu và dự án."
+  page="home"
+  initFn="initExplore"
+  mediaGallery
+>
+  <main id="hero">
+    <div id="intro">
+      <section class="hero section">
+        <div class="hero-copy reveal">
+          <p class="eyebrow editable" data-key="hero-eyebrow">Film • Photography • Edit</p>
+          <h1 class="editable" data-key="hero-title">Chuyển những khoảnh khắc nhỏ thành câu chuyện cinematic.</h1>
+          <p class="hero-text editable" data-key="hero-text">
+            Portfolio dành cho freelancer sáng tạo, làm quay, chụp và dựng phim theo phong cách aesthetic,
+            nhẹ nhàng, có cảm xúc và đủ sức thu hút thương hiệu.
+          </p>
+          <div class="hero-actions">
+            <a class="button primary" href="#portfolio">Xem dự án</a>
+            <a class="button ghost" href="#contact">Liên hệ ngay</a>
+          </div>
+          <ul class="hero-stats">
+            <li>
+              <strong>+50</strong>
+              <span>Dự án hoàn thành</span>
+            </li>
+            <li>
+              <strong>8+</strong>
+              <span>Năm kinh nghiệm</span>
+            </li>
+            <li>
+              <strong>24/7</strong>
+              <span>Hỗ trợ sáng tạo</span>
+            </li>
+          </ul>
+        </div>
+
+        <div class="hero-visual reveal">
+          <div class="reel-card">
+            <div class="reel-media" aria-hidden="true"></div>
+            <div class="reel-glow"></div>
+            <div class="reel-content">
+              <span class="pill">Latest Reel</span>
+              <h3 class="editable" data-key="reel-title">Spring Motion Film</h3>
+              <p class="editable" data-key="reel-meta">Brand story · 2026 · 01:30</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="showreel" class="section showreel reveal">
+        <div class="showreel-card">
+          <div class="showreel-copy">
+            <p class="eyebrow">Showreel</p>
+            <h2 class="editable" data-key="showreel-title">Kỹ thuật quay dựng sắc nét, nhịp điệu chuyển cảnh tinh tế.</h2>
+            <p class="editable" data-key="showreel-text">
+              Mỗi cảnh quay là một nhịp cảm xúc, được dựng tinh tế để giữ ánh sáng, không gian và âm hưởng thương hiệu.
+            </p>
+            <a class="button primary" href="#portfolio">Xem thêm tác phẩm</a>
+          </div>
+          <div class="showreel-quote">
+            <p>"Không chỉ là hình ảnh, mà là cảm xúc được làm chậm, tinh giản và kể lại bằng ánh sáng."</p>
+            <span>— Cường Nguyễn</span>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <!-- Optional Explore section (will animate only on capable devices) -->
+    <section id="explore" class="section pin-section">
+      <div class="pin-inner">
+        <div class="panel panel-1">
+          <div class="panel-content">
+            <span class="eyebrow">Featured</span>
+            <h3>Quiet Luxury — Campaign</h3>
+            <p>Visual storytelling with muted tones and cinematic pacing.</p>
+          </div>
+        </div>
+        <div class="panel panel-2">
+          <div class="panel-content">
+            <span class="eyebrow">Short Film</span>
+            <h3>After Rain</h3>
+            <p>A short story built around golden hour and memory.</p>
+          </div>
+        </div>
+        <div class="panel panel-3">
+          <div class="panel-content">
+            <span class="eyebrow">Editorial</span>
+            <h3>Golden Hour</h3>
+            <p>Portrait series with cinematic color grading.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="services" class="section services reveal">
+      <div class="section-heading">
+        <p class="eyebrow">Dịch vụ</p>
+        <h2>Giải pháp sáng tạo cho mọi khung hình.</h2>
+      </div>
+      <div class="service-grid">
+        <article class="service-card">
+          <h3 class="editable" data-key="service-1-title">Quay phim</h3>
+          <p class="editable" data-key="service-1-desc">Quay cinematic cho thương hiệu, campaign, short film, lifestyle và content social.</p>
+        </article>
+        <article class="service-card">
+          <h3 class="editable" data-key="service-2-title">Chụp ảnh</h3>
+          <p class="editable" data-key="service-2-desc">Chụp portrait, product, editorial và concept với ánh sáng mềm, màu sắc tinh tế.</p>
+        </article>
+        <article class="service-card">
+          <h3 class="editable" data-key="service-3-title">Dựng phim</h3>
+          <p class="editable" data-key="service-3-desc">Biên tập, color grading và sound design để từng cảnh đều đẹp và có nhịp kể chuyện.</p>
+        </article>
+      </div>
+    </section>
+
+    <section id="portfolio" class="section portfolio reveal">
+      <div class="section-heading portfolio-heading">
+        <div>
+          <p class="eyebrow">Dự án nổi bật</p>
+          <h2>Một vài tác phẩm thể hiện phong cách làm việc.</h2>
+        </div>
+        <button type="button" id="portfolio-add-btn" class="button primary small admin-only">+ Thêm dự án</button>
+      </div>
+      <div class="portfolio-grid" id="portfolio-grid"></div>
+    </section>
+
+    <section class="section contact reveal" id="contact">
+      <div class="contact-card">
+        <p class="eyebrow">Liên hệ</p>
+        <h2 class="editable" data-key="contact-title">Muốn tạo một bộ sưu tập hình ảnh thật đẹp cho dự án của bạn?</h2>
+        <p class="editable" data-key="contact-text">
+          Gửi cho tôi thông tin dự án, phong cách bạn muốn và thời gian cần sản phẩm. Tôi sẽ phản hồi sớm nhất.
+        </p>
+        <a id="contact-email" class="button primary editable" data-key="contact-email" href="mailto:hello@nomonm.studio">hello@nomonm.studio</a>
+      </div>
+    </section>
+  </main>
+</BaseLayout>

@@ -1,0 +1,58 @@
+---
+// Conditional loader: fetches GSAP, ScrollTrigger, and Lenis from CDNs only
+// on capable devices, then calls window[initFn] once they're loaded. Shared
+// by both pin-scroll sections (Explore on the home page, the Resume page's
+// carousel) so the low-power/reduced-motion gate lives in exactly one place.
+interface Props {
+  initFn: 'initExplore' | 'initResume';
+}
+const { initFn } = Astro.props;
+---
+
+<script define:vars={{ initFn }}>
+  (function () {
+    try {
+      const prefersReduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      // Dev-only escape hatch: some environments (VS Code's embedded browser,
+      // certain OS/browser combos) report prefers-reduced-motion as true
+      // regardless of the real user setting, with no way to override it from
+      // DevTools. ?motion=1 (or localStorage force-motion=1) lets us verify
+      // the real animation locally without weakening the accessibility gate
+      // for actual visitors, who never pass this flag.
+      const forceMotion = /[?&]motion=1\b/.test(location.search) || localStorage.getItem('force-motion') === '1';
+      const conn = navigator.connection || navigator.mozConnection || navigator.webkitConnection || null;
+      const saveData = conn && conn.saveData;
+      const slowNetwork = conn && conn.effectiveType && /2g|slow-2g/.test(conn.effectiveType);
+      const lowMemory = navigator.deviceMemory && navigator.deviceMemory <= 2;
+      const lowCores = navigator.hardwareConcurrency && navigator.hardwareConcurrency <= 2;
+      const avoid = (prefersReduced && !forceMotion) || saveData || slowNetwork || lowMemory || lowCores;
+      if (avoid) return; // skip loading heavy libs on constrained devices
+
+      function loadScript(src) {
+        return new Promise((res, rej) => {
+          const s = document.createElement('script');
+          s.src = src;
+          s.async = true;
+          s.onload = res;
+          s.onerror = rej;
+          document.head.appendChild(s);
+        });
+      }
+
+      Promise.all([
+        loadScript('https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js'),
+        loadScript('https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js'),
+        loadScript('https://cdn.jsdelivr.net/npm/lenis@1.1.13/dist/lenis.min.js'),
+      ])
+        .then(() => {
+          if (window[initFn]) window[initFn]();
+        })
+        .catch(() => {
+          // non-fatal: pin-scroll animation will not initialize
+          console.warn(initFn + ' libs failed to load');
+        });
+    } catch (e) {
+      /* ignore */
+    }
+  })();
+</script>
