@@ -7,8 +7,8 @@ import '../styles/global.css';
 interface Props {
   title: string;
   description: string;
-  page: 'home' | 'resume';
-  initFn: 'initExplore' | 'initResume';
+  page: 'home' | 'resume' | 'portfolio';
+  initFn?: 'initExplore' | 'initResume';
   mediaGallery?: boolean;
 }
 const { title, description, page, initFn, mediaGallery = false } = Astro.props;
@@ -27,7 +27,7 @@ const { title, description, page, initFn, mediaGallery = false } = Astro.props;
       href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Playfair+Display:wght@600;700&display=swap"
       rel="stylesheet"
     />
-    <HeavyAnimationLoader initFn={initFn} />
+    {initFn && <HeavyAnimationLoader initFn={initFn} />}
     {mediaGallery && (
       <script>
         import '../scripts/gallery.js';

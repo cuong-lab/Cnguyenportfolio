@@ -12,9 +12,9 @@ const MOCK_PORTFOLIO = [
   { tag: 'Editorial', cardClass: 'card-3', title: 'Golden Hour', description: 'Bộ ảnh cá nhân với phong cách cinematic và góc nhìn độc đáo.' },
 ];
 
-function renderMockPortfolio() {
-  if (!portfolioGrid) return;
-  portfolioGrid.innerHTML = '';
+function renderMockPortfolio(target) {
+  if (!target) return;
+  target.innerHTML = '';
   MOCK_PORTFOLIO.forEach((mock) => {
     const card = document.createElement('article');
     card.className = `portfolio-card ${mock.cardClass}`;
@@ -28,8 +28,17 @@ function renderMockPortfolio() {
     p.textContent = mock.description;
     content.append(span, h3, p);
     card.appendChild(content);
-    portfolioGrid.appendChild(card);
+    target.appendChild(card);
   });
+}
+
+function renderEmptyMessage(target, text) {
+  if (!target) return;
+  target.innerHTML = '';
+  const p = document.createElement('p');
+  p.className = 'gallery-empty';
+  p.textContent = text;
+  target.appendChild(p);
 }
 
 function publicUrlFor(path) {
@@ -97,26 +106,13 @@ function pickFile() {
   });
 }
 
-// ---------- Portfolio (open gallery: add/delete/reorder) ----------
+// ---------- Portfolio (full gallery at /portfolio/: add/delete/reorder) ----------
 
 const portfolioGrid = document.getElementById('portfolio-grid');
 const portfolioAddBtn = document.getElementById('portfolio-add-btn');
 let portfolioItems = [];
 
-function renderPortfolio() {
-  if (!portfolioGrid) return;
-  portfolioGrid.innerHTML = '';
-  if (portfolioItems.length === 0) {
-    const p = document.createElement('p');
-    p.className = 'gallery-empty';
-    p.textContent = 'Chưa có dự án nào.';
-    portfolioGrid.appendChild(p);
-    return;
-  }
-  portfolioItems.forEach((item) => portfolioGrid.appendChild(createPortfolioCard(item)));
-}
-
-function createPortfolioCard(item) {
+function createPortfolioCardBase(item) {
   const card = document.createElement('article');
   card.className = 'portfolio-card';
 
@@ -138,6 +134,22 @@ function createPortfolioCard(item) {
   }
   card.appendChild(content);
 
+  return card;
+}
+
+function renderPortfolio() {
+  if (!portfolioGrid) return;
+  portfolioGrid.innerHTML = '';
+  if (portfolioItems.length === 0) {
+    renderEmptyMessage(portfolioGrid, 'Chưa có dự án nào.');
+    return;
+  }
+  portfolioItems.forEach((item) => portfolioGrid.appendChild(createPortfolioCard(item)));
+}
+
+function createPortfolioCard(item) {
+  const card = createPortfolioCardBase(item);
+
   const controls = document.createElement('div');
   controls.className = 'card-admin-controls admin-only';
   controls.append(
@@ -151,25 +163,49 @@ function createPortfolioCard(item) {
 }
 
 async function loadPortfolio() {
+  if (!portfolioGrid) return;
   try {
     portfolioItems = await fetchCategory('portfolio');
   } catch (e) {
     console.warn('Portfolio fetch failed', e);
     portfolioItems = [];
     if (!SUPABASE_CONFIGURED) {
-      renderMockPortfolio();
+      renderMockPortfolio(portfolioGrid);
       return;
     }
-    if (portfolioGrid) {
-      portfolioGrid.innerHTML = '';
-      const p = document.createElement('p');
-      p.className = 'gallery-empty';
-      p.textContent = 'Không thể tải nội dung, vui lòng thử lại sau.';
-      portfolioGrid.appendChild(p);
-    }
+    renderEmptyMessage(portfolioGrid, 'Không thể tải nội dung, vui lòng thử lại sau.');
     return;
   }
   renderPortfolio();
+}
+
+// ---------- Portfolio teaser (home page preview, read-only) ----------
+
+const portfolioTeaserGrid = document.getElementById('portfolio-teaser-grid');
+const PORTFOLIO_TEASER_LIMIT = 3;
+
+async function loadPortfolioTeaser() {
+  if (!portfolioTeaserGrid) return;
+  let items;
+  try {
+    items = await fetchCategory('portfolio');
+  } catch (e) {
+    console.warn('Portfolio teaser fetch failed', e);
+    if (!SUPABASE_CONFIGURED) {
+      renderMockPortfolio(portfolioTeaserGrid);
+      return;
+    }
+    renderEmptyMessage(portfolioTeaserGrid, 'Không thể tải nội dung, vui lòng thử lại sau.');
+    return;
+  }
+  portfolioTeaserGrid.innerHTML = '';
+  if (items.length === 0) {
+    renderEmptyMessage(portfolioTeaserGrid, 'Chưa có dự án nào.');
+    return;
+  }
+  items.slice(0, PORTFOLIO_TEASER_LIMIT).forEach((item) => {
+    portfolioTeaserGrid.appendChild(createPortfolioCardBase(item));
+  });
 }
 
 async function addPortfolioItem(file) {
@@ -246,6 +282,7 @@ function renderHero() {
 }
 
 async function loadHero() {
+  if (!heroMedia) return;
   try {
     const items = await fetchCategory('hero');
     heroItem = items[0] || null;
@@ -342,6 +379,7 @@ function renderExploreSlot(slotIndex, item) {
 }
 
 async function loadExplore() {
+  if (!document.querySelector('.panel-1')) return;
   try {
     const items = await fetchCategory('explore');
     items.slice(0, EXPLORE_SLOTS).forEach((item) => {
@@ -445,5 +483,6 @@ window.__gallerySignOut = handleSignOut;
 // ---------- Init ----------
 
 loadPortfolio();
+loadPortfolioTeaser();
 loadHero();
 loadExplore();

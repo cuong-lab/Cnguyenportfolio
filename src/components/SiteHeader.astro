@@ -1,12 +1,13 @@
 ---
 interface Props {
-  page: 'home' | 'resume';
+  page: 'home' | 'resume' | 'portfolio';
 }
 const { page } = Astro.props;
 const isHome = page === 'home';
 const base = isHome ? '' : '/';
-const introHref = isHome ? '#intro' : '#about-me';
-const resumeHref = isHome ? '/resume/#resume-experience' : '#resume-experience';
+const introHref = isHome ? '#intro' : page === 'resume' ? '#about-me' : '/#intro';
+const portfolioHref = isHome ? '#portfolio' : '/portfolio/';
+const resumeHref = page === 'resume' ? '#resume-experience' : '/resume/#resume-experience';
 const logoHref = `${base}#hero`;
 ---
 
@@ -18,12 +19,12 @@ const logoHref = `${base}#hero`;
       <div class="nav-indicator-pill"></div>
       <a href={introHref} class="nav-toggle">Giới thiệu</a>
       <a href={`${base}#services`} class="nav-toggle">Dịch vụ</a>
-      <a href={`${base}#portfolio`} class="nav-toggle">Dự án</a>
+      <a href={portfolioHref} class="nav-toggle">Dự án</a>
       <a href={`${base}#contact`} class="nav-toggle">Liên hệ</a>
+      <a href={resumeHref} class="nav-toggle">Resume</a>
     </div>
   </nav>
   <div class="header-actions">
-    <a class="nav-link-plain" href={resumeHref}>Resume</a>
     <a class="nav-cta" href={`${base}#contact`}>Đặt lịch</a>
   </div>
 </header>

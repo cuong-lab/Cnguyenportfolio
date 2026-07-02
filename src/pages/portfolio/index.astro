@@ -1,0 +1,23 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+---
+
+<BaseLayout
+  title="Dự án | Cường Nguyễn Showreel"
+  description="Toàn bộ dự án quay phim, chụp ảnh và dựng phim của Cường Nguyễn Showreel — portfolio đầy đủ dành cho khách hàng và nhà tuyển dụng."
+  page="portfolio"
+  mediaGallery
+>
+  <main>
+    <section class="section portfolio reveal">
+      <div class="section-heading portfolio-heading">
+        <div>
+          <p class="eyebrow">Dự án</p>
+          <h2>Toàn bộ dự án quay dựng và chụp ảnh.</h2>
+        </div>
+        <button type="button" id="portfolio-add-btn" class="button primary small admin-only">+ Thêm dự án</button>
+      </div>
+      <div class="portfolio-grid" id="portfolio-grid"></div>
+    </section>
+  </main>
+</BaseLayout>
