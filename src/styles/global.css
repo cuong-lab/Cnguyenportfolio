@@ -597,7 +597,7 @@ h1 {
   grid-column: 1 / -1;
 }
 
-.portfolio-view-all {
+.view-all-link {
   display: flex;
   justify-content: center;
   margin-top: 32px;
