@@ -1,0 +1,13 @@
+{
+  "name": "nomonm-portfolio-utils",
+  "version": "1.0.0",
+  "description": "Utilities for optimizing assets for Nomonm portfolio",
+  "scripts": {
+    "convert-images": "node scripts/convert_images.js"
+  },
+  "dependencies": {
+    "sharp": "^0.32.0",
+    "glob": "^10.3.3",
+    "yargs": "^17.7.2"
+  }
+}

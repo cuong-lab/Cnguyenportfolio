@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="Portfolio aesthetic cho freelancer làm quay phim, chụp ảnh và dựng phim.
+      Cường Nguyễn Showreel tạo nên câu chuyện hình ảnh cinematic cho thương hiệu và dự án." 
+    />
+    <title>Cường Nguyễn Showreel | Portfolio</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Playfair+Display:wght@600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="styles.css" />
+    <!-- Conditional loader for Explore animation: loads GSAP+ScrollTrigger+Lenis only on capable devices -->
+    <script>
+      (function(){
+        try {
+          const prefersReduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+          // Dev-only escape hatch: some environments (VS Code's embedded browser,
+          // certain OS/browser combos) report prefers-reduced-motion as true
+          // regardless of the real user setting, with no way to override it from
+          // DevTools. ?motion=1 (or localStorage force-motion=1) lets us verify
+          // the real animation locally without weakening the accessibility gate
+          // for actual visitors, who never pass this flag.
+          const forceMotion = /[?&]motion=1\b/.test(location.search) || localStorage.getItem('force-motion') === '1';
+          const conn = navigator.connection || navigator.mozConnection || navigator.webkitConnection || null;
+          const saveData = conn && conn.saveData;
+          const slowNetwork = conn && conn.effectiveType && /2g|slow-2g/.test(conn.effectiveType);
+          const lowMemory = navigator.deviceMemory && navigator.deviceMemory <= 2;
+          const lowCores = navigator.hardwareConcurrency && navigator.hardwareConcurrency <= 2;
+          const avoid = (prefersReduced && !forceMotion) || saveData || slowNetwork || lowMemory || lowCores;
+          if (avoid) return; // skip loading heavy libs on constrained devices
+
+          function loadScript(src){
+            return new Promise((res,rej)=>{
+              const s = document.createElement('script');
+              s.src = src; s.async = true;
+              s.onload = res; s.onerror = rej;
+              document.head.appendChild(s);
+            });
+          }
+
+          Promise.all([
+            loadScript('https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js'),
+            loadScript('https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js'),
+            loadScript('https://cdn.jsdelivr.net/npm/lenis@1.1.13/dist/lenis.min.js')
+          ]).then(()=>{
+            if (window.initExplore) window.initExplore();
+          }).catch(()=>{
+            // non-fatal: explore animation will not initialize
+            console.warn('Explore libs failed to load');
+          });
+        } catch(e) { /* ignore */ }
+      })();
+    </script>
+    <script type="module" src="supabase-client.js"></script>
+    <script type="module" src="gallery.js"></script>
+  </head>
+  <body>
+    <div class="background-glow glow-1"></div>
+    <div class="background-glow glow-2"></div>
+
+    <header class="site-header">
+      <a id="logo" class="brand" href="#hero">Cường Nguyễn Showreel</a>
+      <nav class="nav-pill-wrapper" aria-label="Điều hướng chính">
+        <div class="nav-indicator-glow"></div>
+        <div class="nav-pill">
+          <div class="nav-indicator-pill"></div>
+          <a href="#intro" class="nav-toggle">Giới thiệu</a>
+          <a href="#services" class="nav-toggle">Dịch vụ</a>
+          <a href="#portfolio" class="nav-toggle">Dự án</a>
+          <a href="#contact" class="nav-toggle">Liên hệ</a>
+        </div>
+      </nav>
+      <div class="header-actions">
+        <a class="nav-link-plain" href="resume/#resume-experience">Resume</a>
+        <a class="nav-cta" href="#contact">Đặt lịch</a>
+      </div>
+    </header>
+
+    <div id="admin-bar" class="admin-bar" aria-hidden="true">
+      <div class="admin-inner">
+        <span id="admin-status">Admin: off</span>
+        <button type="button" id="admin-save" class="button primary small">Lưu</button>
+        <button type="button" id="media-admin-btn" class="button ghost small">Quản lý ảnh/video</button>
+        <button type="button" id="admin-signout" class="button ghost small">Đăng xuất</button>
+        <button type="button" id="admin-exit" class="button ghost small">Thoát</button>
+      </div>
+    </div>
+
+    <div id="admin-login" class="admin-login" hidden aria-hidden="true">
+      <form id="admin-login-form">
+        <input type="email" id="admin-login-email" placeholder="Email" required autocomplete="username" />
+        <input type="password" id="admin-login-password" placeholder="Mật khẩu" required autocomplete="current-password" />
+        <button type="submit" class="button primary small">Đăng nhập</button>
+        <p id="admin-login-error" class="admin-login-error" hidden></p>
+      </form>
+    </div>
+
+
+    <main id="hero">
+      <div id="intro">
+      <section class="hero section">
+        <div class="hero-copy reveal">
+          <p class="eyebrow editable" data-key="hero-eyebrow">Film • Photography • Edit</p>
+          <h1 class="editable" data-key="hero-title">Chuyển những khoảnh khắc nhỏ thành câu chuyện cinematic.</h1>
+          <p class="hero-text editable" data-key="hero-text">
+            Portfolio dành cho freelancer sáng tạo, làm quay, chụp và dựng phim theo phong cách aesthetic,
+            nhẹ nhàng, có cảm xúc và đủ sức thu hút thương hiệu.
+          </p>
+          <div class="hero-actions">
+            <a class="button primary" href="#portfolio">Xem dự án</a>
+            <a class="button ghost" href="#contact">Liên hệ ngay</a>
+          </div>
+          <ul class="hero-stats">
+            <li>
+              <strong>+50</strong>
+              <span>Dự án hoàn thành</span>
+            </li>
+            <li>
+              <strong>8+</strong>
+              <span>Năm kinh nghiệm</span>
+            </li>
+            <li>
+              <strong>24/7</strong>
+              <span>Hỗ trợ sáng tạo</span>
+            </li>
+          </ul>
+        </div>
+
+        <div class="hero-visual reveal">
+          <div class="reel-card">
+            <div class="reel-media" aria-hidden="true"></div>
+            <div class="reel-glow"></div>
+            <div class="reel-content">
+              <span class="pill">Latest Reel</span>
+              <h3 class="editable" data-key="reel-title">Spring Motion Film</h3>
+              <p class="editable" data-key="reel-meta">Brand story · 2026 · 01:30</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="showreel" class="section showreel reveal">
+        <div class="showreel-card">
+          <div class="showreel-copy">
+            <p class="eyebrow">Showreel</p>
+            <h2 class="editable" data-key="showreel-title">Kỹ thuật quay dựng sắc nét, nhịp điệu chuyển cảnh tinh tế.</h2>
+            <p class="editable" data-key="showreel-text">
+              Mỗi cảnh quay là một nhịp cảm xúc, được dựng tinh tế để giữ ánh sáng, không gian và âm hưởng thương hiệu.
+            </p>
+            <a class="button primary" href="#portfolio">Xem thêm tác phẩm</a>
+          </div>
+          <div class="showreel-quote">
+            <p>“Không chỉ là hình ảnh, mà là cảm xúc được làm chậm, tinh giản và kể lại bằng ánh sáng.”</p>
+            <span>— Cường Nguyễn</span>
+          </div>
+        </div>
+      </section>
+      </div>
+
+      <!-- Optional Explore section (will animate only on capable devices) -->
+      <section id="explore" class="section pin-section">
+        <div class="pin-inner">
+          <div class="panel panel-1">
+            <div class="panel-content">
+              <span class="eyebrow">Featured</span>
+              <h3>Quiet Luxury — Campaign</h3>
+              <p>Visual storytelling with muted tones and cinematic pacing.</p>
+            </div>
+          </div>
+          <div class="panel panel-2">
+            <div class="panel-content">
+              <span class="eyebrow">Short Film</span>
+              <h3>After Rain</h3>
+              <p>A short story built around golden hour and memory.</p>
+            </div>
+          </div>
+          <div class="panel panel-3">
+            <div class="panel-content">
+              <span class="eyebrow">Editorial</span>
+              <h3>Golden Hour</h3>
+              <p>Portrait series with cinematic color grading.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      
+
+      <section id="services" class="section services reveal">
+        <div class="section-heading">
+          <p class="eyebrow">Dịch vụ</p>
+          <h2>Giải pháp sáng tạo cho mọi khung hình.</h2>
+        </div>
+        <div class="service-grid">
+          <article class="service-card">
+            <h3 class="editable" data-key="service-1-title">Quay phim</h3>
+            <p class="editable" data-key="service-1-desc">Quay cinematic cho thương hiệu, campaign, short film, lifestyle và content social.</p>
+          </article>
+          <article class="service-card">
+            <h3 class="editable" data-key="service-2-title">Chụp ảnh</h3>
+            <p class="editable" data-key="service-2-desc">Chụp portrait, product, editorial và concept với ánh sáng mềm, màu sắc tinh tế.</p>
+          </article>
+          <article class="service-card">
+            <h3 class="editable" data-key="service-3-title">Dựng phim</h3>
+            <p class="editable" data-key="service-3-desc">Biên tập, color grading và sound design để từng cảnh đều đẹp và có nhịp kể chuyện.</p>
+          </article>
+        </div>
+      </section>
+
+      <section id="portfolio" class="section portfolio reveal">
+        <div class="section-heading portfolio-heading">
+          <div>
+            <p class="eyebrow">Dự án nổi bật</p>
+            <h2>Một vài tác phẩm thể hiện phong cách làm việc.</h2>
+          </div>
+          <button type="button" id="portfolio-add-btn" class="button primary small admin-only">+ Thêm dự án</button>
+        </div>
+        <div class="portfolio-grid" id="portfolio-grid"></div>
+      </section>
+
+      <section class="section contact reveal" id="contact">
+        <div class="contact-card">
+          <p class="eyebrow">Liên hệ</p>
+          <h2 class="editable" data-key="contact-title">Muốn tạo một bộ sưu tập hình ảnh thật đẹp cho dự án của bạn?</h2>
+          <p class="editable" data-key="contact-text">
+            Gửi cho tôi thông tin dự án, phong cách bạn muốn và thời gian cần sản phẩm. Tôi sẽ phản hồi sớm nhất.
+          </p>
+          <a id="contact-email" class="button primary editable" data-key="contact-email" href="mailto:hello@nomonm.studio">hello@nomonm.studio</a>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <p>© <span id="year"></span> Cường Nguyễn Showreel. Crafted with light and story.</p>
+    </footer>
+
+    <script src="script.js"></script>
+  </body>
+</html>
