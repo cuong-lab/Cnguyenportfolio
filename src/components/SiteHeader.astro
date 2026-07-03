@@ -3,30 +3,29 @@ interface Props {
   page: 'home' | 'resume' | 'portfolio' | 'services' | 'contact';
 }
 const { page } = Astro.props;
-const isHome = page === 'home';
-const base = isHome ? '' : '/';
-const introHref = isHome ? '#intro' : page === 'resume' ? '#about-me' : '/#intro';
-const servicesHref = isHome ? '#services' : '/dich-vu/';
-const portfolioHref = isHome ? '#portfolio' : '/portfolio/';
-const contactHref = isHome ? '#contact' : '/lien-he/';
+// Per project routing rule (instruction.md): the nav bar always links to a
+// real /path/ route, never a #hash standing in for a page. The one allowed
+// exception is a #anchor jump to a sub-section *within* the real page a link
+// already points at (Resume's own experience section; the resume page's own
+// "Giới thiệu" equivalent, Về tôi) — not a hash pretending to be a page.
+const introHref = page === 'resume' ? '#about-me' : '/';
 const resumeHref = page === 'resume' ? '#resume-experience' : '/resume/#resume-experience';
-const logoHref = `${base}#hero`;
 ---
 
 <header class="site-header">
-  <a id="logo" class="brand" href={logoHref}>Cường Nguyễn Showreel</a>
+  <a id="logo" class="brand" href="/">Cường Nguyễn Showreel</a>
   <nav class="nav-pill-wrapper" aria-label="Điều hướng chính">
     <div class="nav-indicator-glow"></div>
     <div class="nav-pill">
       <div class="nav-indicator-pill"></div>
       <a href={introHref} class="nav-toggle">Giới thiệu</a>
-      <a href={servicesHref} class="nav-toggle">Dịch vụ</a>
-      <a href={portfolioHref} class="nav-toggle">Dự án</a>
-      <a href={contactHref} class="nav-toggle">Liên hệ</a>
+      <a href="/dich-vu/" class="nav-toggle">Dịch vụ</a>
+      <a href="/portfolio/" class="nav-toggle">Dự án</a>
+      <a href="/lien-he/" class="nav-toggle">Liên hệ</a>
       <a href={resumeHref} class="nav-toggle">Resume</a>
     </div>
   </nav>
   <div class="header-actions">
-    <a class="nav-cta" href={contactHref}>Đặt lịch</a>
+    <a class="nav-cta" href="/lien-he/">Đặt lịch</a>
   </div>
 </header>
