@@ -7,11 +7,10 @@ import '../styles/global.css';
 interface Props {
   title: string;
   description: string;
-  page: 'home' | 'resume' | 'portfolio' | 'services' | 'contact';
   initFn?: 'initExplore' | 'initResume';
   mediaGallery?: boolean;
 }
-const { title, description, page, initFn, mediaGallery = false } = Astro.props;
+const { title, description, initFn, mediaGallery = false } = Astro.props;
 ---
 
 <!DOCTYPE html>
@@ -38,7 +37,7 @@ const { title, description, page, initFn, mediaGallery = false } = Astro.props;
     <div class="background-glow glow-1"></div>
     <div class="background-glow glow-2"></div>
 
-    <SiteHeader page={page} />
+    <SiteHeader />
     <AdminBar mediaAdmin={mediaGallery} />
 
     <slot />

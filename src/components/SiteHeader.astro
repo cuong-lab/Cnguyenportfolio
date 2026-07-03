@@ -1,15 +1,11 @@
 ---
-interface Props {
-  page: 'home' | 'resume' | 'portfolio' | 'services' | 'contact';
-}
-const { page } = Astro.props;
-// Per project routing rule (instruction.md): the nav bar always links to a
-// real /path/ route, never a #hash standing in for a page. The one allowed
-// exception is a #anchor jump to a sub-section *within* the real page a link
-// already points at (Resume's own experience section; the resume page's own
-// "Giới thiệu" equivalent, Về tôi) — not a hash pretending to be a page.
-const introHref = page === 'resume' ? '#about-me' : '/';
-const resumeHref = page === 'resume' ? '#resume-experience' : '/resume/#resume-experience';
+// Per project routing rule (instruction.md): every nav link is a real
+// /path/ route — no #hash anchor stands in for a page, on any page,
+// including the resume page's own "Về tôi"/"Kinh nghiệm" sections (that
+// was the one remaining violation: the main nav used #about-me/
+// #resume-experience to jump between sections dumped into one file).
+// Those sections are still on /resume/, just reached by scrolling the
+// page normally rather than being individual nav targets.
 ---
 
 <header class="site-header">
@@ -18,11 +14,11 @@ const resumeHref = page === 'resume' ? '#resume-experience' : '/resume/#resume-e
     <div class="nav-indicator-glow"></div>
     <div class="nav-pill">
       <div class="nav-indicator-pill"></div>
-      <a href={introHref} class="nav-toggle">Giới thiệu</a>
+      <a href="/" class="nav-toggle">Giới thiệu</a>
       <a href="/dich-vu/" class="nav-toggle">Dịch vụ</a>
       <a href="/portfolio/" class="nav-toggle">Dự án</a>
       <a href="/lien-he/" class="nav-toggle">Liên hệ</a>
-      <a href={resumeHref} class="nav-toggle">Resume</a>
+      <a href="/resume/" class="nav-toggle">Resume</a>
     </div>
   </nav>
   <div class="header-actions">

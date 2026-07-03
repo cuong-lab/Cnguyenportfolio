@@ -52,89 +52,20 @@ function setActiveNavToggle(toggle) {
 }
 
 if (navToggles.length) {
-  // Nav now mixes same-page anchors (scroll-spy candidates) with links to
-  // other pages (e.g. "Giới thiệu"/"Resume" point at resume/, served as
-  // resume/index.html) — only hash hrefs are scroll-spied; a toggle whose
-  // href resolves to the page we're currently on is the active tab instead.
+  // Every nav-toggle is a real /path/ route now (project routing rule — see
+  // instruction.md), never a #hash standing in for a page, so the active
+  // tab is simply whichever toggle's href resolves to the current page.
   // Normalize away "index.html" and trailing slashes so "/resume/",
   // "/resume/index.html" and "/resume" all compare as the same page.
   const normalizePath = (path) => path.replace(/index\.html$/, '').replace(/\/$/, '') || '/';
   const currentPath = normalizePath(window.location.pathname);
 
-  const anchorToggles = Array.from(navToggles).filter((t) => t.getAttribute('href').startsWith('#'));
-  const navSections = anchorToggles
-    .map((toggle) => document.querySelector(toggle.getAttribute('href')))
-    .filter(Boolean);
-
   const pageToggle = Array.from(navToggles).find((t) => {
-    const href = t.getAttribute('href');
-    if (href.startsWith('#')) return false;
-    const resolvedPath = new URL(href, window.location.href).pathname;
+    const resolvedPath = new URL(t.getAttribute('href'), window.location.href).pathname;
     return normalizePath(resolvedPath) === currentPath;
   });
 
-  if (navSections.length) {
-    // Position-based scroll-spy: on every scroll tick, find the last section
-    // (in document order) whose top has scrolled above the header line -
-    // that's the section currently in view. This replaced two earlier
-    // IntersectionObserver-based attempts (ratio comparison, then a tracked-
-    // top-per-section Map) that both broke down on sections of very
-    // different heights: a short teaser section could hit 100% visible and
-    // beat a taller one only partially in view, and the #intro wrapper
-    // (Hero + Showreel combined, taller than a viewport) could never cross
-    // its intersection threshold at all when scrolled back to the very top,
-    // leaving the pill stuck on whatever was last active instead of
-    // returning to "Giới thiệu". Checking real-time position on every scroll
-    // sidesteps threshold/ratio edge cases entirely.
-    function recomputeActiveSection() {
-      const line = (header ? header.offsetHeight : 76) + 20;
-      let activeIndex = -1;
-      navSections.forEach((section, i) => {
-        if (section.getBoundingClientRect().top <= line) activeIndex = i;
-      });
-      setActiveNavToggle(pageToggle || (activeIndex !== -1 ? anchorToggles[activeIndex] : anchorToggles[0]));
-    }
-
-    // Clicking a tab should light it up immediately rather than waiting for
-    // html's scroll-behavior: smooth to actually finish scrolling there —
-    // recomputeActiveSection would otherwise keep showing the *previous*
-    // tab active for the whole scroll animation. Suppress the position-based
-    // recompute while that animation is still in flight (refreshed on every
-    // scroll tick so it keeps holding for as long as the scroll is still
-    // moving) and let it resume once scrolling has actually settled.
-    let suppressSpy = false;
-    let suppressSpyTimer = null;
-    function holdSpySuppression() {
-      suppressSpy = true;
-      clearTimeout(suppressSpyTimer);
-      suppressSpyTimer = setTimeout(() => { suppressSpy = false; }, 700);
-    }
-    anchorToggles.forEach((toggle) => {
-      toggle.addEventListener('click', () => {
-        setActiveNavToggle(toggle);
-        holdSpySuppression();
-      });
-    });
-
-    let navSpyTicking = false;
-    window.addEventListener(
-      'scroll',
-      () => {
-        if (navSpyTicking) return;
-        navSpyTicking = true;
-        window.requestAnimationFrame(() => {
-          if (suppressSpy) holdSpySuppression();
-          else recomputeActiveSection();
-          navSpyTicking = false;
-        });
-      },
-      { passive: true }
-    );
-
-    recomputeActiveSection();
-
-    window.addEventListener('resize', recomputeActiveSection);
-  } else if (pageToggle) {
+  if (pageToggle) {
     setActiveNavToggle(pageToggle);
 
     window.addEventListener('resize', () => {
