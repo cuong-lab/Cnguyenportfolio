@@ -1583,19 +1583,13 @@ body.modal-open .site-header {
   position: absolute;
   left: 50%;
   top: 0;
-  width: 11px;
-  height: 40px;
+  width: 3px;
+  height: 48px;
   transform: translateX(-50%);
   background: var(--accent);
-  border-radius: 60% 40% 55% 45% / 50% 55% 45% 50%;
-  box-shadow: 0 0 14px rgba(var(--accent-rgb), 0.55), 0 6px 12px rgba(0, 0, 0, 0.45);
-  animation: pmDropMorph 4.5s ease-in-out infinite;
-  will-change: top, height, border-radius;
-}
-
-@keyframes pmDropMorph {
-  0%, 100% { border-radius: 60% 40% 55% 45% / 50% 55% 45% 50%; }
-  50%      { border-radius: 42% 58% 45% 55% / 58% 42% 58% 42%; }
+  border-radius: 999px;
+  box-shadow: 0 0 8px rgba(var(--accent-rgb), 0.6);
+  will-change: top, height;
 }
 
 /* Lock page scroll while the modal is open. */
