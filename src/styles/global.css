@@ -1,16 +1,23 @@
 :root {
   color-scheme: dark;
-  --bg: #030712;
+  /* STRICT 3-COLOR CINEMATIC PALETTE */
+  /* Color 1: Obsidian Charcoal (Background & Panels) */
+  --bg: #07080a;
+  --bg-soft: #0e1016;
+  
+  /* Color 2: Platinum White & Muted Silver (Typography & Borders) */
+  --text: #f4f5f8;
+  --muted: rgba(244, 245, 248, 0.62);
+  --border: rgba(244, 245, 248, 0.08);
+  
+  /* Color 3: Deep Cinematic Crimson (Accent & Highlights) */
+  --accent: #c92a2a;
+  --accent-rgb: 201, 42, 42;
+  --accent-2: #a61e1e;
+  --accent-2-rgb: 166, 30, 30;
+  
   --header-height: 76px;
-  --bg-soft: #0f172a;
-  --text: #f8fafc;
-  --muted: #94a3b8;
-  --accent: #9b111e;
-  --accent-rgb: 155, 17, 30;
-  --accent-2: #7f1d1d;
-  --accent-2-rgb: 127, 29, 29;
-  --border: rgba(255, 255, 255, 0.08);
-  --shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+  --shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
 }
 
 * {
@@ -462,9 +469,11 @@ h1 {
 }
 
 .button.primary {
-  color: var(--text);
   background: var(--accent);
-  border: 1px solid var(--accent-2);
+  color: #ffffff;
+  border: 1px solid var(--accent);
+  box-shadow: 0 4px 20px rgba(201, 42, 42, 0.35);
+  font-weight: 600;
 }
 
 .button.ghost {
@@ -545,7 +554,7 @@ h1 {
   padding: 6px 10px;
   border-radius: 999px;
   background: rgba(var(--accent-rgb), 0.2);
-  color: #ffd8af;
+  color: var(--text);
   font-size: 0.78rem;
   margin-bottom: 12px;
 }
@@ -821,7 +830,7 @@ h1 {
 }
 
 .portfolio-card:focus-visible {
-  outline: 2px solid var(--accent, #f0a96f);
+  outline: 2px solid var(--accent, var(--accent));
   outline-offset: 3px;
 }
 
@@ -1423,7 +1432,7 @@ body.modal-open .site-header {
 }
 
 .pm-counter {
-  color: #ffd9b8;
+  color: var(--text);
   text-transform: uppercase;
   letter-spacing: 0.18em;
   font-size: 0.72rem;
@@ -1507,7 +1516,7 @@ body.modal-open .site-header {
 .pm-meta-label {
   display: block;
   margin: 0 0 5px;
-  color: #ffd9b8;
+  color: var(--text);
   text-transform: uppercase;
   letter-spacing: 0.16em;
   font-size: 0.72rem;
@@ -1527,7 +1536,7 @@ body.modal-open .site-header {
 
 .pm-desc-head {
   margin-bottom: 14px;
-  color: #ffd9b8;
+  color: var(--text);
   text-transform: uppercase;
   letter-spacing: 0.16em;
   font-size: 0.72rem;
@@ -2307,7 +2316,7 @@ body::after {
 
 .footer-brand .brand-subtitle {
   font-size: 0.85rem;
-  color: var(--accent, #e53935);
+  color: var(--accent, var(--accent));
   font-family: var(--font-mono, monospace);
   text-transform: uppercase;
   letter-spacing: 0.1em;
@@ -2356,7 +2365,7 @@ body::after {
 
 .footer-icon {
   flex-shrink: 0;
-  color: var(--accent, #e53935);
+  color: var(--accent, var(--accent));
   transition: transform 0.25s ease;
 }
 
@@ -2393,7 +2402,7 @@ body::after {
 }
 
 .admin-dot:hover {
-  background: var(--accent, #e53935);
+  background: var(--accent, var(--accent));
   transform: scale(1.4);
   box-shadow: 0 0 10px rgba(229, 57, 53, 0.8);
 }
@@ -2518,8 +2527,8 @@ body::after {
 }
 
 .portfolio-card:hover .card-arrow-btn {
-  background: var(--accent, #e53935);
-  border-color: var(--accent, #e53935);
+  background: var(--accent, var(--accent));
+  border-color: var(--accent, var(--accent));
   transform: scale(1.1);
 }
 
@@ -2559,7 +2568,7 @@ body::after {
   display: flex;
   align-items: center;
   justify-content: center;
-  color: var(--accent, #e53935);
+  color: var(--accent, var(--accent));
 }
 
 .service-title {
