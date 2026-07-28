@@ -12,60 +12,75 @@ window.addEventListener('resize', () => {
   resizeTimeout = setTimeout(updateHeaderHeightVar, 180);
 });
 
-// Throttled scroll handler using rAF and passive listener
-let ticking = false;
-let lastScrollY = window.scrollY;
+// Absolute 3s Countdown Smart Header
 let isHeaderHovered = false;
-let hideHeaderTimeout = null;
+let autoHideTimer = null;
+let lastScrollY = typeof window !== 'undefined' ? window.scrollY : 0;
+let ticking = false;
+let autoHiddenThisScrollUp = false;
+
+function start3sAutoHideTimer() {
+  clearTimeout(autoHideTimer);
+  autoHideTimer = setTimeout(() => {
+    if (!isHeaderHovered && window.scrollY > 50) {
+      header?.classList.add('hidden');
+      autoHiddenThisScrollUp = true; // Lock out further popups during same upward scroll gesture
+    }
+  }, 3000);
+}
 
 if (header) {
   header.addEventListener('mouseenter', () => {
     isHeaderHovered = true;
+    clearTimeout(autoHideTimer);
     header.classList.remove('hidden');
+    autoHiddenThisScrollUp = false;
   });
 
   header.addEventListener('mouseleave', () => {
     isHeaderHovered = false;
+    if (window.scrollY > 50 && !header.classList.contains('hidden')) {
+      start3sAutoHideTimer();
+    }
   });
 }
 
-let isHeaderHidden = false;
-let isScrolled = false;
-
 function onScroll() {
   if (!header) return;
+
   if (!ticking) {
     ticking = true;
     window.requestAnimationFrame(() => {
       const currentScrollY = Math.max(0, window.scrollY);
       const scrollDelta = currentScrollY - lastScrollY;
 
-      // 1. Scrolled background styling (> 30px / <= 15px)
-      if (currentScrollY > 30 && !isScrolled) {
-        isScrolled = true;
-        header.classList.add('scrolled');
-      } else if (currentScrollY <= 15 && isScrolled) {
-        isScrolled = false;
-        header.classList.remove('scrolled');
+      // Ignore micro subpixel scroll jitter (< 2px)
+      if (Math.abs(scrollDelta) < 2) {
+        lastScrollY = currentScrollY;
+        ticking = false;
+        return;
       }
 
-      // 2. Pure Direction-Based Smart Header State Machine:
-      // At the very top (scrollY <= 15px), ALWAYS keep header visible
-      if (currentScrollY <= 15) {
-        if (isHeaderHidden) {
-          isHeaderHidden = false;
-          header.classList.remove('hidden');
-        }
+      // 1. Top of page (scrollY <= 50px): Always show header & reset flags
+      if (currentScrollY <= 50) {
+        clearTimeout(autoHideTimer);
+        autoHiddenThisScrollUp = false;
+        header.classList.remove('hidden');
       } else {
-        // Scroll DOWN -> Hide IMMEDIATELY
-        if (scrollDelta > 3 && !isHeaderHidden && !isHeaderHovered) {
-          isHeaderHidden = true;
-          header.classList.add('hidden');
+        // 2. Scroll DOWN (> 2px): Hide immediately & reset lockout
+        if (scrollDelta > 2) {
+          clearTimeout(autoHideTimer);
+          autoHiddenThisScrollUp = false;
+          if (!isHeaderHovered) {
+            header.classList.add('hidden');
+          }
         }
-        // Scroll UP -> Show IMMEDIATELY
-        else if (scrollDelta < -3 && isHeaderHidden) {
-          isHeaderHidden = false;
-          header.classList.remove('hidden');
+        // 3. Scroll UP (< -2px): Open ONLY if hidden & not locked out, start absolute 3s timer ONCE
+        else if (scrollDelta < -2) {
+          if (header.classList.contains('hidden') && !autoHiddenThisScrollUp) {
+            header.classList.remove('hidden');
+            start3sAutoHideTimer();
+          }
         }
       }
 
@@ -74,6 +89,12 @@ function onScroll() {
     });
   }
 }
+
+// Guarantee ONLY ONE scroll listener is attached
+if (window.__headerScrollHandler) {
+  window.removeEventListener('scroll', window.__headerScrollHandler);
+}
+window.__headerScrollHandler = onScroll;
 window.addEventListener('scroll', onScroll, { passive: true });
 
 // Nav pill sliding indicator. The active tab is decided server-side in
