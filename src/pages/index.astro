@@ -30,7 +30,8 @@ const heroPoster = settings.hero?.posterImageUrl || "/images/hero-poster.jpg";
 // Auto-detect YouTube URL and convert to embed format
 function getYouTubeEmbedUrl(url: string | null): string | null {
   if (!url) return null;
-  const match = url.match(/(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=))([\w-]{11})/);
+  const cleanUrl = url.trim();
+  const match = cleanUrl.match(/(?:https?:\/\/)?(?:www\.)?(?:youtube\.com\/(?:embed\/|v\/|watch\?v=|shorts\/)|youtu\.be\/)([\w-]{11})/i);
   if (match && match[1]) {
     const videoId = match[1];
     return `https://www.youtube.com/embed/${videoId}?autoplay=1&mute=1&controls=0&loop=1&playlist=${videoId}&playsinline=1&modestbranding=1&rel=0`;

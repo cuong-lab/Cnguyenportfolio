@@ -23,7 +23,18 @@ export default defineType({
         defineField({ name: 'eyebrow', title: 'Tiêu đề nhỏ (Eyebrow)', type: 'string' }),
         defineField({ name: 'title', title: 'Tiêu đề chính (Main Title)', type: 'string' }),
         defineField({ name: 'description', title: 'Mô tả ngắn', type: 'text', rows: 2 }),
-        defineField({ name: 'videoUrl', title: 'Link Video nền Hero (MP4/WebM)', type: 'url' }),
+        defineField({ 
+          name: 'videoUrl', 
+          title: 'Link Video nền Hero (Link YouTube, Vimeo, MP4/WebM)', 
+          type: 'string',
+          description: 'Dán link YouTube (ví dụ: https://youtu.be/xxx hoặc https://www.youtube.com/watch?v=xxx) hoặc link file .mp4',
+        }),
+        defineField({ 
+          name: 'videoFile', 
+          title: 'Hoặc Tải Video File trực tiếp (MP4/WebM)', 
+          type: 'file',
+          options: { accept: 'video/*' },
+        }),
         defineField({ name: 'posterImage', title: 'Ảnh Poster nền', type: 'image', options: { hotspot: true } }),
       ],
     }),
@@ -52,7 +63,7 @@ export default defineType({
     // 3. Portfolio Teaser
     defineField({
       name: 'portfolioTeaser',
-      title: '3. Khấu Dự án Nổi bật',
+      title: '3. Khối Dự án Nổi bật',
       type: 'object',
       options: { collapsible: true, collapsed: true },
       fields: [

@@ -199,12 +199,15 @@ export async function getResumePage() {
 // ---------- Site settings (singleton) ----------
 export async function getSiteSettings() {
   const row = await safeFetch(
-    `*[_type == "site_settings"][0]{
+    `*[_type == "site_settings"] | order(_updatedAt desc)[0]{
       seoTitle, metaDescription, contact, stats, portfolioTeaser, servicesTeaser, contactBanner,
-      hero { eyebrow, title, description, videoUrl, posterImage }
+      hero { eyebrow, title, description, videoUrl, videoFile { asset-> { url } }, posterImage }
     }`
   );
   if (row) {
+    const directFileUrl = row.hero?.videoFile?.asset?.url || null;
+    const rawVideoUrl = directFileUrl || row.hero?.videoUrl || null;
+
     return {
       seoTitle: row.seoTitle || null,
       metaDescription: row.metaDescription || null,
@@ -228,7 +231,7 @@ export async function getSiteSettings() {
         eyebrow: row.hero?.eyebrow || null,
         title: row.hero?.title || null,
         description: row.hero?.description || null,
-        videoUrl: row.hero?.videoUrl || null,
+        videoUrl: rawVideoUrl,
         posterImageUrl: row.hero?.posterImage ? coverUrl(row.hero.posterImage, 1920, 1080) : null,
       },
       portfolioTeaser: {
