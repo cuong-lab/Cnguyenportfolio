@@ -199,7 +199,7 @@ export async function getResumePage() {
 // ---------- Site settings (singleton) ----------
 export async function getSiteSettings() {
   const row = await safeFetch(
-    `*[_type == "site_settings"] | order(_updatedAt desc)[0]{
+    `*[_id in ["site_settings", "drafts.site_settings"]] | order(_updatedAt desc)[0]{
       seoTitle, metaDescription, contact, stats, portfolioTeaser, servicesTeaser, contactBanner,
       hero { eyebrow, title, description, videoUrl, videoFile { asset-> { url } }, posterImage }
     }`

@@ -39,7 +39,16 @@ function getYouTubeEmbedUrl(url: string | null): string | null {
   return null;
 }
 
+// Helper to determine video MIME type dynamically
+function getVideoMimeType(url: string): string {
+  const clean = url.toLowerCase();
+  if (clean.includes('.webm')) return 'video/webm';
+  if (clean.includes('.ogg') || clean.includes('.ogv')) return 'video/ogg';
+  return 'video/mp4';
+}
+
 const youtubeEmbedUrl = getYouTubeEmbedUrl(heroVideoUrl);
+const heroVideoMime = getVideoMimeType(heroVideoUrl);
 ---
 
 <BaseLayout
@@ -60,7 +69,8 @@ const youtubeEmbedUrl = getYouTubeEmbedUrl(heroVideoUrl);
           ></iframe>
         ) : (
           <video autoplay loop muted playsinline class="cinematic-video" poster={heroPoster}>
-            <source src={heroVideoUrl} type="video/mp4" />
+            <source src={heroVideoUrl} type={heroVideoMime} />
+            <source src={heroVideoUrl} />
           </video>
         )}
         <div class="cinematic-overlay"></div>
@@ -75,6 +85,40 @@ const youtubeEmbedUrl = getYouTubeEmbedUrl(heroVideoUrl);
           <a class="button ghost light" href="/lien-he/">{t('actions.contactNow')}</a>
         </div>
       </div>
+
+      <!-- Custom Luxury Video Player Controls Bar (Floating Bottom-Right) -->
+      {!youtubeEmbedUrl && (
+        <div class="hero-player-controls" id="hero-player-controls">
+          <!-- Play / Pause -->
+          <button type="button" id="hero-play-toggle" class="player-btn" aria-label="Play or Pause">
+            <svg id="icon-pause" class="btn-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg>
+            <svg id="icon-play" class="btn-icon hidden" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+          </button>
+
+          <!-- Rewind -10s -->
+          <button type="button" id="hero-rewind-10" class="player-btn" aria-label="Rewind 10 seconds">
+            <span class="btn-label">-10s</span>
+          </button>
+
+          <!-- Forward +10s -->
+          <button type="button" id="hero-forward-10" class="player-btn" aria-label="Forward 10 seconds">
+            <span class="btn-label">+10s</span>
+          </button>
+
+          <div class="player-divider"></div>
+
+          <!-- Mute / Unmute -->
+          <button type="button" id="hero-mute-toggle" class="player-btn" aria-label="Mute or Unmute">
+            <svg id="icon-mute" class="btn-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5L6 9H2v6h4l5 4V5z"/><line x1="23" y1="9" x2="17" y2="15"/><line x1="17" y1="9" x2="23" y2="15"/></svg>
+            <svg id="icon-sound" class="btn-icon hidden" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"/></svg>
+          </button>
+
+          <!-- Volume Slider -->
+          <div class="volume-slider-wrapper">
+            <input type="range" id="hero-volume-range" class="volume-range" min="0" max="1" step="0.05" value="0.8" aria-label="Volume Slider" />
+          </div>
+        </div>
+      )}
     </section>
 
     <!-- Section 01: Featured Portfolio with 100% Transform-Based Silky Slider -->
@@ -177,6 +221,75 @@ const youtubeEmbedUrl = getYouTubeEmbedUrl(heroVideoUrl);
   </main>
 
   <script>
+    // Custom Hero Video Player Logic
+    const heroVideo = document.querySelector('.cinematic-video') as HTMLVideoElement;
+    const playBtn = document.getElementById('hero-play-toggle');
+    const iconPlay = document.getElementById('icon-play');
+    const iconPause = document.getElementById('icon-pause');
+    
+    const rewindBtn = document.getElementById('hero-rewind-10');
+    const forwardBtn = document.getElementById('hero-forward-10');
+
+    const muteBtn = document.getElementById('hero-mute-toggle');
+    const iconMute = document.getElementById('icon-mute');
+    const iconSound = document.getElementById('icon-sound');
+
+    const volumeRange = document.getElementById('hero-volume-range') as HTMLInputElement;
+
+    if (heroVideo && playBtn && muteBtn && volumeRange) {
+      // 1. Play / Pause Toggle
+      playBtn.addEventListener('click', () => {
+        if (heroVideo.paused) {
+          heroVideo.play();
+          iconPlay?.classList.add('hidden');
+          iconPause?.classList.remove('hidden');
+        } else {
+          heroVideo.pause();
+          iconPlay?.classList.remove('hidden');
+          iconPause?.classList.add('hidden');
+        }
+      });
+
+      // 2. Rewind -10s & Forward +10s
+      rewindBtn?.addEventListener('click', () => {
+        heroVideo.currentTime = Math.max(0, heroVideo.currentTime - 10);
+      });
+      forwardBtn?.addEventListener('click', () => {
+        heroVideo.currentTime = Math.min(heroVideo.duration || 9999, heroVideo.currentTime + 10);
+      });
+
+      // 3. Mute / Unmute Toggle
+      muteBtn.addEventListener('click', () => {
+        heroVideo.muted = !heroVideo.muted;
+        if (heroVideo.muted) {
+          iconMute?.classList.remove('hidden');
+          iconSound?.classList.add('hidden');
+        } else {
+          iconMute?.classList.add('hidden');
+          iconSound?.classList.remove('hidden');
+          if (heroVideo.volume === 0) {
+            heroVideo.volume = 0.8;
+            volumeRange.value = '0.8';
+          }
+        }
+      });
+
+      // 4. Volume Slider Range
+      volumeRange.addEventListener('input', (e) => {
+        const val = parseFloat((e.target as HTMLInputElement).value);
+        heroVideo.volume = val;
+        if (val === 0) {
+          heroVideo.muted = true;
+          iconMute?.classList.remove('hidden');
+          iconSound?.classList.add('hidden');
+        } else {
+          heroVideo.muted = false;
+          iconMute?.classList.add('hidden');
+          iconSound?.classList.remove('hidden');
+        }
+      });
+    }
+
     // 100% Transform-Based Hardware-Accelerated Smooth Slider < >
     const track = document.getElementById('portfolio-track');
     const viewport = document.getElementById('portfolio-viewport');
