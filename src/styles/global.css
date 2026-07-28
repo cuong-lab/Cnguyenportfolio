@@ -3360,3 +3360,26 @@ body::after {
   transform: none !important;
   opacity: 1 !important;
 }
+
+
+/* ==========================================================================
+   SMOOTH SMART HEADER (SCROLL DOWN = HIDE, SCROLL UP = SHOW, 0 FLICKER)
+   ========================================================================== */
+
+.site-header {
+  position: sticky !important;
+  top: 18px !important;
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), background 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease, opacity 0.35s ease !important;
+}
+
+.site-header.scrolled {
+  background: rgba(10, 11, 16, 0.85) !important;
+  border-color: rgba(255, 255, 255, 0.16) !important;
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.5) !important;
+}
+
+.site-header.hidden {
+  transform: translateY(calc(-100% - 30px)) !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+}

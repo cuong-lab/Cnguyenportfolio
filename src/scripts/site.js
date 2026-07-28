@@ -46,8 +46,9 @@ function onScroll() {
     ticking = true;
     window.requestAnimationFrame(() => {
       const currentScrollY = window.scrollY;
+      const scrollDelta = currentScrollY - lastScrollY;
 
-      // Hysteresis gap (40px / 20px) to prevent edge flickering when scrolling near boundary
+      // Scrolled state background effect (with 40px/20px hysteresis)
       if (currentScrollY > 40 && !isScrolled) {
         isScrolled = true;
         header.classList.add('scrolled');
@@ -56,6 +57,21 @@ function onScroll() {
         header.classList.remove('scrolled');
       }
 
+      // Smart Header: Hide on scroll down (> 12px), Show on scroll up (<-12px), Dead-zone < 120px
+      if (currentScrollY > 120) {
+        if (scrollDelta > 12) {
+          // Scrolling down significantly -> hide header
+          if (!isHeaderHovered) header.classList.add('hidden');
+        } else if (scrollDelta < -12) {
+          // Scrolling up significantly -> show header
+          header.classList.remove('hidden');
+        }
+      } else {
+        // Dead-zone near top -> always show header
+        header.classList.remove('hidden');
+      }
+
+      lastScrollY = currentScrollY <= 0 ? 0 : currentScrollY;
       ticking = false;
     });
   }
