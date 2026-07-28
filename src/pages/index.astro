@@ -9,9 +9,9 @@ import { getServices, getFeaturedProjects, getSiteSettings } from '../sanity/api
 
 const locale = getLocale(Astro.url);
 const t = useTranslations(locale);
-const { hero, showreel, explore, servicesTeaser, portfolioTeaser } = home;
+const { hero, servicesTeaser, portfolioTeaser } = home;
 
-// Sanity-backed (with src/data fallback); editorial copy below stays in src/data.
+// Sanity-backed (with src/data fallback)
 const [servicesList, featuredProjects, settings] = await Promise.all([
   getServices(),
   getFeaturedProjects(3),
@@ -25,8 +25,7 @@ const heroText = settings.hero?.description || L(hero.text, locale);
 const heroVideoUrl = settings.hero?.videoUrl || "/videos/showreel-preview.mp4";
 const heroPoster = settings.hero?.posterImageUrl || "/images/hero-poster.jpg";
 
-// Hero stat numbers come from site_settings when set, keeping the localized
-// labels + the static third stat from home.json.
+// Hero stat numbers come from site_settings when set
 const heroStats = hero.stats.map((stat, i) => {
   if (i === 0 && settings.stats.projects != null) return { value: `+${settings.stats.projects}`, label: stat.label };
   if (i === 1 && settings.stats.experienceYears != null) return { value: `${settings.stats.experienceYears}+`, label: stat.label };
@@ -37,118 +36,98 @@ const heroStats = hero.stats.map((stat, i) => {
 <BaseLayout
   title={settings.seoTitle || L(home.meta.title, locale)}
   description={settings.metaDescription || L(home.meta.description, locale)}
-  initFn="initExplore"
-  mediaGallery
 >
   <main id="hero">
-    <div id="intro">
-      <section class="hero cinematic-hero">
-        <div class="cinematic-bg">
-          <video autoplay loop muted playsinline class="cinematic-video" poster={heroPoster}>
-            <source src={heroVideoUrl} type="video/mp4" />
-          </video>
-          <div class="cinematic-overlay"></div>
+    <!-- Cinematic Hero (Netflix Style Bottom-Left) -->
+    <section class="hero cinematic-hero">
+      <div class="cinematic-bg">
+        <video autoplay loop muted playsinline class="cinematic-video" poster={heroPoster}>
+          <source src={heroVideoUrl} type="video/mp4" />
+        </video>
+        <div class="cinematic-overlay"></div>
+      </div>
+      
+      <div class="hero-content reveal">
+        <p class="eyebrow cinematic-eyebrow">{heroEyebrow}</p>
+        <h1 class="cinematic-title">{heroTitle}</h1>
+        <p class="hero-text cinematic-text">{heroText}</p>
+        <div class="hero-actions">
+          <a class="button primary" href="/portfolio/">{t('actions.viewProjects')}</a>
+          <a class="button ghost light" href="/lien-he/">{t('actions.contactNow')}</a>
         </div>
         
-        <div class="hero-content reveal">
-          <p class="eyebrow cinematic-eyebrow">{heroEyebrow}</p>
-          <h1 class="cinematic-title">{heroTitle}</h1>
-          <p class="hero-text cinematic-text">{heroText}</p>
-          <div class="hero-actions">
-            <a class="button primary" href="/portfolio/">{t('actions.viewProjects')}</a>
-            <a class="button ghost light" href="/lien-he/">{t('actions.contactNow')}</a>
-          </div>
-          
-          <ul class="hero-stats cinematic-stats reveal-stagger">
-            {heroStats.map((stat) => (
-              <li>
-                <strong class="stat-value">{stat.value}</strong>
-                <span>{L(stat.label, locale)}</span>
-              </li>
-            ))}
-          </ul>
-        </div>
-      </section>
-
-      <section id="showreel" class="section showreel reveal">
-        <div class="showreel-card">
-          <div class="showreel-copy">
-            <p class="eyebrow">{L(showreel.eyebrow, locale)}</p>
-            <h2>{L(showreel.title, locale)}</h2>
-            <p>{L(showreel.text, locale)}</p>
-            <a class="button primary" href="/portfolio/">{t('actions.viewMoreWork')}</a>
-          </div>
-          <div class="showreel-quote">
-            <p>{L(showreel.quote, locale)}</p>
-            <span>{showreel.author}</span>
-          </div>
-        </div>
-      </section>
-    </div>
-
-    <!-- Optional Explore section (will animate only on capable devices) -->
-    <section id="explore" class="section pin-section">
-      <div class="pin-inner">
-        {explore.map((panel, i) => (
-          <div class:list={['panel', `panel-${i + 1}`]}>
-            <div class="panel-content">
-              <span class="eyebrow">{L(panel.eyebrow, locale)}</span>
-              <h3>{L(panel.title, locale)}</h3>
-              <p>{L(panel.text, locale)}</p>
-            </div>
-          </div>
-        ))}
+        <ul class="hero-stats cinematic-stats reveal-stagger">
+          {heroStats.map((stat) => (
+            <li>
+              <strong class="stat-value">{stat.value}</strong>
+              <span>{L(stat.label, locale)}</span>
+            </li>
+          ))}
+        </ul>
       </div>
     </section>
 
-    <section id="portfolio" class="section portfolio teaser-block reveal">
-      <div class="section-heading portfolio-heading">
-        <div>
-          <p class="eyebrow">{L(portfolioTeaser.eyebrow, locale)}</p>
-          <h2>{L(portfolioTeaser.heading, locale)}</h2>
+    <!-- Section 01: Featured Portfolio -->
+    <section id="portfolio" class="section editorial-section reveal">
+      <div class="editorial-container">
+        <div class="editorial-header">
+          <div class="section-tag">[ 01 / PORTFOLIO ]</div>
+          <h2 class="editorial-title">{L(portfolioTeaser.heading, locale)}</h2>
+        </div>
+        
+        <div class="portfolio-grid reveal-stagger">
+          {featuredProjects.map((project, i) => (
+            <ProjectCard
+              title={project.title}
+              index={i}
+              coverImageUrl={project.coverImageUrl}
+              videoHoverUrl={project.videoHoverUrl}
+              cardClass={project.cardClass}
+              id={project.id}
+            />
+          ))}
+        </div>
+        
+        <div class="editorial-action">
+          <a class="button ghost" href="/portfolio/">{t('actions.viewAllProjects')} ↗</a>
         </div>
       </div>
-      <div class="portfolio-grid reveal-stagger">
-        {featuredProjects.map((project, i) => (
-          <ProjectCard
-            title={project.title}
-            index={i}
-            coverImageUrl={project.coverImageUrl}
-            videoHoverUrl={project.videoHoverUrl}
-            cardClass={project.cardClass}
-            id={project.id}
-          />
-        ))}
-      </div>
-      <div class="view-all-link">
-        <a class="button ghost" href="/portfolio/">{t('actions.viewAllProjects')}</a>
+    </section>
+
+    <!-- Section 02: Services & Capabilities -->
+    <section id="services" class="section editorial-section reveal">
+      <div class="editorial-container">
+        <div class="editorial-header">
+          <div class="section-tag">[ 02 / SERVICES ]</div>
+          <h2 class="editorial-title">{L(servicesTeaser.heading, locale)}</h2>
+        </div>
+        
+        <div class="service-grid reveal-stagger">
+          {servicesList.map((service) => (
+            <ServiceCard title={service.title} description={service.description} iconUrl={service.iconUrl} />
+          ))}
+        </div>
+        
+        <div class="editorial-action">
+          <a class="button ghost" href="/dich-vu/">{t('actions.viewServices')} ↗</a>
+        </div>
       </div>
     </section>
 
-    <section id="services" class="section services teaser-block reveal">
-      <div class="section-heading">
-        <p class="eyebrow">{L(servicesTeaser.eyebrow, locale)}</p>
-        <h2>{L(servicesTeaser.heading, locale)}</h2>
-      </div>
-      <div class="service-grid reveal-stagger">
-        {servicesList.map((service) => (
-          <ServiceCard title={service.title} description={service.description} iconUrl={service.iconUrl} />
-        ))}
-      </div>
-      <div class="view-all-link">
-        <a class="button ghost" href="/dich-vu/">{t('actions.viewServices')}</a>
-      </div>
-    </section>
-
+    <!-- In-Page Lightbox Modal -->
     <ProjectModal projects={featuredProjects} />
 
-
-    <section class="section contact reveal" id="contact">
-      <div class="contact-card">
-        <p class="eyebrow">{L(contact.eyebrow, locale)}</p>
-        <h2>{L(contact.title, locale)}</h2>
-        <p>{L(contact.text, locale)}</p>
-        <a class="button primary" href="/lien-he/">{t('actions.contactNow')}</a>
+    <!-- Section 03: Contact Banner -->
+    <section class="section editorial-contact-section reveal" id="contact">
+      <div class="editorial-container">
+        <div class="contact-banner-inner">
+          <div class="section-tag">[ 03 / CONTACT ]</div>
+          <h2 class="contact-banner-title">{L(contact.title, locale)}</h2>
+          <p class="contact-banner-text">{L(contact.text, locale)}</p>
+          <div class="contact-banner-action">
+            <a class="button primary" href="/lien-he/">{t('actions.contactNow')}</a>
+          </div>
+        </div>
       </div>
     </section>
   </main>
