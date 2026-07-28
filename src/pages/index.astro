@@ -350,5 +350,49 @@ const heroVideoMime = getVideoMimeType(heroVideoUrl);
 
       counterItems.forEach(item => observer.observe(item));
     }
+
+    // Live Client-side Hero Video Sync from Sanity (Bypasses Static SSG Cache)
+    const projectId = 'yrg3sjk0';
+    const query = encodeURIComponent(`*[_id in ["site_settings", "drafts.site_settings"]] | order(_updatedAt desc)[0]{ hero { videoUrl, videoFile { asset-> { url } } } }`);
+    const sanityEndpoint = `https://${projectId}.api.sanity.io/v2023-01-01/data/query/production?query=${query}`;
+
+    fetch(sanityEndpoint)
+      .then((res) => res.json())
+      .then((data) => {
+        const heroData = data?.result?.hero;
+        if (!heroData) return;
+
+        const liveVideoUrl = heroData.videoFile?.asset?.url || heroData.videoUrl;
+        if (!liveVideoUrl) return;
+
+        const videoContainer = document.querySelector('.cinematic-bg');
+        if (!videoContainer) return;
+
+        const videoEl = videoContainer.querySelector('video') as HTMLVideoElement;
+        const iframeEl = videoContainer.querySelector('iframe') as HTMLIFrameElement;
+        const sources = videoEl?.querySelectorAll('source');
+
+        // Check if YouTube link
+        const ytMatch = liveVideoUrl.match(/(?:https?:\/\/)?(?:www\.)?(?:youtube\.com\/(?:embed\/|v\/|watch\?v=|shorts\/)|youtu\.be\/)([\w-]{11})/i);
+
+        if (ytMatch && ytMatch[1]) {
+          const ytEmbed = `https://www.youtube.com/embed/${ytMatch[1]}?autoplay=1&mute=1&controls=0&loop=1&playlist=${ytMatch[1]}&playsinline=1&modestbranding=1&rel=0`;
+          if (iframeEl) {
+            if (iframeEl.src !== ytEmbed) iframeEl.src = ytEmbed;
+          } else {
+            videoContainer.innerHTML = `<iframe class="cinematic-video youtube-hero-iframe" src="${ytEmbed}" title="Hero Background Video" allow="autoplay; encrypted-media" frameborder="0"></iframe><div class="cinematic-overlay"></div>`;
+          }
+        } else if (videoEl && sources && sources.length) {
+          const currentSrc = sources[0].getAttribute('src');
+          if (currentSrc !== liveVideoUrl) {
+            sources[0].setAttribute('src', liveVideoUrl);
+            sources[0].setAttribute('type', liveVideoUrl.includes('.webm') ? 'video/webm' : 'video/mp4');
+            if (sources[1]) sources[1].setAttribute('src', liveVideoUrl);
+            videoEl.load();
+            videoEl.play().catch(() => {});
+          }
+        }
+      })
+      .catch(() => {});
   </script>
 </BaseLayout>
