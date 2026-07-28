@@ -61,6 +61,10 @@
     "errorMessage": "Vui lòng nhập lời nhắn."
   },
   "footer": {
-    "tagline": "Crafted with light and story."
+    "tagline": "Kể chuyện bằng hình ảnh, ánh sáng và nhịp điệu điện ảnh.",
+    "phone": "Điện thoại",
+    "email": "Email",
+    "address": "Địa chỉ",
+    "social": "Mạng xã hội"
   }
 }

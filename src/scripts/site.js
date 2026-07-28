@@ -546,35 +546,7 @@ window.initResume = function initResume() {
 // must still go home, every activation is debounced within a short window: 3+
 // taps route to /admin, anything less falls through to the logo's real href.
 // Modified clicks (cmd/ctrl/shift/alt — i.e. open-in-new-tab) are left alone.
-const logo = document.getElementById('logo');
-if (logo) {
-  const TAP_WINDOW = 2000; // ms allowed between first and last tap
-  let tapCount = 0;
-  let tapTimer = null;
-  logo.addEventListener('click', (e) => {
-    if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
-    e.preventDefault();
-    tapCount += 1;
-    
-    if (tapCount === 1) {
-      tapTimer = setTimeout(() => {
-        // If they didn't reach 5 taps in 2s, redirect to home
-        if (tapCount < 5) {
-          window.location.href = logo.getAttribute('href') || '/';
-        }
-        tapCount = 0;
-      }, TAP_WINDOW);
-    }
-    
-    if (tapCount >= 5) {
-      clearTimeout(tapTimer);
-      tapCount = 0;
-      window.location.href = '/admin';
-    }
-  });
-}
-
-// Year
+// Year in footer
 const year = document.getElementById('year');
 if (year) year.textContent = new Date().getFullYear();
 

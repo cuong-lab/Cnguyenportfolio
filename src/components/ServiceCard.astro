@@ -1,6 +1,4 @@
 ---
-// Presentational card — takes already-resolved plain strings (see src/sanity/api.js),
-// which come from Sanity when configured or the src/data fallback otherwise.
 interface Props {
   title: string;
   description?: string | null;
@@ -10,9 +8,17 @@ const { title, description, iconUrl } = Astro.props;
 ---
 
 <article class="service-card glass">
-  {iconUrl && (
-    <img class="service-icon" src={iconUrl} alt="" width="48" height="48" loading="lazy" decoding="async" />
-  )}
-  <h3>{title}</h3>
-  {description && <p>{description}</p>}
+  <div class="service-card-inner">
+    <div class="service-icon-wrapper">
+      {iconUrl ? (
+        <img class="service-icon" src={iconUrl} alt="" width="32" height="32" loading="lazy" decoding="async" />
+      ) : (
+        <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="service-icon-svg"><polygon points="23 7 16 12 23 17 23 7"/><rect width="15" height="14" x="1" y="5" rx="2" ry="2"/></svg>
+      )}
+    </div>
+    <div class="service-content">
+      <h3 class="service-title">{title}</h3>
+      {description && <p class="service-desc">{description}</p>}
+    </div>
+  </div>
 </article>
