@@ -13,9 +13,9 @@ const t = useTranslations(locale);
 const navItems = [
   { key: 'about', href: '/' },
   { key: 'work', href: '/portfolio/' },
+  { key: 'resume', href: '/resume/' },
   { key: 'services', href: '/dich-vu/' },
   { key: 'contact', href: '/lien-he/' },
-  { key: 'resume', href: '/resume/' },
 ] as const;
 
 const normalize = (path: string) => path.replace(/index\.html$/, '').replace(/\/$/, '') || '/';

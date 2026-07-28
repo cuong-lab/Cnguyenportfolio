@@ -5,17 +5,18 @@ import ProjectCard from '../components/ProjectCard.astro';
 import ProjectModal from '../components/ProjectModal.astro';
 import { getLocale, useTranslations, localize as L } from '../i18n/utils';
 import { home, contact } from '../data';
-import { getServices, getProjects, getSiteSettings } from '../sanity/api.js';
+import { getServices, getProjects, getSiteSettings, getResumePage } from '../sanity/api.js';
 
 const locale = getLocale(Astro.url);
 const t = useTranslations(locale);
 const { hero, servicesTeaser, portfolioTeaser } = home;
 
 // Sanity-backed (with src/data fallback)
-const [servicesList, allProjects, settings] = await Promise.all([
+const [servicesList, allProjects, settings, resumeContent] = await Promise.all([
   getServices(),
   getProjects(),
   getSiteSettings(),
+  getResumePage(),
 ]);
 
 const featuredProjects = allProjects.slice(0, 8);
@@ -182,6 +183,33 @@ const heroVideoMime = getVideoMimeType(heroVideoUrl);
       </div>
     </section>
 
+    <!-- Section: Resume Teaser -->
+    <section id="about" class="section editorial-section reveal">
+      <div class="editorial-container">
+        <div class="resume-teaser-grid">
+          <div class="resume-teaser-content">
+            <div class="section-tag">{resumeContent.eyebrow}</div>
+            <h2 class="editorial-title">{resumeContent.title}</h2>
+            <p class="resume-teaser-text">{resumeContent.paragraphs[0]}</p>
+            <div class="editorial-action">
+              <a class="button ghost" href="/resume/">Xem chi tiết Resume ↗</a>
+            </div>
+          </div>
+          <div class="resume-teaser-highlights">
+            <h3 class="highlights-title">{t('about.strengths')}</h3>
+            <ul class="strengths-list">
+              {resumeContent.strengths.slice(0, 3).map((s) => (
+                <li><span>{s}</span></li>
+              ))}
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 35mm Light-Catching Edge Line Divider -->
+    <div class="film-divider" aria-hidden="true"></div>
+
     <!-- Section 02: Services & Capabilities -->
     <section id="services" class="section editorial-section reveal">
       <div class="editorial-container">
@@ -201,6 +229,9 @@ const heroVideoMime = getVideoMimeType(heroVideoUrl);
         </div>
       </div>
     </section>
+
+    <!-- 35mm Light-Catching Edge Line Divider -->
+    <div class="film-divider" aria-hidden="true"></div>
 
     <!-- In-Page Lightbox Modal -->
     <ProjectModal projects={featuredProjects} />
