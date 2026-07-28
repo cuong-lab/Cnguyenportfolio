@@ -14,6 +14,44 @@ export default defineType({
       rows: 3,
     }),
     defineField({
+      name: 'hero',
+      title: 'Cấu hình Cụm Hero (Netflix Style)',
+      type: 'object',
+      options: { collapsible: true, collapsed: false },
+      fields: [
+        defineField({
+          name: 'eyebrow',
+          title: 'Tiêu đề nhỏ (Eyebrow)',
+          type: 'string',
+          description: 'Ví dụ: Director of Photography & Editor',
+        }),
+        defineField({
+          name: 'title',
+          title: 'Tiêu đề chính (Main Title)',
+          type: 'string',
+          description: 'Ví dụ: Cường Nguyễn — Visual Storyteller',
+        }),
+        defineField({
+          name: 'description',
+          title: 'Mô tả ngắn',
+          type: 'text',
+          rows: 3,
+        }),
+        defineField({
+          name: 'videoUrl',
+          title: 'Link Video nền Hero (MP4/WebM)',
+          type: 'url',
+          description: 'Đường dẫn video trực tiếp (Vimeo direct, MP4, Supabase URL...)',
+        }),
+        defineField({
+          name: 'posterImage',
+          title: 'Ảnh nền Poster (khi video chưa load)',
+          type: 'image',
+          options: { hotspot: true },
+        }),
+      ],
+    }),
+    defineField({
       name: 'contact',
       title: 'Thông tin liên hệ',
       type: 'object',

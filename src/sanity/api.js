@@ -168,7 +168,10 @@ export async function getResumeExperiences() {
 // ---------- Site settings (singleton) ----------
 export async function getSiteSettings() {
   const row = await safeFetch(
-    `*[_type == "site_settings"][0]{ seoTitle, metaDescription, contact, stats }`
+    `*[_type == "site_settings"][0]{
+      seoTitle, metaDescription, contact, stats,
+      hero { eyebrow, title, description, videoUrl, posterImage }
+    }`
   );
   if (row) {
     return {
@@ -180,6 +183,13 @@ export async function getSiteSettings() {
         projects: row.stats?.projects ?? null,
         experienceYears: row.stats?.experienceYears ?? null,
       },
+      hero: {
+        eyebrow: row.hero?.eyebrow || null,
+        title: row.hero?.title || null,
+        description: row.hero?.description || null,
+        videoUrl: row.hero?.videoUrl || null,
+        posterImageUrl: row.hero?.posterImage ? coverUrl(row.hero.posterImage, 1920, 1080) : null,
+      },
     };
   }
   return {
@@ -188,5 +198,6 @@ export async function getSiteSettings() {
     email: contactData.email,
     phone: null,
     stats: { projects: null, experienceYears: null },
+    hero: { eyebrow: null, title: null, description: null, videoUrl: null, posterImageUrl: null },
   };
 }

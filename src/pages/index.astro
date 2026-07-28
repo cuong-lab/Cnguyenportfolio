@@ -18,6 +18,13 @@ const [servicesList, featuredProjects, settings] = await Promise.all([
   getSiteSettings(),
 ]);
 
+// Dynamic Hero values from Sanity site_settings (falling back to static home.json)
+const heroEyebrow = settings.hero?.eyebrow || L(hero.eyebrow, locale);
+const heroTitle = settings.hero?.title || L(hero.title, locale);
+const heroText = settings.hero?.description || L(hero.text, locale);
+const heroVideoUrl = settings.hero?.videoUrl || "/videos/showreel-preview.mp4";
+const heroPoster = settings.hero?.posterImageUrl || "/images/hero-poster.jpg";
+
 // Hero stat numbers come from site_settings when set, keeping the localized
 // labels + the static third stat from home.json.
 const heroStats = hero.stats.map((stat, i) => {
@@ -37,16 +44,16 @@ const heroStats = hero.stats.map((stat, i) => {
     <div id="intro">
       <section class="hero cinematic-hero">
         <div class="cinematic-bg">
-          <video autoplay loop muted playsinline class="cinematic-video" poster="/images/hero-poster.jpg">
-            <source src="/videos/showreel-preview.mp4" type="video/mp4" />
+          <video autoplay loop muted playsinline class="cinematic-video" poster={heroPoster}>
+            <source src={heroVideoUrl} type="video/mp4" />
           </video>
           <div class="cinematic-overlay"></div>
         </div>
         
         <div class="hero-content reveal">
-          <p class="eyebrow cinematic-eyebrow">{L(hero.eyebrow, locale)}</p>
-          <h1 class="cinematic-title">{L(hero.title, locale)}</h1>
-          <p class="hero-text cinematic-text">{L(hero.text, locale)}</p>
+          <p class="eyebrow cinematic-eyebrow">{heroEyebrow}</p>
+          <h1 class="cinematic-title">{heroTitle}</h1>
+          <p class="hero-text cinematic-text">{heroText}</p>
           <div class="hero-actions">
             <a class="button primary" href="/portfolio/">{t('actions.viewProjects')}</a>
             <a class="button ghost light" href="/lien-he/">{t('actions.contactNow')}</a>
