@@ -188,8 +188,10 @@ const heroVideoMime = getVideoMimeType(heroVideoUrl);
       <div class="editorial-container">
         <div class="resume-teaser-grid">
           <div class="resume-teaser-content">
-            <div class="section-tag">{resumeContent.eyebrow}</div>
-            <h2 class="editorial-title">{resumeContent.title}</h2>
+            <div class="editorial-header">
+              <div class="section-tag">{resumeContent.eyebrow && resumeContent.eyebrow.includes('02') ? resumeContent.eyebrow : '[ 02 / VỀ TÔI ]'}</div>
+              <h2 class="editorial-title">{resumeContent.title}</h2>
+            </div>
             <p class="resume-teaser-text">{resumeContent.paragraphs[0]}</p>
             <div class="editorial-action">
               <a class="button ghost" href="/resume/">Xem chi tiết Resume ↗</a>

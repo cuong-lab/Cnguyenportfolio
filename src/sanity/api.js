@@ -242,11 +242,11 @@ export async function getSiteSettings() {
         title: row.portfolioTeaser?.title || null,
       },
       servicesTeaser: {
-        tag: row.servicesTeaser?.tag || '[ 02 / SERVICES ]',
+        tag: row.servicesTeaser?.tag || '[ 03 / SERVICES ]',
         title: row.servicesTeaser?.title || null,
       },
       contactBanner: {
-        tag: row.contactBanner?.tag || '[ 03 / CONTACT ]',
+        tag: row.contactBanner?.tag || '[ 04 / CONTACT ]',
         title: row.contactBanner?.title || null,
         text: row.contactBanner?.text || null,
       },
@@ -265,7 +265,7 @@ export async function getSiteSettings() {
     },
     hero: { eyebrow: null, title: null, description: null, videoUrl: null, posterImageUrl: null },
     portfolioTeaser: { tag: '[ 01 / PORTFOLIO ]', title: null },
-    servicesTeaser: { tag: '[ 02 / SERVICES ]', title: null },
-    contactBanner: { tag: '[ 03 / CONTACT ]', title: null, text: null },
+    servicesTeaser: { tag: '[ 03 / SERVICES ]', title: null },
+    contactBanner: { tag: '[ 04 / CONTACT ]', title: null, text: null },
   };
 }
