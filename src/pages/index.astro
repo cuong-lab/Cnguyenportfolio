@@ -5,18 +5,21 @@ import ProjectCard from '../components/ProjectCard.astro';
 import ProjectModal from '../components/ProjectModal.astro';
 import { getLocale, useTranslations, localize as L } from '../i18n/utils';
 import { home, contact } from '../data';
-import { getServices, getFeaturedProjects, getSiteSettings } from '../sanity/api.js';
+import { getServices, getProjects, getSiteSettings } from '../sanity/api.js';
 
 const locale = getLocale(Astro.url);
 const t = useTranslations(locale);
 const { hero, servicesTeaser, portfolioTeaser } = home;
 
 // Sanity-backed (with src/data fallback)
-const [servicesList, featuredProjects, settings] = await Promise.all([
+const [servicesList, allProjects, settings] = await Promise.all([
   getServices(),
-  getFeaturedProjects(3),
+  getProjects(),
   getSiteSettings(),
 ]);
+
+// Show more projects on homepage so slider controls work smoothly
+const featuredProjects = allProjects.slice(0, 8);
 
 // Dynamic Hero values from Sanity site_settings (falling back to static home.json)
 const heroEyebrow = settings.hero?.eyebrow || L(hero.eyebrow, locale);
@@ -24,13 +27,6 @@ const heroTitle = settings.hero?.title || L(hero.title, locale);
 const heroText = settings.hero?.description || L(hero.text, locale);
 const heroVideoUrl = settings.hero?.videoUrl || "/videos/showreel-preview.mp4";
 const heroPoster = settings.hero?.posterImageUrl || "/images/hero-poster.jpg";
-
-// Hero stat numbers come from site_settings when set
-const heroStats = hero.stats.map((stat, i) => {
-  if (i === 0 && settings.stats.projects != null) return { value: `+${settings.stats.projects}`, label: stat.label };
-  if (i === 1 && settings.stats.experienceYears != null) return { value: `${settings.stats.experienceYears}+`, label: stat.label };
-  return stat;
-});
 ---
 
 <BaseLayout
@@ -55,27 +51,28 @@ const heroStats = hero.stats.map((stat, i) => {
           <a class="button primary" href="/portfolio/">{t('actions.viewProjects')}</a>
           <a class="button ghost light" href="/lien-he/">{t('actions.contactNow')}</a>
         </div>
-        
-        <ul class="hero-stats cinematic-stats reveal-stagger">
-          {heroStats.map((stat) => (
-            <li>
-              <strong class="stat-value">{stat.value}</strong>
-              <span>{L(stat.label, locale)}</span>
-            </li>
-          ))}
-        </ul>
       </div>
     </section>
 
-    <!-- Section 01: Featured Portfolio -->
+    <!-- Section 01: Featured Portfolio with Slider Controls < > -->
     <section id="portfolio" class="section editorial-section reveal">
       <div class="editorial-container">
-        <div class="editorial-header">
-          <div class="section-tag">[ 01 / PORTFOLIO ]</div>
-          <h2 class="editorial-title">{L(portfolioTeaser.heading, locale)}</h2>
+        <div class="editorial-header portfolio-header-row">
+          <div>
+            <div class="section-tag">{settings.portfolioTeaser.tag}</div>
+            <h2 class="editorial-title">{settings.portfolioTeaser.title || L(portfolioTeaser.heading, locale)}</h2>
+          </div>
+          <div class="portfolio-slider-controls">
+            <button type="button" id="port-prev" class="slider-arrow-btn" aria-label="Previous Project">
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
+            </button>
+            <button type="button" id="port-next" class="slider-arrow-btn" aria-label="Next Project">
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>
+            </button>
+          </div>
         </div>
         
-        <div class="portfolio-grid reveal-stagger">
+        <div class="portfolio-grid portfolio-slider-grid reveal-stagger" id="portfolio-slider">
           {featuredProjects.map((project, i) => (
             <ProjectCard
               title={project.title}
@@ -94,12 +91,34 @@ const heroStats = hero.stats.map((stat, i) => {
       </div>
     </section>
 
+    <!-- Stats Counter Section (Clean vertical dividers, countup animation, number on top, label on bottom) -->
+    <section class="section stats-counter-section reveal">
+      <div class="editorial-container">
+        <div class="stats-counter-bar">
+          <div class="stat-counter-item">
+            <span class="stat-num" data-target={settings.stats.stat1_value} data-prefix={settings.stats.stat1_prefix} data-suffix={settings.stats.stat1_suffix}>0</span>
+            <span class="stat-lbl">{settings.stats.stat1_label}</span>
+          </div>
+          <div class="stat-divider"></div>
+          <div class="stat-counter-item">
+            <span class="stat-num" data-target={settings.stats.stat2_value} data-suffix={settings.stats.stat2_suffix}>0</span>
+            <span class="stat-lbl">{settings.stats.stat2_label}</span>
+          </div>
+          <div class="stat-divider"></div>
+          <div class="stat-counter-item">
+            <span class="stat-num" data-target={settings.stats.stat3_value}>0</span>
+            <span class="stat-lbl">{settings.stats.stat3_label}</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
     <!-- Section 02: Services & Capabilities -->
     <section id="services" class="section editorial-section reveal">
       <div class="editorial-container">
         <div class="editorial-header">
-          <div class="section-tag">[ 02 / SERVICES ]</div>
-          <h2 class="editorial-title">{L(servicesTeaser.heading, locale)}</h2>
+          <div class="section-tag">{settings.servicesTeaser.tag}</div>
+          <h2 class="editorial-title">{settings.servicesTeaser.title || L(servicesTeaser.heading, locale)}</h2>
         </div>
         
         <div class="service-grid reveal-stagger">
@@ -121,9 +140,9 @@ const heroStats = hero.stats.map((stat, i) => {
     <section class="section editorial-contact-section reveal" id="contact">
       <div class="editorial-container">
         <div class="contact-banner-inner">
-          <div class="section-tag">[ 03 / CONTACT ]</div>
-          <h2 class="contact-banner-title">{L(contact.title, locale)}</h2>
-          <p class="contact-banner-text">{L(contact.text, locale)}</p>
+          <div class="section-tag">{settings.contactBanner.tag}</div>
+          <h2 class="contact-banner-title">{settings.contactBanner.title || L(contact.title, locale)}</h2>
+          <p class="contact-banner-text">{settings.contactBanner.text || L(contact.text, locale)}</p>
           <div class="contact-banner-action">
             <a class="button primary" href="/lien-he/">{t('actions.contactNow')}</a>
           </div>
@@ -131,4 +150,53 @@ const heroStats = hero.stats.map((stat, i) => {
       </div>
     </section>
   </main>
+
+  <script>
+    // Portfolio Slider < > Controls
+    const slider = document.getElementById('portfolio-slider');
+    const prevBtn = document.getElementById('port-prev');
+    const nextBtn = document.getElementById('port-next');
+
+    if (slider && prevBtn && nextBtn) {
+      prevBtn.addEventListener('click', () => {
+        slider.scrollBy({ left: -380, behavior: 'smooth' });
+      });
+      nextBtn.addEventListener('click', () => {
+        slider.scrollBy({ left: 380, behavior: 'smooth' });
+      });
+    }
+
+    // CountUp Animation for Stats
+    const counterItems = document.querySelectorAll('.stat-num');
+    if (counterItems.length) {
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            const el = entry.target as HTMLElement;
+            const target = parseInt(el.getAttribute('data-target') || '0', 10);
+            const prefix = el.getAttribute('data-prefix') || '';
+            const suffix = el.getAttribute('data-suffix') || '';
+            let count = 0;
+            const duration = 1400; // ms
+            const stepTime = 20;
+            const steps = duration / stepTime;
+            const increment = target / steps;
+
+            const timer = setInterval(() => {
+              count += increment;
+              if (count >= target) {
+                count = target;
+                clearInterval(timer);
+              }
+              el.textContent = `${prefix}${Math.floor(count)}${suffix}`;
+            }, stepTime);
+
+            observer.unobserve(el);
+          }
+        });
+      }, { threshold: 0.4 });
+
+      counterItems.forEach(item => observer.observe(item));
+    }
+  </script>
 </BaseLayout>

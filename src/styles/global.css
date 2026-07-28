@@ -2903,3 +2903,127 @@ body::after {
     height: 140px;
   }
 }
+
+
+/* ==========================================================================
+   STATS COUNTER BAR & PORTFOLIO SLIDER CONTROLS
+   ========================================================================== */
+
+/* Stats Counter Bar */
+.stats-counter-section {
+  padding: 36px 0 !important;
+}
+
+.stats-counter-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  width: 100%;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  padding: 32px 0;
+}
+
+.stat-counter-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 8px;
+}
+
+.stat-num {
+  font-size: clamp(2.4rem, 4vw, 3.4rem);
+  font-weight: 800;
+  color: var(--text, #f4f5f8);
+  font-family: var(--font-mono, monospace);
+  line-height: 1;
+  letter-spacing: -0.02em;
+}
+
+.stat-lbl {
+  font-size: 0.88rem;
+  color: var(--muted, rgba(244, 245, 248, 0.6));
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  font-weight: 500;
+}
+
+.stat-divider {
+  width: 1px;
+  height: 48px;
+  background: rgba(255, 255, 255, 0.12);
+}
+
+@media (max-width: 640px) {
+  .stats-counter-bar {
+    flex-direction: column;
+    gap: 24px;
+    padding: 24px 0;
+  }
+  .stat-divider {
+    width: 60px;
+    height: 1px;
+  }
+}
+
+/* Portfolio Header Row & Slider < > Controls */
+.portfolio-header-row {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.portfolio-slider-controls {
+  display: flex;
+  gap: 12px;
+}
+
+.slider-arrow-btn {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: var(--text, #fff);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background 0.25s ease, border-color 0.25s ease, transform 0.2s ease;
+}
+
+.slider-arrow-btn:hover {
+  background: var(--accent, #c92a2a);
+  border-color: var(--accent, #c92a2a);
+  transform: scale(1.08);
+}
+
+/* Portfolio Slider Grid (Horizontal Scrollable) */
+.portfolio-slider-grid {
+  display: flex !important;
+  overflow-x: auto !important;
+  scroll-snap-type: x mandatory !important;
+  scrollbar-width: none !important;
+  scroll-behavior: smooth !important;
+  gap: 20px !important;
+  padding-bottom: 12px !important;
+}
+
+.portfolio-slider-grid::-webkit-scrollbar {
+  display: none;
+}
+
+.portfolio-slider-grid .portfolio-card {
+  flex: 0 0 360px !important;
+  min-width: 360px !important;
+  scroll-snap-align: start !important;
+}
+
+@media (max-width: 640px) {
+  .portfolio-slider-grid .portfolio-card {
+    flex: 0 0 280px !important;
+    min-width: 280px !important;
+  }
+}

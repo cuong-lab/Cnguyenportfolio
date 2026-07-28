@@ -200,7 +200,7 @@ export async function getResumePage() {
 export async function getSiteSettings() {
   const row = await safeFetch(
     `*[_type == "site_settings"][0]{
-      seoTitle, metaDescription, contact, stats,
+      seoTitle, metaDescription, contact, stats, portfolioTeaser, servicesTeaser, contactBanner,
       hero { eyebrow, title, description, videoUrl, posterImage }
     }`
   );
@@ -210,9 +210,19 @@ export async function getSiteSettings() {
       metaDescription: row.metaDescription || null,
       email: row.contact?.email || contactData.email,
       phone: row.contact?.phone || null,
+      address: row.contact?.address || 'Kim Hoa, Đống Đa, Hà Nội',
       stats: {
-        projects: row.stats?.projects ?? null,
-        experienceYears: row.stats?.experienceYears ?? null,
+        stat1_value: row.stats?.stat1_value ?? 50,
+        stat1_prefix: row.stats?.stat1_prefix ?? '+',
+        stat1_suffix: row.stats?.stat1_suffix ?? '',
+        stat1_label: row.stats?.stat1_label || 'Dự án hoàn thành',
+
+        stat2_value: row.stats?.stat2_value ?? 8,
+        stat2_suffix: row.stats?.stat2_suffix ?? '+',
+        stat2_label: row.stats?.stat2_label || 'Năm kinh nghiệm',
+
+        stat3_value: row.stats?.stat3_value ?? 365,
+        stat3_label: row.stats?.stat3_label || 'Ngày sáng tạo',
       },
       hero: {
         eyebrow: row.hero?.eyebrow || null,
@@ -221,6 +231,19 @@ export async function getSiteSettings() {
         videoUrl: row.hero?.videoUrl || null,
         posterImageUrl: row.hero?.posterImage ? coverUrl(row.hero.posterImage, 1920, 1080) : null,
       },
+      portfolioTeaser: {
+        tag: row.portfolioTeaser?.tag || '[ 01 / PORTFOLIO ]',
+        title: row.portfolioTeaser?.title || null,
+      },
+      servicesTeaser: {
+        tag: row.servicesTeaser?.tag || '[ 02 / SERVICES ]',
+        title: row.servicesTeaser?.title || null,
+      },
+      contactBanner: {
+        tag: row.contactBanner?.tag || '[ 03 / CONTACT ]',
+        title: row.contactBanner?.title || null,
+        text: row.contactBanner?.text || null,
+      },
     };
   }
   return {
@@ -228,7 +251,15 @@ export async function getSiteSettings() {
     metaDescription: null,
     email: contactData.email,
     phone: null,
-    stats: { projects: null, experienceYears: null },
+    address: 'Kim Hoa, Đống Đa, Hà Nội',
+    stats: {
+      stat1_value: 50, stat1_prefix: '+', stat1_suffix: '', stat1_label: 'Dự án hoàn thành',
+      stat2_value: 8, stat2_suffix: '+', stat2_label: 'Năm kinh nghiệm',
+      stat3_value: 365, stat3_label: 'Ngày sáng tạo',
+    },
     hero: { eyebrow: null, title: null, description: null, videoUrl: null, posterImageUrl: null },
+    portfolioTeaser: { tag: '[ 01 / PORTFOLIO ]', title: null },
+    servicesTeaser: { tag: '[ 02 / SERVICES ]', title: null },
+    contactBanner: { tag: '[ 03 / CONTACT ]', title: null, text: null },
   };
 }

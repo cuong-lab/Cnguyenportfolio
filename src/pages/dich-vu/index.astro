@@ -13,17 +13,20 @@ const servicesList = await getServices();
   title={L(services.meta.title, locale)}
   description={L(services.meta.description, locale)}
 >
-  <main>
-    <section class="section services reveal">
-      <div class="section-heading">
-        <p class="eyebrow">{L(services.eyebrow, locale)}</p>
-        <h2>{L(services.heading, locale)}</h2>
-      </div>
-      <div class="service-grid reveal-stagger">
-        {servicesList.map((service) => (
-          <ServiceCard title={service.title} description={service.description} iconUrl={service.iconUrl} />
-        ))}
-      </div>
-    </section>
+  <main class="page-main-wrapper">
+    <div class="editorial-container">
+      <section class="section services reveal">
+        <div class="editorial-header">
+          <div class="section-tag">[ SERVICES ]</div>
+          <h1 class="editorial-title">{L(services.heading, locale)}</h1>
+        </div>
+        
+        <div class="service-grid reveal-stagger">
+          {servicesList.map((service) => (
+            <ServiceCard title={service.title} description={service.description} iconUrl={service.iconUrl} />
+          ))}
+        </div>
+      </section>
+    </div>
   </main>
 </BaseLayout>
