@@ -284,6 +284,12 @@ img {
   opacity: 1;
 }
 
+.site-header.hidden {
+  transform: translateY(calc(-100% - 40px)) !important;
+  opacity: 0 !important;
+  pointer-events: none;
+}
+
 :target {
   scroll-margin-top: calc(var(--header-height) + 16px);
 }

@@ -14,13 +14,65 @@ window.addEventListener('resize', () => {
 
 // Throttled scroll handler using rAF and passive listener
 let ticking = false;
+let lastScrollY = window.scrollY;
+let isHeaderHovered = false;
+let hideHeaderTimeout = null;
+
+if (header) {
+  header.addEventListener('mouseenter', () => {
+    isHeaderHovered = true;
+    clearTimeout(hideHeaderTimeout);
+    header.classList.remove('hidden');
+  });
+
+  header.addEventListener('mouseleave', () => {
+    isHeaderHovered = false;
+    if (window.scrollY > 50) {
+      clearTimeout(hideHeaderTimeout);
+      hideHeaderTimeout = setTimeout(() => {
+        if (!isHeaderHovered && window.scrollY > 50) {
+          header.classList.add('hidden');
+        }
+      }, 2000);
+    }
+  });
+}
+
 function onScroll() {
   if (!header) return;
   if (!ticking) {
     ticking = true;
     window.requestAnimationFrame(() => {
-      if (window.scrollY > 12) header.classList.add('scrolled');
+      const currentScrollY = window.scrollY;
+      
+      if (currentScrollY > 12) header.classList.add('scrolled');
       else header.classList.remove('scrolled');
+
+      // Smart header logic
+      if (currentScrollY > 50) {
+        if (currentScrollY > lastScrollY) {
+          // Scrolling down -> hide immediately
+          header.classList.add('hidden');
+          clearTimeout(hideHeaderTimeout);
+        } else if (currentScrollY < lastScrollY) {
+          // Scrolling up -> show and start 5s timeout if not hovered
+          header.classList.remove('hidden');
+          if (!isHeaderHovered) {
+            clearTimeout(hideHeaderTimeout);
+            hideHeaderTimeout = setTimeout(() => {
+              if (!isHeaderHovered && window.scrollY > 50) {
+                header.classList.add('hidden');
+              }
+            }, 5000);
+          }
+        }
+      } else {
+        // At the very top -> always show
+        header.classList.remove('hidden');
+        clearTimeout(hideHeaderTimeout);
+      }
+
+      lastScrollY = currentScrollY <= 0 ? 0 : currentScrollY; // For Mobile or negative scrolling
       ticking = false;
     });
   }
