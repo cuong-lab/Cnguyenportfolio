@@ -11,7 +11,7 @@ const locale = getLocale(Astro.url);
   title={L(contact.meta.title, locale)}
   description={L(contact.meta.description, locale)}
 >
-  <main>
+  <main class="page-main-wrapper">
     <section class="section contact reveal" id="contact">
       <div class="contact-card contact-card-form">
         <p class="eyebrow">{L(contact.eyebrow, locale)}</p>

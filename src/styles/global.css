@@ -3362,3 +3362,18 @@ body::after {
   filter: blur(4px) !important;
   pointer-events: none !important;
 }
+
+/* ==========================================================================
+   SUBPAGE TOP SPACING (Clears Floating Glass Header)
+   ========================================================================== */
+.page-main-wrapper,
+.resume-main-wrapper {
+  padding-top: 150px !important;
+}
+
+@media (max-width: 768px) {
+  .page-main-wrapper,
+  .resume-main-wrapper {
+    padding-top: 120px !important;
+  }
+}
