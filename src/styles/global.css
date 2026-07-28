@@ -3317,7 +3317,8 @@ body::after {
 
 
 /* ==========================================================================
-   HERO FRAME ASPECT RATIO 16:10 & HEADER SMOOTH TRANSITION
+/* ==========================================================================
+   PERFECT SMART HEADER & 16:10 HERO VIDEO FRAME
    ========================================================================== */
 
 .cinematic-hero {
@@ -3330,70 +3331,8 @@ body::after {
 }
 
 .site-header {
-  transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), background 0.35s ease, border-color 0.35s ease, backdrop-filter 0.35s ease !important;
-}
-
-.site-header.hidden {
-  transform: translateY(-100%) !important;
-}
-
-
-/* ==========================================================================
-   ROCK-SOLID HEADER FIX (ZERO FLICKERING & ZERO JUMPING)
-   ========================================================================== */
-
-.site-header {
   position: sticky !important;
   top: 18px !important;
-  transform: none !important;
-  transition: background 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease !important;
-}
-
-.site-header.scrolled {
-  background: rgba(10, 11, 16, 0.85) !important;
-  border-color: rgba(255, 255, 255, 0.16) !important;
-  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.5) !important;
-  transform: none !important;
-}
-
-.site-header.hidden {
-  transform: none !important;
-  opacity: 1 !important;
-}
-
-
-/* ==========================================================================
-   SMOOTH SMART HEADER (SCROLL DOWN = HIDE, SCROLL UP = SHOW, 0 FLICKER)
-   ========================================================================== */
-
-.site-header {
-  position: sticky !important;
-  top: 18px !important;
-  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), background 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease, opacity 0.35s ease !important;
-}
-
-.site-header.scrolled {
-  background: rgba(10, 11, 16, 0.85) !important;
-  border-color: rgba(255, 255, 255, 0.16) !important;
-  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.5) !important;
-}
-
-.site-header.hidden {
-  transform: translateY(calc(-100% - 30px)) !important;
-  opacity: 0 !important;
-  pointer-events: none !important;
-}
-
-
-/* ==========================================================================
-   PURE DIRECTION-BASED SMART HEADER (INSTANT RESPONSIVE, 0 FLICKER)
-   ========================================================================== */
-
-.site-header {
-  position: fixed !important;
-  top: 18px !important;
-  left: 50% !important;
-  transform: translateX(-50%) !important;
   width: min(1180px, calc(100% - 40px)) !important;
   margin: 0 auto !important;
   transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.35s ease, background 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease !important;
@@ -3407,7 +3346,7 @@ body::after {
 }
 
 .site-header.hidden {
-  transform: translate(-50%, calc(-100% - 40px)) !important;
+  transform: translateY(calc(-100% - 40px)) !important;
   opacity: 0 !important;
   pointer-events: none !important;
 }
