@@ -44,35 +44,27 @@ function onScroll() {
     ticking = true;
     window.requestAnimationFrame(() => {
       const currentScrollY = window.scrollY;
-      
-      if (currentScrollY > 12) header.classList.add('scrolled');
+      const scrollDelta = currentScrollY - lastScrollY;
+
+      // Scrolled state background effect
+      if (currentScrollY > 20) header.classList.add('scrolled');
       else header.classList.remove('scrolled');
 
-      // Smart header logic
-      if (currentScrollY > 50) {
-        if (currentScrollY > lastScrollY) {
-          // Scrolling down -> hide immediately
-          header.classList.add('hidden');
-          clearTimeout(hideHeaderTimeout);
-        } else if (currentScrollY < lastScrollY) {
-          // Scrolling up -> show and start 5s timeout if not hovered
+      // Smart hide/show with 8px delta threshold to prevent micro-bounce flickering
+      if (currentScrollY > 80) {
+        if (scrollDelta > 8) {
+          // Scrolling down -> hide header
+          if (!isHeaderHovered) header.classList.add('hidden');
+        } else if (scrollDelta < -8) {
+          // Scrolling up -> show header
           header.classList.remove('hidden');
-          if (!isHeaderHovered) {
-            clearTimeout(hideHeaderTimeout);
-            hideHeaderTimeout = setTimeout(() => {
-              if (!isHeaderHovered && window.scrollY > 50) {
-                header.classList.add('hidden');
-              }
-            }, 5000);
-          }
         }
       } else {
-        // At the very top -> always show
+        // Near the top -> always show header
         header.classList.remove('hidden');
-        clearTimeout(hideHeaderTimeout);
       }
 
-      lastScrollY = currentScrollY <= 0 ? 0 : currentScrollY; // For Mobile or negative scrolling
+      lastScrollY = currentScrollY <= 0 ? 0 : currentScrollY;
       ticking = false;
     });
   }
