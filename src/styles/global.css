@@ -3336,3 +3336,27 @@ body::after {
 .site-header.hidden {
   transform: translateY(-100%) !important;
 }
+
+
+/* ==========================================================================
+   ROCK-SOLID HEADER FIX (ZERO FLICKERING & ZERO JUMPING)
+   ========================================================================== */
+
+.site-header {
+  position: sticky !important;
+  top: 18px !important;
+  transform: none !important;
+  transition: background 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease !important;
+}
+
+.site-header.scrolled {
+  background: rgba(10, 11, 16, 0.85) !important;
+  border-color: rgba(255, 255, 255, 0.16) !important;
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.5) !important;
+  transform: none !important;
+}
+
+.site-header.hidden {
+  transform: none !important;
+  opacity: 1 !important;
+}

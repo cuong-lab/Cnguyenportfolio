@@ -38,33 +38,24 @@ if (header) {
   });
 }
 
+let isScrolled = false;
+
 function onScroll() {
   if (!header) return;
   if (!ticking) {
     ticking = true;
     window.requestAnimationFrame(() => {
       const currentScrollY = window.scrollY;
-      const scrollDelta = currentScrollY - lastScrollY;
 
-      // Scrolled state background effect
-      if (currentScrollY > 20) header.classList.add('scrolled');
-      else header.classList.remove('scrolled');
-
-      // Smart hide/show with 8px delta threshold to prevent micro-bounce flickering
-      if (currentScrollY > 80) {
-        if (scrollDelta > 8) {
-          // Scrolling down -> hide header
-          if (!isHeaderHovered) header.classList.add('hidden');
-        } else if (scrollDelta < -8) {
-          // Scrolling up -> show header
-          header.classList.remove('hidden');
-        }
-      } else {
-        // Near the top -> always show header
-        header.classList.remove('hidden');
+      // Hysteresis gap (40px / 20px) to prevent edge flickering when scrolling near boundary
+      if (currentScrollY > 40 && !isScrolled) {
+        isScrolled = true;
+        header.classList.add('scrolled');
+      } else if (currentScrollY < 20 && isScrolled) {
+        isScrolled = false;
+        header.classList.remove('scrolled');
       }
 
-      lastScrollY = currentScrollY <= 0 ? 0 : currentScrollY;
       ticking = false;
     });
   }
