@@ -29,6 +29,7 @@ if (header) {
   });
 }
 
+let isHeaderHidden = false;
 let isScrolled = false;
 
 function onScroll() {
@@ -36,33 +37,39 @@ function onScroll() {
   if (!ticking) {
     ticking = true;
     window.requestAnimationFrame(() => {
-      const currentScrollY = window.scrollY;
+      const currentScrollY = Math.max(0, window.scrollY);
       const scrollDelta = currentScrollY - lastScrollY;
 
-      // Scrolled state background effect (with 40px/20px hysteresis)
-      if (currentScrollY > 40 && !isScrolled) {
+      // 1. Scrolled background styling (> 30px / <= 15px)
+      if (currentScrollY > 30 && !isScrolled) {
         isScrolled = true;
         header.classList.add('scrolled');
-      } else if (currentScrollY < 20 && isScrolled) {
+      } else if (currentScrollY <= 15 && isScrolled) {
         isScrolled = false;
         header.classList.remove('scrolled');
       }
 
-      // Smart Header: 
-      // - Inside Hero Section (<= 250px): ALWAYS SHOW (Zero hiding/flickering over Hero video)
-      // - Below Hero Section (> 250px): Hide on scroll down (> 15px), Show on scroll up (<-15px)
-      if (currentScrollY > 250) {
-        if (scrollDelta > 15) {
-          if (!isHeaderHovered) header.classList.add('hidden');
-        } else if (scrollDelta < -15) {
+      // 2. Pure Direction-Based Smart Header State Machine:
+      // At the very top (scrollY <= 15px), ALWAYS keep header visible
+      if (currentScrollY <= 15) {
+        if (isHeaderHidden) {
+          isHeaderHidden = false;
           header.classList.remove('hidden');
         }
       } else {
-        // Hero dead-zone -> always show header
-        header.classList.remove('hidden');
+        // Scroll DOWN -> Hide IMMEDIATELY
+        if (scrollDelta > 3 && !isHeaderHidden && !isHeaderHovered) {
+          isHeaderHidden = true;
+          header.classList.add('hidden');
+        }
+        // Scroll UP -> Show IMMEDIATELY
+        else if (scrollDelta < -3 && isHeaderHidden) {
+          isHeaderHidden = false;
+          header.classList.remove('hidden');
+        }
       }
 
-      lastScrollY = currentScrollY <= 0 ? 0 : currentScrollY;
+      lastScrollY = currentScrollY;
       ticking = false;
     });
   }
