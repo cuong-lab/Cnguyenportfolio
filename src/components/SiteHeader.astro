@@ -1,27 +1,45 @@
 ---
-// Per project routing rule (instruction.md): every nav link is a real
-// /path/ route — no #hash anchor stands in for a page, on any page,
-// including the resume page's own "Về tôi"/"Kinh nghiệm" sections (that
-// was the one remaining violation: the main nav used #about-me/
-// #resume-experience to jump between sections dumped into one file).
-// Those sections are still on /resume/, just reached by scrolling the
-// page normally rather than being individual nav targets.
+// Per project routing rule: every nav link is a real /path/ route — no #hash
+// anchor stands in for a page. The active tab is resolved server-side here from
+// Astro.url.pathname (not in the browser) so the correct pill renders in the
+// initial HTML — that removes the flash where the indicator started on "Home"
+// and visibly slid to the real tab after hydration (site.js then just positions
+// the indicator under whichever toggle already carries .active).
+import { getLocale, useTranslations } from '../i18n/utils';
+
+const locale = getLocale(Astro.url);
+const t = useTranslations(locale);
+
+const navItems = [
+  { key: 'about', href: '/' },
+  { key: 'services', href: '/dich-vu/' },
+  { key: 'work', href: '/portfolio/' },
+  { key: 'contact', href: '/lien-he/' },
+  { key: 'resume', href: '/resume/' },
+] as const;
+
+const normalize = (path: string) => path.replace(/index\.html$/, '').replace(/\/$/, '') || '/';
+const current = normalize(Astro.url.pathname);
+const isActive = (href: string) => normalize(href) === current;
 ---
 
 <header class="site-header">
   <a id="logo" class="brand" href="/">Cường Nguyễn Showreel</a>
-  <nav class="nav-pill-wrapper" aria-label="Điều hướng chính">
+  <nav class="nav-pill-wrapper" aria-label={t('nav.ariaLabel')}>
     <div class="nav-indicator-glow"></div>
     <div class="nav-pill">
       <div class="nav-indicator-pill"></div>
-      <a href="/" class="nav-toggle">Giới thiệu</a>
-      <a href="/dich-vu/" class="nav-toggle">Dịch vụ</a>
-      <a href="/portfolio/" class="nav-toggle">Dự án</a>
-      <a href="/lien-he/" class="nav-toggle">Liên hệ</a>
-      <a href="/resume/" class="nav-toggle">Resume</a>
+      {navItems.map((item) => (
+        <a
+          href={item.href}
+          class:list={['nav-toggle', { active: isActive(item.href) }]}
+        >
+          {t(`nav.${item.key}`)}
+        </a>
+      ))}
     </div>
   </nav>
   <div class="header-actions">
-    <a class="nav-cta" href="/lien-he/">Đặt lịch</a>
+    <a class="nav-cta" href="/lien-he/">{t('actions.bookNow')}</a>
   </div>
 </header>

@@ -1,0 +1,82 @@
+---
+import { useTranslations, type Locale } from '../i18n/utils';
+
+interface Props {
+  locale: Locale;
+}
+const { locale } = Astro.props;
+const t = useTranslations(locale);
+---
+
+<!-- Real contact form (replaces the old mailto: link). There is no backend in
+     this static build yet, so contact.js validates client-side and shows an
+     inline success state; wire the POST endpoint (Formspree / serverless /
+     Supabase Edge Function) into contact.js's `submitForm` when it exists. -->
+<form
+  id="contact-form"
+  class="contact-form"
+  novalidate
+  data-msg-sending={t('contactForm.sending')}
+  data-msg-success={t('contactForm.success')}
+  data-msg-error={t('contactForm.error')}
+>
+  <div class="form-row">
+    <div class="form-field">
+      <label for="cf-name">{t('contactForm.name')}</label>
+      <input
+        type="text"
+        id="cf-name"
+        name="name"
+        autocomplete="name"
+        placeholder={t('contactForm.namePlaceholder')}
+        required
+      />
+      <p class="form-error" data-error-for="name">{t('contactForm.errorName')}</p>
+    </div>
+    <div class="form-field">
+      <label for="cf-email">{t('contactForm.email')}</label>
+      <input
+        type="email"
+        id="cf-email"
+        name="email"
+        autocomplete="email"
+        placeholder={t('contactForm.emailPlaceholder')}
+        required
+      />
+      <p class="form-error" data-error-for="email">{t('contactForm.errorEmail')}</p>
+    </div>
+  </div>
+
+  <div class="form-field">
+    <label for="cf-type">{t('contactForm.projectType')}</label>
+    <select id="cf-type" name="projectType">
+      <option value="" disabled selected>{t('contactForm.projectTypePlaceholder')}</option>
+      <option value="film">{t('contactForm.optionFilm')}</option>
+      <option value="photo">{t('contactForm.optionPhoto')}</option>
+      <option value="edit">{t('contactForm.optionEdit')}</option>
+      <option value="other">{t('contactForm.optionOther')}</option>
+    </select>
+  </div>
+
+  <div class="form-field">
+    <label for="cf-message">{t('contactForm.message')}</label>
+    <textarea
+      id="cf-message"
+      name="message"
+      rows="5"
+      placeholder={t('contactForm.messagePlaceholder')}
+      required
+    ></textarea>
+    <p class="form-error" data-error-for="message">{t('contactForm.errorMessage')}</p>
+  </div>
+
+  <button type="submit" class="button primary contact-submit">
+    <span class="contact-submit-label">{t('contactForm.submit')}</span>
+  </button>
+
+  <p class="form-status" role="status" aria-live="polite"></p>
+</form>
+
+<script>
+  import '../scripts/contact.js';
+</script>

@@ -1,7 +1,8 @@
 ---
 import SiteHeader from '../components/SiteHeader.astro';
-import AdminBar from '../components/AdminBar.astro';
 import HeavyAnimationLoader from '../components/HeavyAnimationLoader.astro';
+import LoadingOverlay from '../components/LoadingOverlay.astro';
+import { getLocale, useTranslations } from '../i18n/utils';
 import '../styles/global.css';
 
 interface Props {
@@ -11,10 +12,13 @@ interface Props {
   mediaGallery?: boolean;
 }
 const { title, description, initFn, mediaGallery = false } = Astro.props;
+
+const locale = getLocale(Astro.url);
+const t = useTranslations(locale);
 ---
 
 <!DOCTYPE html>
-<html lang="vi">
+<html lang={locale}>
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -23,7 +27,7 @@ const { title, description, initFn, mediaGallery = false } = Astro.props;
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Playfair+Display:wght@600;700&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700;800&display=swap"
       rel="stylesheet"
     />
     {initFn && <HeavyAnimationLoader initFn={initFn} />}
@@ -34,16 +38,16 @@ const { title, description, initFn, mediaGallery = false } = Astro.props;
     )}
   </head>
   <body>
-    <div class="background-glow glow-1"></div>
-    <div class="background-glow glow-2"></div>
+    <div class="cursor-dot" aria-hidden="true"></div>
 
     <SiteHeader />
-    <AdminBar mediaAdmin={mediaGallery} />
 
     <slot />
+    
+    <LoadingOverlay />
 
     <footer class="site-footer">
-      <p>© <span id="year"></span> Cường Nguyễn Showreel. Crafted with light and story.</p>
+      <p>© <span id="year"></span> Cường Nguyễn Showreel. {t('footer.tagline')}</p>
     </footer>
 
     <script>

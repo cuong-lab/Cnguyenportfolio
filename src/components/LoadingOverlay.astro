@@ -1,0 +1,61 @@
+---
+// LoadingOverlay.astro
+---
+
+<div id="page-transition-overlay" class="loading-overlay" aria-hidden="true">
+  <div class="loading-icon-wrapper">
+    <svg class="film-reel-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+      <circle cx="12" cy="12" r="10"></circle>
+      <circle cx="12" cy="12" r="2"></circle>
+      <line x1="12" y1="2" x2="12" y2="4"></line>
+      <line x1="12" y1="20" x2="12" y2="22"></line>
+      <line x1="2" y1="12" x2="4" y2="12"></line>
+      <line x1="20" y1="12" x2="22" y2="12"></line>
+      <line x1="4.93" y1="4.93" x2="6.34" y2="6.34"></line>
+      <line x1="17.66" y1="17.66" x2="19.07" y2="19.07"></line>
+      <line x1="4.93" y1="19.07" x2="6.34" y2="17.66"></line>
+      <line x1="17.66" y1="4.93" x2="19.07" y2="6.34"></line>
+    </svg>
+  </div>
+</div>
+
+<style is:global>
+  .loading-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 99999;
+    background: var(--bg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.4s ease;
+  }
+  
+  .loading-overlay.is-active {
+    opacity: 1;
+    pointer-events: all;
+  }
+
+  /* Lớp grain điện ảnh cho overlay */
+  .loading-overlay::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.08'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: -1;
+  }
+
+  .film-reel-icon {
+    width: 64px;
+    height: 64px;
+    color: var(--accent);
+    animation: spin 2s linear infinite;
+  }
+
+  @keyframes spin {
+    100% { transform: rotate(360deg); }
+  }
+</style>

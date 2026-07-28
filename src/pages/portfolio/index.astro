@@ -1,22 +1,63 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
+import ProjectCard from '../../components/ProjectCard.astro';
+import ProjectModal from '../../components/ProjectModal.astro';
+import { getLocale, useTranslations, localize as L } from '../../i18n/utils';
+import { projects } from '../../data';
+import { getProjects } from '../../sanity/api.js';
+
+const locale = getLocale(Astro.url);
+const t = useTranslations(locale);
+// Rendered server-side from Sanity (falls back to projects.json samples). Hero
+// and Explore media are still Supabase-backed on the home page; this grid is
+// now driven entirely by the Sanity `project` documents.
+const projectList = await getProjects();
+
+// Distinct categories across all projects, preserving first-seen order — feeds
+// the client-side filter pills (portfolio-filter.js).
+const allCategories = [...new Set(projectList.flatMap((p) => p.categories || []))];
 ---
 
 <BaseLayout
-  title="Dự án | Cường Nguyễn Showreel"
-  description="Toàn bộ dự án quay phim, chụp ảnh và dựng phim của Cường Nguyễn Showreel — portfolio đầy đủ dành cho khách hàng và nhà tuyển dụng."
-  mediaGallery
+  title={L(projects.meta.title, locale)}
+  description={L(projects.meta.description, locale)}
 >
   <main>
     <section class="section portfolio reveal">
       <div class="section-heading portfolio-heading">
         <div>
-          <p class="eyebrow">Dự án</p>
-          <h2>Toàn bộ dự án quay dựng và chụp ảnh.</h2>
+          <p class="eyebrow">{L(projects.eyebrow, locale)}</p>
+          <h2>{L(projects.heading, locale)}</h2>
         </div>
-        <button type="button" id="portfolio-add-btn" class="button primary small admin-only">+ Thêm dự án</button>
       </div>
-      <div class="portfolio-grid reveal-stagger" id="portfolio-grid"></div>
+
+      {allCategories.length > 0 && (
+        <div class="portfolio-filter" role="group" aria-label={t('project.filterAria')}>
+          <button type="button" class="filter-pill active" data-filter="all">{t('project.all')}</button>
+          {allCategories.map((cat) => (
+            <button type="button" class="filter-pill" data-filter={cat}>{cat}</button>
+          ))}
+        </div>
+      )}
+
+      <div class="portfolio-grid reveal-stagger" data-portfolio-grid>
+        {projectList.map((project, i) => (
+          <ProjectCard
+            title={project.title}
+            index={i}
+            coverImageUrl={project.coverImageUrl}
+            videoHoverUrl={project.videoHoverUrl}
+            cardClass={project.cardClass}
+            categories={project.categories}
+            id={project.id}
+          />
+        ))}
+      </div>
     </section>
+    <ProjectModal projects={projectList} />
   </main>
+
+  <script>
+    import '../../scripts/portfolio-filter.js';
+  </script>
 </BaseLayout>

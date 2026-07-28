@@ -1,0 +1,87 @@
+{
+  "meta": {
+    "title": {
+      "vi": "Cường Nguyễn Showreel | Portfolio",
+      "en": "Cường Nguyễn Showreel | Portfolio"
+    },
+    "description": {
+      "vi": "Portfolio aesthetic cho freelancer làm quay phim, chụp ảnh và dựng phim. Cường Nguyễn Showreel tạo nên câu chuyện hình ảnh cinematic cho thương hiệu và dự án.",
+      "en": "An aesthetic portfolio for a freelance filmmaker, photographer and editor. Cường Nguyễn Showreel crafts cinematic visual stories for brands and projects."
+    }
+  },
+  "hero": {
+    "eyebrow": { "vi": "Film • Photography • Edit", "en": "Film • Photography • Edit" },
+    "title": {
+      "vi": "Chuyển những khoảnh khắc nhỏ thành câu chuyện cinematic.",
+      "en": "Turning small moments into cinematic stories."
+    },
+    "text": {
+      "vi": "Portfolio dành cho freelancer sáng tạo, làm quay, chụp và dựng phim theo phong cách aesthetic, nhẹ nhàng, có cảm xúc và đủ sức thu hút thương hiệu.",
+      "en": "A portfolio for a creative freelancer shooting, photographing and editing in an aesthetic, soft and emotional style that draws brands in."
+    },
+    "stats": [
+      { "value": "+50", "label": { "vi": "Dự án hoàn thành", "en": "Projects delivered" } },
+      { "value": "8+", "label": { "vi": "Năm kinh nghiệm", "en": "Years of experience" } },
+      { "value": "24/7", "label": { "vi": "Hỗ trợ sáng tạo", "en": "Creative support" } }
+    ],
+    "reelPill": { "vi": "Latest Reel", "en": "Latest Reel" },
+    "reelTitle": { "vi": "Spring Motion Film", "en": "Spring Motion Film" },
+    "reelMeta": { "vi": "Brand story · 2026 · 01:30", "en": "Brand story · 2026 · 01:30" }
+  },
+  "showreel": {
+    "eyebrow": { "vi": "Showreel", "en": "Showreel" },
+    "title": {
+      "vi": "Kỹ thuật quay dựng sắc nét, nhịp điệu chuyển cảnh tinh tế.",
+      "en": "Crisp cinematography and a refined editing rhythm."
+    },
+    "text": {
+      "vi": "Mỗi cảnh quay là một nhịp cảm xúc, được dựng tinh tế để giữ ánh sáng, không gian và âm hưởng thương hiệu.",
+      "en": "Every shot is a beat of emotion, edited with care to preserve light, space and the brand's tone."
+    },
+    "quote": {
+      "vi": "\"Không chỉ là hình ảnh, mà là cảm xúc được làm chậm, tinh giản và kể lại bằng ánh sáng.\"",
+      "en": "\"Not just images, but emotion slowed down, distilled and retold through light.\""
+    },
+    "author": "— Cường Nguyễn"
+  },
+  "explore": [
+    {
+      "eyebrow": { "vi": "Featured", "en": "Featured" },
+      "title": { "vi": "Quiet Luxury — Campaign", "en": "Quiet Luxury — Campaign" },
+      "text": {
+        "vi": "Kể chuyện bằng hình ảnh với tone màu trầm và nhịp điệu cinematic.",
+        "en": "Visual storytelling with muted tones and cinematic pacing."
+      }
+    },
+    {
+      "eyebrow": { "vi": "Short Film", "en": "Short Film" },
+      "title": { "vi": "After Rain", "en": "After Rain" },
+      "text": {
+        "vi": "Câu chuyện ngắn xây quanh ánh sáng hoàng hôn và ký ức.",
+        "en": "A short story built around golden hour and memory."
+      }
+    },
+    {
+      "eyebrow": { "vi": "Editorial", "en": "Editorial" },
+      "title": { "vi": "Golden Hour", "en": "Golden Hour" },
+      "text": {
+        "vi": "Bộ ảnh chân dung với color grading điện ảnh.",
+        "en": "Portrait series with cinematic color grading."
+      }
+    }
+  ],
+  "servicesTeaser": {
+    "eyebrow": { "vi": "Dịch vụ", "en": "Services" },
+    "heading": {
+      "vi": "Giải pháp sáng tạo cho mọi khung hình.",
+      "en": "Creative solutions for every frame."
+    }
+  },
+  "portfolioTeaser": {
+    "eyebrow": { "vi": "Dự án nổi bật", "en": "Featured work" },
+    "heading": {
+      "vi": "Một vài tác phẩm thể hiện phong cách làm việc.",
+      "en": "A few pieces that show how I work."
+    }
+  }
+}

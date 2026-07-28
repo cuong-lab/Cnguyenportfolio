@@ -1,0 +1,192 @@
+import { sanityClient } from 'sanity:client';
+import { urlFor } from './image.js';
+import { localize } from '../i18n/utils';
+import {
+  services as servicesData,
+  projects as projectsData,
+  about as aboutData,
+  contact as contactData,
+} from '../data';
+
+// GROQ data access with graceful fallback. When SANITY_PROJECT_ID is unset
+// (placeholder) or a query fails/returns nothing, every getter falls back to
+// the src/data sample content, so the site builds and renders before Sanity is
+// configured and switches over automatically once it is.
+const PROJECT_ID = import.meta.env.SANITY_PROJECT_ID;
+const CONFIGURED = !!PROJECT_ID && PROJECT_ID !== 'placeholder';
+
+// Fallback content in src/data is authored bilingually ({ vi, en }); the Sanity
+// schema is single-language, so collapse fallbacks to the default locale (vi).
+const L = (field) => (field ? localize(field, 'vi') : '');
+
+async function safeFetch(query, params) {
+  if (!CONFIGURED) return null;
+  try {
+    return await sanityClient.fetch(query, params);
+  } catch (e) {
+    console.warn('[sanity] fetch failed, using src/data fallback:', e?.message || e);
+    return null;
+  }
+}
+
+// Flatten Portable Text blocks into a short plain-text excerpt for cards.
+function blocksToText(blocks) {
+  if (!Array.isArray(blocks)) return '';
+  return blocks
+    .filter((b) => b && b._type === 'block')
+    .map((b) => (b.children || []).map((c) => c.text).join(''))
+    .join('\n\n')
+    .trim();
+}
+
+function coverUrl(source, w = 1600, h = 900) {
+  if (!source) return null;
+  try {
+    return urlFor(source).width(w).height(h).fit('crop').auto('format').url();
+  } catch {
+    return null;
+  }
+}
+
+// ---------- Services ----------
+export async function getServices() {
+  const rows = await safeFetch(
+    `*[_type == "service"] | order(order asc, _createdAt asc){ "id": _id, title, description, icon }`
+  );
+  if (rows && rows.length) {
+    return rows.map((r) => ({
+      id: r.id,
+      title: r.title || '',
+      description: r.description || '',
+      iconUrl: r.icon ? urlFor(r.icon).width(96).height(96).fit('crop').url() : null,
+    }));
+  }
+  return servicesData.items.map((s) => ({
+    id: s.id,
+    title: L(s.title),
+    description: L(s.description),
+    iconUrl: null,
+  }));
+}
+
+// ---------- Projects ----------
+// Split flattened Portable Text into trimmed, non-empty paragraphs.
+function toParagraphs(blocks) {
+  return blocksToText(blocks)
+    .split('\n\n')
+    .map((p) => p.trim())
+    .filter(Boolean);
+}
+
+function fixLocalhostUrl(url) {
+  if (typeof url !== 'string') return url;
+  return url.replace(/^http:\/\/(localhost|127\.0\.0\.1)(:\d+)?/, '');
+}
+
+function mapProject(r) {
+  return {
+    id: r.id,
+    title: r.title || '',
+    coverImageUrl: coverUrl(r.coverImage),
+    // Hover teaser on the card; main video, structured metadata, and full
+    // description feed the in-page modal (ProjectModal.astro / portfolio-modal.js).
+    videoHoverUrl: fixLocalhostUrl(r.videoHoverUrl) || null,
+    videoUrl: fixLocalhostUrl(r.mainVideoUrl) || null,
+    client: r.client || null,
+    year: r.year ?? null,
+    role: r.role || null,
+    categories: Array.isArray(r.categories) ? r.categories.filter(Boolean) : [],
+    aspectRatio: r.aspectRatio === '9:16' ? '9:16' : '16:9',
+    descriptionParagraphs: toParagraphs(r.description),
+    cardClass: null,
+    featured: !!r.featured,
+  };
+}
+
+export async function getProjects() {
+  const rows = await safeFetch(
+    `*[_type == "project"] | order(featured desc, year desc, _createdAt desc){
+      "id": _id, title, featured, client, year, role, categories, aspectRatio,
+      coverImage, videoHoverUrl, mainVideoUrl, description
+    }`
+  );
+  if (rows && rows.length) return rows.map(mapProject);
+  return projectsData.items.map((p) => ({
+    id: p.id,
+    title: L(p.title),
+    coverImageUrl: null,
+    videoHoverUrl: null,
+    videoUrl: null,
+    client: null,
+    year: null,
+    role: null,
+    // The bilingual sample "tag" doubles as a single fallback category so the
+    // filter has something to work with before Sanity is configured.
+    categories: p.tag ? [L(p.tag)] : [],
+    aspectRatio: '16:9',
+    descriptionParagraphs: [L(p.description)].filter(Boolean),
+    cardClass: p.cardClass || null,
+    featured: !!p.featured,
+  }));
+}
+
+export async function getFeaturedProjects(limit = 3) {
+  const all = await getProjects();
+  const featured = all.filter((p) => p.featured);
+  return (featured.length ? featured : all).slice(0, limit);
+}
+
+// ---------- Resume experiences ----------
+export async function getResumeExperiences() {
+  const rows = await safeFetch(
+    `*[_type == "resume_experience"] | order(order asc, _createdAt desc){
+      "id": _id, company, role, timeframe, skills, outcomes, description
+    }`
+  );
+  if (rows && rows.length) {
+    return rows.map((r) => ({
+      id: r.id,
+      company: r.company || '',
+      role: r.role || '',
+      timeframe: r.timeframe || '',
+      skills: Array.isArray(r.skills) ? r.skills : [],
+      outcomes: r.outcomes || '',
+      description: r.description || '',
+    }));
+  }
+  return aboutData.experiences.map((e) => ({
+    id: e.id,
+    company: L(e.company),
+    role: L(e.role),
+    timeframe: L(e.year),
+    skills: (e.tags || []).map(L),
+    outcomes: L(e.outcomes),
+    description: L(e.description),
+  }));
+}
+
+// ---------- Site settings (singleton) ----------
+export async function getSiteSettings() {
+  const row = await safeFetch(
+    `*[_type == "site_settings"][0]{ seoTitle, metaDescription, contact, stats }`
+  );
+  if (row) {
+    return {
+      seoTitle: row.seoTitle || null,
+      metaDescription: row.metaDescription || null,
+      email: row.contact?.email || contactData.email,
+      phone: row.contact?.phone || null,
+      stats: {
+        projects: row.stats?.projects ?? null,
+        experienceYears: row.stats?.experienceYears ?? null,
+      },
+    };
+  }
+  return {
+    seoTitle: null,
+    metaDescription: null,
+    email: contactData.email,
+    phone: null,
+    stats: { projects: null, experienceYears: null },
+  };
+}

@@ -1,0 +1,99 @@
+---
+import { getLocale, useTranslations } from '../i18n/utils';
+
+// In-page video lightbox for the gallery. A card click (data-index) opens this
+// over the current page — no navigation. The player + Title + description are
+// driven client-side by portfolio-modal.js from the JSON data island below,
+// which must stay in the same order as the rendered cards.
+interface ModalProject {
+  title: string;
+  videoUrl?: string | null;
+  coverImageUrl?: string | null;
+  client?: string | null;
+  year?: number | null;
+  role?: string | null;
+  aspectRatio?: string | null;
+  descriptionParagraphs?: string[];
+}
+interface Props {
+  projects: ModalProject[];
+}
+const { projects } = Astro.props;
+
+const locale = getLocale(Astro.url);
+const t = useTranslations(locale);
+
+// Escape "<" so a "</script>" inside any description can't break out of the
+// JSON <script> island.
+const dataJson = JSON.stringify(
+  projects.map((p) => ({
+    title: p.title,
+    videoUrl: p.videoUrl ?? null,
+    cover: p.coverImageUrl ?? null,
+    client: p.client ?? null,
+    year: p.year ?? null,
+    role: p.role ?? null,
+    aspectRatio: p.aspectRatio === '9:16' ? '9:16' : '16:9',
+    desc: p.descriptionParagraphs ?? [],
+  }))
+).replace(/</g, '\\u003c');
+---
+
+<script type="application/json" id="projects-data" set:html={dataJson}></script>
+
+<div id="project-modal" class="pm-overlay" aria-hidden="true">
+  <div
+    class="pm-dialog"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="pm-title"
+  >
+    <button type="button" class="pm-btn pm-close" aria-label={t('project.closeAria')}>&times;</button>
+
+    <div class="pm-scroll" data-pm-scroll>
+      <div class="pm-player" data-pm-player></div>
+
+      <div class="pm-info">
+        <div class="pm-info-head">
+          <h2 id="pm-title" class="pm-title"></h2>
+          <div class="pm-nav">
+            <span class="pm-counter" aria-hidden="true"></span>
+            <button type="button" class="pm-btn pm-prev" aria-label={t('project.prevAria')}>&lsaquo;</button>
+            <button type="button" class="pm-btn pm-next" aria-label={t('project.nextAria')}>&rsaquo;</button>
+          </div>
+        </div>
+
+        <div class="pm-body">
+          <dl class="pm-meta" data-pm-meta>
+            <div class="pm-meta-row" data-pm-row="client" hidden>
+              <dt class="pm-meta-label">{t('project.client')}</dt>
+              <dd class="pm-meta-value" data-pm-client></dd>
+            </div>
+            <div class="pm-meta-row" data-pm-row="year" hidden>
+              <dt class="pm-meta-label">{t('project.year')}</dt>
+              <dd class="pm-meta-value" data-pm-year></dd>
+            </div>
+            <div class="pm-meta-row" data-pm-row="role" hidden>
+              <dt class="pm-meta-label">{t('project.role')}</dt>
+              <dd class="pm-meta-value" data-pm-role></dd>
+            </div>
+          </dl>
+
+          <div class="pm-desc-section" data-pm-desc-section hidden>
+            <h3 class="pm-desc-head">{t('project.overview')}</h3>
+            <div class="pm-desc" data-pm-desc></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Custom liquid scroll indicator (native scrollbar hidden on .pm-scroll) -->
+    <div class="pm-scrollbar" data-pm-scrollbar aria-hidden="true">
+      <span class="pm-scrollthumb" data-pm-scrollthumb></span>
+    </div>
+  </div>
+</div>
+
+<script>
+  import '../scripts/portfolio-modal.js';
+</script>

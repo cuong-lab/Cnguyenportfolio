@@ -1,30 +1,28 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
+import ServiceCard from '../../components/ServiceCard.astro';
+import { getLocale, localize as L } from '../../i18n/utils';
+import { services } from '../../data';
+import { getServices } from '../../sanity/api.js';
+
+const locale = getLocale(Astro.url);
+const servicesList = await getServices();
 ---
 
 <BaseLayout
-  title="Dịch vụ | Cường Nguyễn Showreel"
-  description="Dịch vụ quay phim, chụp ảnh và dựng phim của Cường Nguyễn Showreel — giải pháp sáng tạo cho mọi khung hình."
+  title={L(services.meta.title, locale)}
+  description={L(services.meta.description, locale)}
 >
   <main>
     <section class="section services reveal">
       <div class="section-heading">
-        <p class="eyebrow">Dịch vụ</p>
-        <h2>Giải pháp sáng tạo cho mọi khung hình.</h2>
+        <p class="eyebrow">{L(services.eyebrow, locale)}</p>
+        <h2>{L(services.heading, locale)}</h2>
       </div>
       <div class="service-grid reveal-stagger">
-        <article class="service-card">
-          <h3 class="editable" data-key="service-1-title">Quay phim</h3>
-          <p class="editable" data-key="service-1-desc">Quay cinematic cho thương hiệu, campaign, short film, lifestyle và content social.</p>
-        </article>
-        <article class="service-card">
-          <h3 class="editable" data-key="service-2-title">Chụp ảnh</h3>
-          <p class="editable" data-key="service-2-desc">Chụp portrait, product, editorial và concept với ánh sáng mềm, màu sắc tinh tế.</p>
-        </article>
-        <article class="service-card">
-          <h3 class="editable" data-key="service-3-title">Dựng phim</h3>
-          <p class="editable" data-key="service-3-desc">Biên tập, color grading và sound design để từng cảnh đều đẹp và có nhịp kể chuyện.</p>
-        </article>
+        {servicesList.map((service) => (
+          <ServiceCard title={service.title} description={service.description} iconUrl={service.iconUrl} />
+        ))}
       </div>
     </section>
   </main>

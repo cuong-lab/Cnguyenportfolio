@@ -1,0 +1,66 @@
+{
+  "nav": {
+    "ariaLabel": "Main navigation",
+    "about": "About",
+    "services": "Services",
+    "work": "Work",
+    "contact": "Contact",
+    "resume": "Resume"
+  },
+  "actions": {
+    "viewProjects": "View work",
+    "contactNow": "Get in touch",
+    "viewMoreWork": "See more work",
+    "viewServices": "Explore services",
+    "viewAllProjects": "View all work",
+    "bookNow": "Book a call"
+  },
+  "resume": {
+    "role": "Role",
+    "skills": "Skills",
+    "outcomes": "Highlights",
+    "description": "Description",
+    "scrollHint": "(Scroll down)",
+    "experience": "Experience",
+    "prevAria": "Previous experience",
+    "nextAria": "Next experience"
+  },
+  "about": {
+    "strengths": "Strengths"
+  },
+  "project": {
+    "client": "Client",
+    "year": "Year",
+    "role": "Role",
+    "overview": "Project overview",
+    "all": "All",
+    "filterAria": "Filter projects by category",
+    "prevAria": "Previous project",
+    "nextAria": "Next project",
+    "closeAria": "Close"
+  },
+  "contactForm": {
+    "name": "Full name",
+    "namePlaceholder": "Your name",
+    "email": "Email",
+    "emailPlaceholder": "you@email.com",
+    "projectType": "Project type",
+    "projectTypePlaceholder": "Choose a project type",
+    "optionFilm": "Filming",
+    "optionPhoto": "Photography",
+    "optionEdit": "Editing",
+    "optionOther": "Other",
+    "message": "Message",
+    "messagePlaceholder": "Tell me about your project…",
+    "submit": "Send message",
+    "sending": "Sending…",
+    "success": "Thank you! I'll get back to you as soon as possible.",
+    "error": "Something went wrong, please try again.",
+    "errorName": "Please enter your name.",
+    "errorEmail": "Please enter a valid email.",
+    "errorMessage": "Please enter a message."
+  },
+  "footer": {
+    "tagline": "Crafted with light and story."
+  }
+}

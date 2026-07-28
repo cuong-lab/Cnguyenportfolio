@@ -1,0 +1,43 @@
+{
+  "meta": {
+    "title": {
+      "vi": "Dịch vụ | Cường Nguyễn Showreel",
+      "en": "Services | Cường Nguyễn Showreel"
+    },
+    "description": {
+      "vi": "Dịch vụ quay phim, chụp ảnh và dựng phim của Cường Nguyễn Showreel — giải pháp sáng tạo cho mọi khung hình.",
+      "en": "Filmmaking, photography and editing services by Cường Nguyễn Showreel — creative solutions for every frame."
+    }
+  },
+  "eyebrow": { "vi": "Dịch vụ", "en": "Services" },
+  "heading": {
+    "vi": "Giải pháp sáng tạo cho mọi khung hình.",
+    "en": "Creative solutions for every frame."
+  },
+  "items": [
+    {
+      "id": "filming",
+      "title": { "vi": "Quay phim", "en": "Filming" },
+      "description": {
+        "vi": "Quay cinematic cho thương hiệu, campaign, short film, lifestyle và content social.",
+        "en": "Cinematic filming for brands, campaigns, short films, lifestyle and social content."
+      }
+    },
+    {
+      "id": "photography",
+      "title": { "vi": "Chụp ảnh", "en": "Photography" },
+      "description": {
+        "vi": "Chụp portrait, product, editorial và concept với ánh sáng mềm, màu sắc tinh tế.",
+        "en": "Portrait, product, editorial and concept photography with soft light and refined color."
+      }
+    },
+    {
+      "id": "editing",
+      "title": { "vi": "Dựng phim", "en": "Editing" },
+      "description": {
+        "vi": "Biên tập, color grading và sound design để từng cảnh đều đẹp và có nhịp kể chuyện.",
+        "en": "Editing, color grading and sound design so every scene looks beautiful and tells a story."
+      }
+    }
+  ]
+}

@@ -1,20 +1,23 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
+import ContactForm from '../../components/ContactForm.astro';
+import { getLocale, localize as L } from '../../i18n/utils';
+import { contact } from '../../data';
+
+const locale = getLocale(Astro.url);
 ---
 
 <BaseLayout
-  title="Liên hệ | Cường Nguyễn Showreel"
-  description="Liên hệ với Cường Nguyễn Showreel để trao đổi về dự án quay phim, chụp ảnh và dựng phim."
+  title={L(contact.meta.title, locale)}
+  description={L(contact.meta.description, locale)}
 >
   <main>
     <section class="section contact reveal" id="contact">
-      <div class="contact-card">
-        <p class="eyebrow">Liên hệ</p>
-        <h2 class="editable" data-key="contact-title">Muốn tạo một bộ sưu tập hình ảnh thật đẹp cho dự án của bạn?</h2>
-        <p class="editable" data-key="contact-text">
-          Gửi cho tôi thông tin dự án, phong cách bạn muốn và thời gian cần sản phẩm. Tôi sẽ phản hồi sớm nhất.
-        </p>
-        <a id="contact-email" class="button primary editable" data-key="contact-email" href="mailto:hello@nomonm.studio">hello@nomonm.studio</a>
+      <div class="contact-card contact-card-form">
+        <p class="eyebrow">{L(contact.eyebrow, locale)}</p>
+        <h2>{L(contact.title, locale)}</h2>
+        <p>{L(contact.text, locale)}</p>
+        <ContactForm locale={locale} />
       </div>
     </section>
   </main>

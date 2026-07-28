@@ -1,10 +1,35 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import ServiceCard from '../components/ServiceCard.astro';
+import ProjectCard from '../components/ProjectCard.astro';
+import ProjectModal from '../components/ProjectModal.astro';
+import { getLocale, useTranslations, localize as L } from '../i18n/utils';
+import { home, contact } from '../data';
+import { getServices, getFeaturedProjects, getSiteSettings } from '../sanity/api.js';
+
+const locale = getLocale(Astro.url);
+const t = useTranslations(locale);
+const { hero, showreel, explore, servicesTeaser, portfolioTeaser } = home;
+
+// Sanity-backed (with src/data fallback); editorial copy below stays in src/data.
+const [servicesList, featuredProjects, settings] = await Promise.all([
+  getServices(),
+  getFeaturedProjects(3),
+  getSiteSettings(),
+]);
+
+// Hero stat numbers come from site_settings when set, keeping the localized
+// labels + the static third stat from home.json.
+const heroStats = hero.stats.map((stat, i) => {
+  if (i === 0 && settings.stats.projects != null) return { value: `+${settings.stats.projects}`, label: stat.label };
+  if (i === 1 && settings.stats.experienceYears != null) return { value: `${settings.stats.experienceYears}+`, label: stat.label };
+  return stat;
+});
 ---
 
 <BaseLayout
-  title="Cường Nguyễn Showreel | Portfolio"
-  description="Portfolio aesthetic cho freelancer làm quay phim, chụp ảnh và dựng phim. Cường Nguyễn Showreel tạo nên câu chuyện hình ảnh cinematic cho thương hiệu và dự án."
+  title={settings.seoTitle || L(home.meta.title, locale)}
+  description={settings.metaDescription || L(home.meta.description, locale)}
   initFn="initExplore"
   mediaGallery
 >
@@ -12,40 +37,31 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     <div id="intro">
       <section class="hero section">
         <div class="hero-copy reveal">
-          <p class="eyebrow editable" data-key="hero-eyebrow">Film • Photography • Edit</p>
-          <h1 class="editable" data-key="hero-title">Chuyển những khoảnh khắc nhỏ thành câu chuyện cinematic.</h1>
-          <p class="hero-text editable" data-key="hero-text">
-            Portfolio dành cho freelancer sáng tạo, làm quay, chụp và dựng phim theo phong cách aesthetic,
-            nhẹ nhàng, có cảm xúc và đủ sức thu hút thương hiệu.
-          </p>
+          <p class="eyebrow">{L(hero.eyebrow, locale)}</p>
+          <h1>{L(hero.title, locale)}</h1>
+          <p class="hero-text">{L(hero.text, locale)}</p>
           <div class="hero-actions">
-            <a class="button primary" href="/portfolio/">Xem dự án</a>
-            <a class="button ghost" href="/lien-he/">Liên hệ ngay</a>
+            <a class="button primary" href="/portfolio/">{t('actions.viewProjects')}</a>
+            <a class="button ghost" href="/lien-he/">{t('actions.contactNow')}</a>
           </div>
           <ul class="hero-stats reveal-stagger">
-            <li>
-              <strong>+50</strong>
-              <span>Dự án hoàn thành</span>
-            </li>
-            <li>
-              <strong>8+</strong>
-              <span>Năm kinh nghiệm</span>
-            </li>
-            <li>
-              <strong>24/7</strong>
-              <span>Hỗ trợ sáng tạo</span>
-            </li>
+            {heroStats.map((stat) => (
+              <li>
+                <strong class="stat-value">{stat.value}</strong>
+                <span>{L(stat.label, locale)}</span>
+              </li>
+            ))}
           </ul>
         </div>
 
         <div class="hero-visual reveal">
           <div class="reel-card">
-            <div class="reel-media" aria-hidden="true"></div>
+            <div id="hero-media" class="reel-media" aria-hidden="true"></div>
             <div class="reel-glow"></div>
             <div class="reel-content">
-              <span class="pill">Latest Reel</span>
-              <h3 class="editable" data-key="reel-title">Spring Motion Film</h3>
-              <p class="editable" data-key="reel-meta">Brand story · 2026 · 01:30</p>
+              <span class="pill">{L(hero.reelPill, locale)}</span>
+              <h3>{L(hero.reelTitle, locale)}</h3>
+              <p>{L(hero.reelMeta, locale)}</p>
             </div>
           </div>
         </div>
@@ -54,16 +70,14 @@ import BaseLayout from '../layouts/BaseLayout.astro';
       <section id="showreel" class="section showreel reveal">
         <div class="showreel-card">
           <div class="showreel-copy">
-            <p class="eyebrow">Showreel</p>
-            <h2 class="editable" data-key="showreel-title">Kỹ thuật quay dựng sắc nét, nhịp điệu chuyển cảnh tinh tế.</h2>
-            <p class="editable" data-key="showreel-text">
-              Mỗi cảnh quay là một nhịp cảm xúc, được dựng tinh tế để giữ ánh sáng, không gian và âm hưởng thương hiệu.
-            </p>
-            <a class="button primary" href="/portfolio/">Xem thêm tác phẩm</a>
+            <p class="eyebrow">{L(showreel.eyebrow, locale)}</p>
+            <h2>{L(showreel.title, locale)}</h2>
+            <p>{L(showreel.text, locale)}</p>
+            <a class="button primary" href="/portfolio/">{t('actions.viewMoreWork')}</a>
           </div>
           <div class="showreel-quote">
-            <p>"Không chỉ là hình ảnh, mà là cảm xúc được làm chậm, tinh giản và kể lại bằng ánh sáng."</p>
-            <span>— Cường Nguyễn</span>
+            <p>{L(showreel.quote, locale)}</p>
+            <span>{showreel.author}</span>
           </div>
         </div>
       </section>
@@ -72,61 +86,66 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     <!-- Optional Explore section (will animate only on capable devices) -->
     <section id="explore" class="section pin-section">
       <div class="pin-inner">
-        <div class="panel panel-1">
-          <div class="panel-content">
-            <span class="eyebrow">Featured</span>
-            <h3>Quiet Luxury — Campaign</h3>
-            <p>Visual storytelling with muted tones and cinematic pacing.</p>
+        {explore.map((panel, i) => (
+          <div class:list={['panel', `panel-${i + 1}`]}>
+            <div class="panel-content">
+              <span class="eyebrow">{L(panel.eyebrow, locale)}</span>
+              <h3>{L(panel.title, locale)}</h3>
+              <p>{L(panel.text, locale)}</p>
+            </div>
           </div>
-        </div>
-        <div class="panel panel-2">
-          <div class="panel-content">
-            <span class="eyebrow">Short Film</span>
-            <h3>After Rain</h3>
-            <p>A short story built around golden hour and memory.</p>
-          </div>
-        </div>
-        <div class="panel panel-3">
-          <div class="panel-content">
-            <span class="eyebrow">Editorial</span>
-            <h3>Golden Hour</h3>
-            <p>Portrait series with cinematic color grading.</p>
-          </div>
-        </div>
+        ))}
       </div>
     </section>
 
     <section id="services" class="section services reveal">
       <div class="section-heading">
-        <p class="eyebrow">Dịch vụ</p>
-        <h2>Giải pháp sáng tạo cho mọi khung hình.</h2>
+        <p class="eyebrow">{L(servicesTeaser.eyebrow, locale)}</p>
+        <h2>{L(servicesTeaser.heading, locale)}</h2>
+      </div>
+      <div class="service-grid reveal-stagger">
+        {servicesList.map((service) => (
+          <ServiceCard title={service.title} description={service.description} iconUrl={service.iconUrl} />
+        ))}
       </div>
       <div class="view-all-link">
-        <a class="button ghost" href="/dich-vu/">Xem chi tiết dịch vụ</a>
+        <a class="button ghost" href="/dich-vu/">{t('actions.viewServices')}</a>
       </div>
     </section>
 
     <section id="portfolio" class="section portfolio reveal">
       <div class="section-heading portfolio-heading">
         <div>
-          <p class="eyebrow">Dự án nổi bật</p>
-          <h2>Một vài tác phẩm thể hiện phong cách làm việc.</h2>
+          <p class="eyebrow">{L(portfolioTeaser.eyebrow, locale)}</p>
+          <h2>{L(portfolioTeaser.heading, locale)}</h2>
         </div>
       </div>
-      <div class="portfolio-grid reveal-stagger" id="portfolio-teaser-grid"></div>
+      <div class="portfolio-grid reveal-stagger">
+        {featuredProjects.map((project, i) => (
+          <ProjectCard
+            title={project.title}
+            index={i}
+            coverImageUrl={project.coverImageUrl}
+            videoHoverUrl={project.videoHoverUrl}
+            cardClass={project.cardClass}
+            id={project.id}
+          />
+        ))}
+      </div>
       <div class="view-all-link">
-        <a class="button ghost" href="/portfolio/">Xem tất cả dự án</a>
+        <a class="button ghost" href="/portfolio/">{t('actions.viewAllProjects')}</a>
       </div>
     </section>
 
+    <ProjectModal projects={featuredProjects} />
+
+
     <section class="section contact reveal" id="contact">
       <div class="contact-card">
-        <p class="eyebrow">Liên hệ</p>
-        <h2 class="editable" data-key="contact-title">Muốn tạo một bộ sưu tập hình ảnh thật đẹp cho dự án của bạn?</h2>
-        <p class="editable" data-key="contact-text">
-          Gửi cho tôi thông tin dự án, phong cách bạn muốn và thời gian cần sản phẩm. Tôi sẽ phản hồi sớm nhất.
-        </p>
-        <a class="button primary" href="/lien-he/">Liên hệ ngay</a>
+        <p class="eyebrow">{L(contact.eyebrow, locale)}</p>
+        <h2>{L(contact.title, locale)}</h2>
+        <p>{L(contact.text, locale)}</p>
+        <a class="button primary" href="/lien-he/">{t('actions.contactNow')}</a>
       </div>
     </section>
   </main>

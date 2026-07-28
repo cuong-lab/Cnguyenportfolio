@@ -1,0 +1,86 @@
+---
+// Setup notice shown at /admin while the embedded Sanity Studio is disabled
+// (no SANITY_PROJECT_ID). When the Studio IS enabled, @sanity/astro owns the
+// /admin route, so getStaticPaths returns [] here and this file emits nothing —
+// no route collision. import.meta.env.SANITY_PROJECT_ID is injected by the
+// vite.define in astro.config.mjs.
+export function getStaticPaths() {
+  const id = import.meta.env.SANITY_PROJECT_ID;
+  const studioEnabled = !!id && id !== 'placeholder';
+  return studioEnabled ? [] : [{ params: { slug: undefined } }];
+}
+---
+
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="robots" content="noindex" />
+    <title>Sanity Studio — Cần cấu hình</title>
+    <style>
+      :root { color-scheme: dark; }
+      * { box-sizing: border-box; margin: 0; padding: 0; }
+      body {
+        font-family: "Inter", system-ui, sans-serif;
+        color: #f4efe9;
+        background: radial-gradient(circle at top left, rgba(240,169,111,0.16), transparent 22%),
+          linear-gradient(135deg, #06070b, #121521 60%, #090b12);
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 24px;
+      }
+      .notice {
+        max-width: 640px;
+        width: 100%;
+        background: rgba(255,255,255,0.04);
+        border: 1px solid rgba(255,255,255,0.12);
+        border-radius: 20px;
+        padding: 40px;
+        box-shadow: 0 20px 60px rgba(0,0,0,0.35);
+      }
+      .badge {
+        display: inline-block;
+        text-transform: uppercase;
+        letter-spacing: 0.22em;
+        font-size: 0.72rem;
+        color: #f0a96f;
+        margin-bottom: 14px;
+      }
+      h1 { font-size: 1.7rem; line-height: 1.2; margin-bottom: 14px; }
+      p { color: #b6b0a8; line-height: 1.7; margin-bottom: 18px; }
+      ol { color: #b6b0a8; line-height: 1.9; padding-left: 20px; margin-bottom: 8px; }
+      li { margin-bottom: 8px; }
+      code {
+        font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+        background: rgba(255,255,255,0.08);
+        border: 1px solid rgba(255,255,255,0.12);
+        border-radius: 6px;
+        padding: 2px 7px;
+        font-size: 0.9em;
+        color: #ffd9b8;
+      }
+      a { color: #f0a96f; }
+    </style>
+  </head>
+  <body>
+    <main class="notice">
+      <span class="badge">Sanity Studio</span>
+      <h1>Studio chưa được bật</h1>
+      <p>
+        Biến môi trường <code>SANITY_PROJECT_ID</code> đang trống, nên trang quản trị
+        nhúng tạm thời bị tắt (tránh lỗi trắng trang khi Studio cố kết nối tới một
+        project không tồn tại). Toàn bộ website vẫn chạy bình thường bằng dữ liệu mẫu.
+      </p>
+      <p>Để bật Studio:</p>
+      <ol>
+        <li>Lấy <strong>Project ID</strong> tại <a href="https://sanity.io/manage" target="_blank" rel="noopener">sanity.io/manage</a> (hoặc chạy <code>npx sanity@latest init</code>).</li>
+        <li>Điền vào file <code>.env</code>: <code>SANITY_PROJECT_ID=your-id</code>.</li>
+        <li>Thêm CORS origin <code>http://localhost:4321</code> (và domain production) trong Sanity dashboard → API, bật <em>Allow credentials</em>.</li>
+        <li>Chạy lại <code>npm run dev</code> — Studio sẽ tự động hiện tại <code>/admin</code>.</li>
+      </ol>
+    </main>
+  </body>
+</html>

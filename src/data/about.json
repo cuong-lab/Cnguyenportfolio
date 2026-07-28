@@ -1,0 +1,113 @@
+{
+  "meta": {
+    "title": {
+      "vi": "Resume | Cường Nguyễn Showreel",
+      "en": "Resume | Cường Nguyễn Showreel"
+    },
+    "description": {
+      "vi": "Resume của Cường Nguyễn Showreel: giới thiệu bản thân, kỹ năng và hành trình nghề nghiệp trong lĩnh vực quay phim, chụp ảnh và dựng phim.",
+      "en": "Cường Nguyễn Showreel's resume: an introduction, skills and career journey in filmmaking, photography and editing."
+    }
+  },
+  "eyebrow": { "vi": "Về tôi", "en": "About me" },
+  "title": {
+    "vi": "Tôi kể chuyện bằng ánh sáng, nhịp điệu và cảm xúc.",
+    "en": "I tell stories through light, rhythm and emotion."
+  },
+  "paragraphs": [
+    {
+      "vi": "Tôi là một freelancer chuyên quay phim, chụp ảnh và dựng hình ảnh cho các dự án thương hiệu, cá nhân và sự kiện. Mỗi khung hình đều được chăm chút để giữ lại vẻ đẹp thật, cảm xúc thật và phong cách thật.",
+      "en": "I'm a freelancer specializing in filming, photography and image editing for brand, personal and event projects. Every frame is crafted to keep real beauty, real emotion and a real style."
+    },
+    {
+      "vi": "Từ concept ban đầu đến sản phẩm cuối cùng, tôi ưu tiên sự mượt mà, tinh tế và đúng tinh thần của thương hiệu bạn muốn truyền tải.",
+      "en": "From the first concept to the final deliverable, I prioritize smoothness, refinement and staying true to the spirit of the brand you want to convey."
+    }
+  ],
+  "strengths": [
+    { "vi": "Storytelling mạnh mẽ", "en": "Strong storytelling" },
+    { "vi": "Chùm hình aesthetic, nhẹ và hiện đại", "en": "Aesthetic, light and modern imagery" },
+    { "vi": "Dựng phim đúng nhịp cảm xúc", "en": "Editing tuned to emotional rhythm" },
+    { "vi": "Phối hợp tốt với brand & creator", "en": "Great collaboration with brands & creators" }
+  ],
+  "skillsEyebrow": { "vi": "Kỹ năng", "en": "Skills" },
+  "skillsHeading": {
+    "vi": "Công cụ làm việc hằng ngày.",
+    "en": "The tools I work with every day."
+  },
+  "skills": [
+    "Premiere Pro",
+    "After Effects",
+    "Photoshop",
+    "Illustrator",
+    "InDesign",
+    "Adobe Audition",
+    "DaVinci Resolve"
+  ],
+  "experienceEyebrow": { "vi": "Kinh nghiệm", "en": "Experience" },
+  "experienceHeading": {
+    "vi": "Hành trình nghề nghiệp qua từng vị trí.",
+    "en": "A career journey through each role."
+  },
+  "experiences": [
+    {
+      "id": "independent",
+      "company": { "vi": "Làm việc độc lập", "en": "Independent" },
+      "role": {
+        "vi": "Freelance Filmmaker & Photographer",
+        "en": "Freelance Filmmaker & Photographer"
+      },
+      "tags": [
+        { "vi": "Quay phim", "en": "Filming" },
+        { "vi": "Dựng phim", "en": "Editing" },
+        { "vi": "Chụp ảnh", "en": "Photography" }
+      ],
+      "outcomes": {
+        "vi": "+50 dự án hoàn thành, hợp tác cùng 10+ thương hiệu và creator.",
+        "en": "+50 projects delivered, working with 10+ brands and creators."
+      },
+      "description": {
+        "vi": "Nhận dự án quay dựng và chụp ảnh trực tiếp cho thương hiệu, creator và sự kiện, phụ trách toàn bộ quy trình từ concept đến sản phẩm cuối.",
+        "en": "Taking on filming and photography projects directly for brands, creators and events, owning the whole process from concept to final deliverable."
+      },
+      "year": { "vi": "2023 — Hiện tại", "en": "2023 — Present" }
+    },
+    {
+      "id": "studio-abc",
+      "company": { "vi": "Studio Sáng Tạo ABC", "en": "ABC Creative Studio" },
+      "role": { "vi": "Video Editor", "en": "Video Editor" },
+      "tags": [
+        { "vi": "Color grading", "en": "Color grading" },
+        { "vi": "Sound design", "en": "Sound design" },
+        { "vi": "Biên tập", "en": "Editing" }
+      ],
+      "outcomes": {
+        "vi": "Biên tập hơn 100 video quảng cáo, tăng 40% lượt tương tác trung bình.",
+        "en": "Edited over 100 ad videos, raising average engagement by 40%."
+      },
+      "description": {
+        "vi": "Biên tập video quảng cáo và nội dung social cho nhiều nhãn hàng, phối hợp cùng đội quay dựng để giữ đúng nhịp kể chuyện thương hiệu.",
+        "en": "Edited ad videos and social content for many brands, working with the production team to keep the brand's storytelling rhythm."
+      },
+      "year": { "vi": "2021 — 2023", "en": "2021 — 2023" }
+    },
+    {
+      "id": "xyz-media",
+      "company": { "vi": "XYZ Media", "en": "XYZ Media" },
+      "role": { "vi": "Junior Videographer", "en": "Junior Videographer" },
+      "tags": [
+        { "vi": "Quay phim sự kiện", "en": "Event filming" },
+        { "vi": "Hỗ trợ sản xuất", "en": "Production support" }
+      ],
+      "outcomes": {
+        "vi": "Tham gia quay hơn 30 sự kiện, hỗ trợ sản xuất cho 5+ chiến dịch lớn.",
+        "en": "Filmed over 30 events and supported production for 5+ major campaigns."
+      },
+      "description": {
+        "vi": "Bắt đầu sự nghiệp với vai trò trợ lý quay phim, học hỏi quy trình sản xuất chuyên nghiệp từ tiền kỳ đến hậu kỳ.",
+        "en": "Started my career as a camera assistant, learning the professional production process from pre- to post-production."
+      },
+      "year": { "vi": "2019 — 2021", "en": "2019 — 2021" }
+    }
+  ]
+}

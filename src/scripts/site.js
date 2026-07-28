@@ -27,240 +27,242 @@ function onScroll() {
 }
 window.addEventListener('scroll', onScroll, { passive: true });
 
-// Nav pill: sliding glow + highlight tracks whichever section is in view
+// Nav pill sliding indicator. The active tab is decided server-side in
+// SiteHeader.astro (from Astro.url.pathname) and ships as `.nav-toggle.active`,
+// so here we only position the indicator under it — never re-derive it.
 const navToggles = document.querySelectorAll('.nav-toggle');
 const navIndicatorPill = document.querySelector('.nav-indicator-pill');
 const navIndicatorGlow = document.querySelector('.nav-indicator-glow');
 
-function setActiveNavToggle(toggle) {
-  navToggles.forEach((t) => t.classList.remove('active'));
+// Move the sliding pill/glow under a toggle WITHOUT touching the active class —
+// used both to seat the indicator under the active tab and to make it follow
+// the hovered tab (the eased `left`/`width` transition on .nav-indicator-pill
+// is what produces the visible slide, since real tabs are separate pages).
+// The pill has a fixed 100px reference width in CSS; scaleX stretches it to the
+// real tab width. Keep this in sync with `.nav-indicator-pill { width: 100px }`.
+const PILL_REF_WIDTH = 100;
+
+function positionIndicator(toggle) {
   if (!toggle) {
     if (navIndicatorPill) navIndicatorPill.style.opacity = '0';
     if (navIndicatorGlow) navIndicatorGlow.style.opacity = '0';
     return;
   }
-  toggle.classList.add('active');
   if (navIndicatorPill) {
     navIndicatorPill.style.opacity = '1';
-    navIndicatorPill.style.left = toggle.offsetLeft + 'px';
-    navIndicatorPill.style.width = toggle.offsetWidth + 'px';
+    navIndicatorPill.style.transform =
+      `translateX(${toggle.offsetLeft}px) scaleX(${toggle.offsetWidth / PILL_REF_WIDTH})`;
   }
   if (navIndicatorGlow) {
     navIndicatorGlow.style.opacity = '1';
-    navIndicatorGlow.style.left = (toggle.offsetLeft + toggle.offsetWidth / 2 - 12) + 'px';
+    navIndicatorGlow.style.transform =
+      `translateX(${toggle.offsetLeft + toggle.offsetWidth / 2 - 12}px)`;
   }
 }
 
+function setActiveNavToggle(toggle) {
+  navToggles.forEach((t) => t.classList.remove('active'));
+  if (toggle) toggle.classList.add('active');
+  positionIndicator(toggle);
+}
+
 if (navToggles.length) {
-  // Every nav-toggle is a real /path/ route now (project routing rule — see
-  // instruction.md), never a #hash standing in for a page, so the active
-  // tab is simply whichever toggle's href resolves to the current page.
-  // Normalize away "index.html" and trailing slashes so "/resume/",
-  // "/resume/index.html" and "/resume" all compare as the same page.
-  const normalizePath = (path) => path.replace(/index\.html$/, '').replace(/\/$/, '') || '/';
-  const currentPath = normalizePath(window.location.pathname);
+  const activeToggle = document.querySelector('.nav-toggle.active');
+  if (activeToggle) {
+    // Glitch fix: position the indicator under the server-rendered active tab
+    // with transitions OFF on first paint, so it appears in place instead of
+    // visibly sliding across from the first tab. Re-enable transitions after
+    // the position has painted (double rAF) so hover/resize moves still animate.
+    if (navIndicatorPill) navIndicatorPill.style.transition = 'none';
+    if (navIndicatorGlow) navIndicatorGlow.style.transition = 'none';
+    setActiveNavToggle(activeToggle);
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        if (navIndicatorPill) navIndicatorPill.style.transition = '';
+        if (navIndicatorGlow) navIndicatorGlow.style.transition = '';
+      });
+    });
 
-  const pageToggle = Array.from(navToggles).find((t) => {
-    const resolvedPath = new URL(t.getAttribute('href'), window.location.href).pathname;
-    return normalizePath(resolvedPath) === currentPath;
-  });
+    // Slide the indicator to follow the hovered tab, then ease it back to the
+    // active tab when the pointer leaves the nav. `.nav-toggle.active` stays the
+    // source of truth — hover never changes it, only the indicator's position.
+    const navPill = document.querySelector('.nav-pill');
+    navToggles.forEach((toggle) => {
+      toggle.addEventListener('mouseenter', () => positionIndicator(toggle));
+    });
+    if (navPill) {
+      navPill.addEventListener('mouseleave', () => {
+        const active = document.querySelector('.nav-toggle.active');
+        if (active) positionIndicator(active);
+      });
+    }
 
-  if (pageToggle) {
-    setActiveNavToggle(pageToggle);
+    // Liquid-glass ambient specular: expose the pointer position over the bar as
+    // CSS vars so the .nav-pill::after sheen can follow it ("light travels around
+    // the material"). Fine-pointer + non-reduced-motion only, matching the custom
+    // cursor's gating — touch / reduced-motion users just get the static glass.
+    const navFinePointer = window.matchMedia && window.matchMedia('(pointer: fine)').matches;
+    const navReducedMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    // Same ?motion=1 / force-motion bypass the rest of the site uses, so the
+    // effect can be verified in dev browsers (e.g. VS Code's) that misreport
+    // prefers-reduced-motion with no way to override it from DevTools.
+    let navForceMotion = false;
+    try {
+      navForceMotion = /[?&]motion=1\b/.test(location.search) || localStorage.getItem('force-motion') === '1';
+    } catch (e) { /* ignore */ }
+    if (navPill && navFinePointer && (!navReducedMotion || navForceMotion)) {
+      let navRect = null;
+      navPill.addEventListener('pointerenter', () => {
+        navRect = navPill.getBoundingClientRect();
+        navPill.classList.add('is-lit');
+      });
+      navPill.addEventListener('pointermove', (e) => {
+        if (!navRect) navRect = navPill.getBoundingClientRect();
+        navPill.style.setProperty('--nav-mx', (e.clientX - navRect.left) + 'px');
+        navPill.style.setProperty('--nav-my', (e.clientY - navRect.top) + 'px');
+      });
+      navPill.addEventListener('pointerleave', () => {
+        navPill.classList.remove('is-lit');
+        navRect = null;
+      });
+    }
 
     window.addEventListener('resize', () => {
       const active = document.querySelector('.nav-toggle.active');
-      if (active) setActiveNavToggle(active);
+      if (active) positionIndicator(active);
     });
   }
 }
 
-// Reveal animations with offset for sticky header
-const reveals = document.querySelectorAll('.reveal');
-
-// Detect low-power / constrained devices and user preferences
-const isReducedMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-const connection = navigator.connection || navigator.mozConnection || navigator.webkitConnection || null;
-const isSaveData = connection && connection.saveData;
-const isLowEndDevice = (() => {
-  try {
-    const cores = navigator.hardwareConcurrency || 4;
-    const mem = navigator.deviceMemory || 4;
-    const slowNet = connection && connection.effectiveType && (connection.effectiveType.includes('2g') || connection.effectiveType.includes('slow-2g'));
-    return !!(isSaveData || slowNet || cores <= 2 || mem <= 2);
-  } catch (e) {
-    return false;
-  }
-})();
-
-// .low-power strips GPU-costly visuals (blur, shadows) and is reserved for
-// genuinely constrained hardware/network — prefers-reduced-motion is an
-// accessibility setting about animation, not device capability, so it only
-// skips the reveal animations below, not the static header blur.
-if (isLowEndDevice) {
-  document.body.classList.add('low-power');
-}
-
-if (isLowEndDevice || isReducedMotion) {
-  // Immediately reveal all sections (no animation)
-  reveals.forEach((el) => el.classList.add('is-visible'));
-} else {
-  function createObserver() {
-    const headerH = header ? header.offsetHeight + 12 : 88;
-    const rootMargin = `-${headerH}px 0px -10% 0px`;
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add('is-visible');
-            observer.unobserve(entry.target);
-          }
-        });
-      },
-      { threshold: 0.12, rootMargin }
-    );
-    reveals.forEach((el) => observer.observe(el));
-  }
-  createObserver();
-}
-
-// Lightweight parallax for the two decorative background-glow blobs — purely
-// cosmetic, so it's skipped under the same reduced-motion/low-power gate as
-// the reveal animations rather than adding a separate check.
-if (!isReducedMotion && !isLowEndDevice) {
-  const glow1 = document.querySelector('.glow-1');
-  const glow2 = document.querySelector('.glow-2');
-  if (glow1 || glow2) {
-    let parallaxTicking = false;
-    function onParallaxScroll() {
-      if (parallaxTicking) return;
-      parallaxTicking = true;
-      window.requestAnimationFrame(() => {
-        const y = window.scrollY;
-        if (glow1) glow1.style.transform = `translateY(${y * 0.08}px)`;
-        if (glow2) glow2.style.transform = `translateY(${y * -0.06}px)`;
-        parallaxTicking = false;
-      });
+document.addEventListener('DOMContentLoaded', () => {
+  const reveals = document.querySelectorAll('.reveal');
+  
+  if (isLowEndDevice || isReducedMotion) {
+    // Immediately reveal all sections (no animation)
+    reveals.forEach((el) => el.classList.add('is-visible'));
+  } else {
+    function createObserver() {
+      const headerH = header ? header.offsetHeight + 12 : 88;
+      const rootMargin = `-${headerH}px 0px -10% 0px`;
+      const observer = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              entry.target.classList.add('is-visible');
+              observer.unobserve(entry.target);
+            }
+          });
+        },
+        { threshold: 0.12, rootMargin }
+      );
+      reveals.forEach((el) => observer.observe(el));
     }
-    window.addEventListener('scroll', onParallaxScroll, { passive: true });
+    createObserver();
   }
-}
 
-// Admin inline editing (triple-tap logo to toggle)
-const logo = document.getElementById('logo');
-const adminBar = document.getElementById('admin-bar');
-const adminStatus = document.getElementById('admin-status');
-const adminSave = document.getElementById('admin-save');
-const adminExit = document.getElementById('admin-exit');
+  function initStatCounters() {
+    const stats = document.querySelectorAll('.stat-value');
+    if (!stats.length || isReducedMotion || isLowEndDevice) return;
 
-let tapTimes = [];
-let logoNavTimeout = null;
-function onLogoTap(e) {
-  // The logo is also a real navigation link (e.g. resume/index.html's logo
-  // points back to ../index.html#hero); without preventDefault the first
-  // click would navigate away before a 2nd/3rd tap could ever register.
-  // So always intercept, and only follow the link if 3 taps don't land
-  // within the window — this keeps single-click "go home" working with a
-  // brief delay while letting the triple-tap admin toggle work on any page.
-  e.preventDefault();
-  const now = Date.now();
-  tapTimes.push(now);
-  // keep taps within 700ms window
-  tapTimes = tapTimes.filter((t) => now - t < 700);
-  if (tapTimes.length >= 3) {
-    if (logoNavTimeout) { clearTimeout(logoNavTimeout); logoNavTimeout = null; }
-    toggleAdmin();
-    tapTimes = [];
-    return;
+    const parse = (text) => {
+      const m = text.match(/^(\D*)(\d+)(.*)$/s);
+      return m ? { prefix: m[1], target: parseInt(m[2], 10), suffix: m[3] } : null;
+    };
+
+    stats.forEach((el) => {
+      const parsed = parse((el.textContent || '').trim());
+      if (!parsed) return;
+      const { prefix, target, suffix } = parsed;
+      let started = false;
+      const run = () => {
+        if (started) return;
+        started = true;
+        const duration = 1100;
+        const start = performance.now();
+        el.textContent = prefix + '0' + suffix;
+        const step = (now) => {
+          const p = Math.min(1, (now - start) / duration);
+          const eased = 1 - Math.pow(1 - p, 3);
+          el.textContent = prefix + Math.round(target * eased) + suffix;
+          if (p < 1) requestAnimationFrame(step);
+          else el.textContent = prefix + target + suffix;
+        };
+        requestAnimationFrame(step);
+      };
+      const obs = new IntersectionObserver(
+        (entries) => entries.forEach((entry) => {
+          if (entry.isIntersecting) { run(); obs.disconnect(); }
+        }),
+        { threshold: 0.5 }
+      );
+      obs.observe(el);
+    });
   }
-  if (logoNavTimeout) clearTimeout(logoNavTimeout);
-  const href = logo.getAttribute('href');
-  logoNavTimeout = setTimeout(() => {
-    logoNavTimeout = null;
-    if (tapTimes.length < 3 && href) window.location.href = href;
-  }, 700);
-}
-logo && logo.addEventListener('click', onLogoTap);
-
-function setEditable(enabled) {
-  const items = document.querySelectorAll('.editable');
-  items.forEach((el) => {
-    if (enabled) {
-      el.setAttribute('contenteditable', 'true');
-      el.classList.add('editing');
-      el.addEventListener('blur', saveOne);
-    } else {
-      el.removeAttribute('contenteditable');
-      el.classList.remove('editing');
-      el.removeEventListener('blur', saveOne);
-    }
-  });
-}
-
-function saveOne(e) {
-  const el = e.target;
-  const key = el.dataset.key;
-  if (!key) return;
-  try { localStorage.setItem(key, el.innerHTML); }
-  catch (err) { console.warn('Save failed', err); }
-}
-
-function saveAll() {
-  const items = document.querySelectorAll('.editable');
-  items.forEach((el) => {
-    const key = el.dataset.key;
-    if (!key) return;
-    try { localStorage.setItem(key, el.innerHTML); }
-    catch (err) { console.warn('Save failed', err); }
-  });
-  adminStatus.textContent = 'Admin: saved';
-  setTimeout(() => adminStatus.textContent = 'Admin: on', 1200);
-}
-
-function exitAdmin() {
-  document.body.classList.remove('admin');
-  adminBar.setAttribute('aria-hidden', 'true');
-  adminStatus.textContent = 'Admin: off';
-  setEditable(false);
-}
-
-function enterAdmin() {
-  document.body.classList.add('admin');
-  adminBar.setAttribute('aria-hidden', 'false');
-  adminStatus.textContent = 'Admin: on';
-  setEditable(true);
-}
-
-function toggleAdmin() {
-  if (document.body.classList.contains('admin')) exitAdmin();
-  else enterAdmin();
-}
-
-adminSave && adminSave.addEventListener('click', saveAll);
-adminExit && adminExit.addEventListener('click', exitAdmin);
-
-// Media (photo/video) admin is a separate, Supabase-auth-gated capability
-// layered on top of this text-editing admin mode (see gallery.js).
-const mediaAdminBtn = document.getElementById('media-admin-btn');
-const adminSignout = document.getElementById('admin-signout');
-mediaAdminBtn && mediaAdminBtn.addEventListener('click', () => {
-  window.__openMediaAdmin && window.__openMediaAdmin();
-});
-adminSignout && adminSignout.addEventListener('click', () => {
-  window.__gallerySignOut && window.__gallerySignOut();
+  initStatCounters();
 });
 
-// Load saved content
-function loadSaved() {
-  const items = document.querySelectorAll('.editable');
-  items.forEach((el) => {
-    const key = el.dataset.key;
-    if (!key) return;
-    const v = localStorage.getItem(key);
-    if (v !== null) el.innerHTML = v;
+// Custom cursor: a small dot that follows the pointer and grows into an
+// "active" ring over interactive elements. Fine-pointer devices only (never on
+// touch), and skipped under reduced-motion. Uses mouseover/mouseout delegation
+// so it also covers gallery cards injected later by gallery.js.
+function initCustomCursor() {
+  const dot = document.querySelector('.cursor-dot');
+  if (!dot) return;
+  const finePointer = window.matchMedia && window.matchMedia('(pointer: fine)').matches;
+  if (!finePointer || isReducedMotion) return;
+
+  document.body.classList.add('has-custom-cursor');
+  const interactiveSel = 'a, button, input, textarea, select, label, [role="button"]';
+  let x = window.innerWidth / 2;
+  let y = window.innerHeight / 2;
+  let raf = null;
+
+  window.addEventListener('mousemove', (e) => {
+    x = e.clientX;
+    y = e.clientY;
+    if (raf) return;
+    raf = requestAnimationFrame(() => {
+      dot.style.transform = `translate(${x}px, ${y}px) translate(-50%, -50%)`;
+      raf = null;
+    });
+  }, { passive: true });
+
+  document.addEventListener('mouseover', (e) => {
+    if (e.target.closest && e.target.closest(interactiveSel)) dot.classList.add('is-active');
+  });
+  document.addEventListener('mouseout', (e) => {
+    if (e.target.closest && e.target.closest(interactiveSel)) dot.classList.remove('is-active');
+  });
+  document.addEventListener('mouseleave', () => dot.classList.remove('is-visible'), true);
+  window.addEventListener('mouseout', (e) => {
+    if (!e.relatedTarget) dot.classList.remove('is-visible');
+  });
+  window.addEventListener('mousemove', () => dot.classList.add('is-visible'), { passive: true, once: true });
+}
+initCustomCursor();
+
+// Hover-to-play project preview videos. The <video> is muted/loop/playsinline
+// in markup; play on pointer-enter, pause on leave. Delegated on document so it
+// works for both the static home teaser cards and the Supabase-rendered cards
+// that gallery.js injects after this script runs.
+function initHoverVideos() {
+  document.addEventListener('mouseover', (e) => {
+    const card = e.target.closest && e.target.closest('.portfolio-card');
+    if (!card) return;
+    const video = card.querySelector('video');
+    if (video && video.paused) {
+      const p = video.play();
+      if (p && typeof p.catch === 'function') p.catch(() => {});
+    }
+  });
+  document.addEventListener('mouseout', (e) => {
+    const card = e.target.closest && e.target.closest('.portfolio-card');
+    if (!card || card.contains(e.relatedTarget)) return;
+    const video = card.querySelector('video');
+    if (video) video.pause();
   });
 }
-loadSaved();
+initHoverVideos();
 
 // Lazy-load images and optimize decoding on supported browsers
 try {
@@ -274,11 +276,6 @@ try {
 } catch (e) {
   // ignore
 }
-
-// Initialize after a short delay (no GSAP pin-section active)
-window.addEventListener('load', () => {
-  // no-op for pin-section (GSAP demo removed)
-});
 
 // Shared low-power/reduced-motion/save-data gate, reused by every GSAP-driven
 // pin section (Explore, Resume, ...) so they all skip on the same conditions.
@@ -490,6 +487,55 @@ window.initResume = function initResume() {
   }
 };
 
+// Hidden admin shortcut: triple-tap / triple-click the logo to jump to the
+// Sanity Studio dashboard at /admin. This is a *navigation* gesture only — NOT
+// a revival of the removed on-page contenteditable editor (see CLAUDE.md); it
+// just routes to an existing page. Because a normal single click on the logo
+// must still go home, every activation is debounced within a short window: 3+
+// taps route to /admin, anything less falls through to the logo's real href.
+// Modified clicks (cmd/ctrl/shift/alt — i.e. open-in-new-tab) are left alone.
+const logo = document.getElementById('logo');
+if (logo) {
+  const TAP_WINDOW = 450; // ms allowed between taps to still count as one gesture
+  let tapCount = 0;
+  let tapTimer = null;
+  logo.addEventListener('click', (e) => {
+    if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+    e.preventDefault();
+    tapCount += 1;
+    clearTimeout(tapTimer);
+    tapTimer = setTimeout(() => {
+      const dest = tapCount >= 3 ? '/admin' : (logo.getAttribute('href') || '/');
+      tapCount = 0;
+      window.location.href = dest;
+    }, TAP_WINDOW);
+  });
+}
+
 // Year
 const year = document.getElementById('year');
 if (year) year.textContent = new Date().getFullYear();
+
+// Kích hoạt loading overlay khi bắt đầu chuyển trang
+document.addEventListener('astro:before-preparation', () => {
+  const overlay = document.getElementById('page-transition-overlay');
+  if (overlay) overlay.classList.add('is-active');
+});
+
+// Tắt loading overlay khi trang đã load xong
+document.addEventListener('astro:page-load', () => {
+  const overlay = document.getElementById('page-transition-overlay');
+  if (overlay) {
+    overlay.classList.add('is-active');
+    setTimeout(() => overlay.classList.remove('is-active'), 150);
+  }
+});
+
+// Vì header được persist qua các trang (SPA), server sẽ không ghi đè lại header.
+// Chúng ta tự bắt click trên nav-toggle để làm slide mượt mà.
+document.addEventListener('click', (e) => {
+  const toggle = e.target.closest('.nav-toggle');
+  if (toggle && typeof setActiveNavToggle === 'function') {
+    setActiveNavToggle(toggle);
+  }
+});

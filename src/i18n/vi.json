@@ -1,0 +1,66 @@
+{
+  "nav": {
+    "ariaLabel": "Điều hướng chính",
+    "about": "Giới thiệu",
+    "services": "Dịch vụ",
+    "work": "Dự án",
+    "contact": "Liên hệ",
+    "resume": "Resume"
+  },
+  "actions": {
+    "viewProjects": "Xem dự án",
+    "contactNow": "Liên hệ ngay",
+    "viewMoreWork": "Xem thêm tác phẩm",
+    "viewServices": "Xem chi tiết dịch vụ",
+    "viewAllProjects": "Xem tất cả dự án",
+    "bookNow": "Đặt lịch"
+  },
+  "resume": {
+    "role": "Vai trò",
+    "skills": "Kỹ năng",
+    "outcomes": "Thành tựu",
+    "description": "Mô tả",
+    "scrollHint": "(Cuộn xuống)",
+    "experience": "Kinh nghiệm",
+    "prevAria": "Kinh nghiệm trước",
+    "nextAria": "Kinh nghiệm sau"
+  },
+  "about": {
+    "strengths": "Điểm mạnh"
+  },
+  "project": {
+    "client": "Khách hàng",
+    "year": "Năm",
+    "role": "Vai trò",
+    "overview": "Mô tả dự án",
+    "all": "Tất cả",
+    "filterAria": "Lọc dự án theo thể loại",
+    "prevAria": "Dự án trước",
+    "nextAria": "Dự án sau",
+    "closeAria": "Đóng"
+  },
+  "contactForm": {
+    "name": "Họ và tên",
+    "namePlaceholder": "Tên của bạn",
+    "email": "Email",
+    "emailPlaceholder": "email@cuaban.com",
+    "projectType": "Loại dự án",
+    "projectTypePlaceholder": "Chọn loại dự án",
+    "optionFilm": "Quay phim",
+    "optionPhoto": "Chụp ảnh",
+    "optionEdit": "Dựng phim",
+    "optionOther": "Khác",
+    "message": "Lời nhắn",
+    "messagePlaceholder": "Kể cho tôi nghe về dự án của bạn…",
+    "submit": "Gửi lời nhắn",
+    "sending": "Đang gửi…",
+    "success": "Cảm ơn bạn! Tôi sẽ phản hồi sớm nhất.",
+    "error": "Có lỗi xảy ra, vui lòng thử lại.",
+    "errorName": "Vui lòng nhập họ tên.",
+    "errorEmail": "Vui lòng nhập email hợp lệ.",
+    "errorMessage": "Vui lòng nhập lời nhắn."
+  },
+  "footer": {
+    "tagline": "Crafted with light and story."
+  }
+}

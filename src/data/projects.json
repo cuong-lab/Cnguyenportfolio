@@ -1,0 +1,52 @@
+{
+  "meta": {
+    "title": {
+      "vi": "Dự án | Cường Nguyễn Showreel",
+      "en": "Work | Cường Nguyễn Showreel"
+    },
+    "description": {
+      "vi": "Toàn bộ dự án quay phim, chụp ảnh và dựng phim của Cường Nguyễn Showreel — portfolio đầy đủ dành cho khách hàng và nhà tuyển dụng.",
+      "en": "The full body of filming, photography and editing work by Cường Nguyễn Showreel — a complete portfolio for clients and recruiters."
+    }
+  },
+  "eyebrow": { "vi": "Dự án", "en": "Work" },
+  "heading": {
+    "vi": "Toàn bộ dự án quay dựng và chụp ảnh.",
+    "en": "The full body of filming and photography work."
+  },
+  "items": [
+    {
+      "id": "quiet-luxury",
+      "featured": true,
+      "cardClass": "card-1",
+      "tag": { "vi": "Campaign", "en": "Campaign" },
+      "title": { "vi": "Quiet Luxury", "en": "Quiet Luxury" },
+      "description": {
+        "vi": "Series hình ảnh thương hiệu với tone màu muted và cảm giác sang trọng.",
+        "en": "A brand image series with muted tones and a sense of understated luxury."
+      }
+    },
+    {
+      "id": "after-rain",
+      "featured": true,
+      "cardClass": "card-2",
+      "tag": { "vi": "Short Film", "en": "Short Film" },
+      "title": { "vi": "After Rain", "en": "After Rain" },
+      "description": {
+        "vi": "Storytelling nhẹ nhàng, lấy cảm hứng từ ánh sáng buổi chiều và nỗi nhớ.",
+        "en": "Gentle storytelling inspired by afternoon light and nostalgia."
+      }
+    },
+    {
+      "id": "golden-hour",
+      "featured": true,
+      "cardClass": "card-3",
+      "tag": { "vi": "Editorial", "en": "Editorial" },
+      "title": { "vi": "Golden Hour", "en": "Golden Hour" },
+      "description": {
+        "vi": "Bộ ảnh cá nhân với phong cách cinematic và góc nhìn độc đáo.",
+        "en": "A personal photo series with a cinematic style and a distinctive point of view."
+      }
+    }
+  ]
+}

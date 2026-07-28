@@ -1,0 +1,59 @@
+---
+import { Image } from 'astro:assets';
+
+// Pure-visual gallery tile: a text-free <button> that opens the in-page video
+// modal (portfolio-modal.js keys off data-index into the #projects-data island;
+// ProjectModal.astro holds the modal). Shows a Sanity cover via astro:assets
+// <Image> (or the gradient .cardClass placeholder for the src/data fallback)
+// and, when a videoHoverUrl exists, a muted looping <video> that fades in on
+// hover — site.js's initHoverVideos() delegates play/pause; the fade is CSS.
+interface Props {
+  title: string;
+  index: number;
+  coverImageUrl?: string | null;
+  videoHoverUrl?: string | null;
+  cardClass?: string | null;
+  categories?: string[];
+  id?: string;
+}
+const { title, index, coverImageUrl, videoHoverUrl, cardClass, categories = [], id } = Astro.props;
+
+// Pipe-delimited category list for the client-side filter (portfolio-filter.js).
+// Pipe avoids clashing with commas/spaces inside category names.
+const categoryData = categories.join('|');
+
+// Fixed 16:9 for the optimized cover (Sanity already crops to this ratio).
+const COVER_W = 1600;
+const COVER_H = 900;
+---
+
+<button
+  type="button"
+  class:list={['portfolio-card', cardClass]}
+  data-index={index}
+  data-categories={categoryData}
+  aria-label={title}
+  data-project={id}
+>
+  {coverImageUrl && (
+    <Image
+      class="card-cover"
+      src={coverImageUrl}
+      width={COVER_W}
+      height={COVER_H}
+      alt={title}
+      loading="lazy"
+    />
+  )}
+  {videoHoverUrl && (
+    <video
+      class="card-video"
+      src={videoHoverUrl}
+      poster={coverImageUrl ?? undefined}
+      muted
+      loop
+      playsinline
+      preload="metadata"
+    ></video>
+  )}
+</button>
