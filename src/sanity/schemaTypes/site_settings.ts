@@ -47,7 +47,7 @@ export default defineType({
       options: { collapsible: true, collapsed: false },
       fields: [
         defineField({ name: 'stat1_value', title: 'Số thứ 1 (Ví dụ: 50)', type: 'number', initialValue: 50 }),
-        defineField({ name: 'stat1_prefix', title: 'Tiền tố thứ 1 (Ví dụ: +)', type: 'string', initialValue: '+' }),
+        defineField({ name: 'stat1_prefix', title: 'Tiền tố thứ 1 (Ví dụ: +)', type: 'string', initialValue: '' }),
         defineField({ name: 'stat1_suffix', title: 'Hậu tố thứ 1 (Ví dụ: +)', type: 'string', initialValue: '' }),
         defineField({ name: 'stat1_label', title: 'Nhãn thứ 1', type: 'string', initialValue: 'Dự án hoàn thành' }),
 

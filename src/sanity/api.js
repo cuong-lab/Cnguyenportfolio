@@ -216,7 +216,7 @@ export async function getSiteSettings() {
       address: row.contact?.address || 'Kim Hoa, Đống Đa, Hà Nội',
       stats: {
         stat1_value: row.stats?.stat1_value ?? 50,
-        stat1_prefix: row.stats?.stat1_prefix ?? '+',
+        stat1_prefix: row.stats?.stat1_prefix ?? '',
         stat1_suffix: row.stats?.stat1_suffix ?? '',
         stat1_label: row.stats?.stat1_label || 'Dự án hoàn thành',
 
@@ -259,7 +259,7 @@ export async function getSiteSettings() {
     phone: null,
     address: 'Kim Hoa, Đống Đa, Hà Nội',
     stats: {
-      stat1_value: 50, stat1_prefix: '+', stat1_suffix: '', stat1_label: 'Dự án hoàn thành',
+      stat1_value: 50, stat1_prefix: '', stat1_suffix: '', stat1_label: 'Dự án hoàn thành',
       stat2_value: 8, stat2_prefix: '', stat2_suffix: '+', stat2_label: 'Năm kinh nghiệm',
       stat3_value: 365, stat3_prefix: '', stat3_suffix: '', stat3_label: 'Ngày sáng tạo',
     },
