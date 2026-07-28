@@ -3004,7 +3004,6 @@ body::after {
 .portfolio-slider-grid {
   display: flex !important;
   overflow-x: auto !important;
-  scroll-snap-type: x mandatory !important;
   scrollbar-width: none !important;
   scroll-behavior: smooth !important;
   gap: 20px !important;
@@ -3018,7 +3017,6 @@ body::after {
 .portfolio-slider-grid .portfolio-card {
   flex: 0 0 360px !important;
   min-width: 360px !important;
-  scroll-snap-align: start !important;
 }
 
 @media (max-width: 640px) {
@@ -3072,4 +3070,130 @@ body::after {
   background: var(--accent, #c92a2a);
   border-color: var(--accent, #c92a2a);
   transform: translateY(-50%) scale(1.15);
+}
+
+
+/* ==========================================================================
+   RICH MODERN WEB ANIMATIONS & SMOOTH SCROLL REVEALS
+   ========================================================================== */
+
+/* Bulletproof 0-Conflict Animations - Content is ALWAYS 100% Visible */
+.reveal {
+  opacity: 1 !important;
+  transform: none;
+}
+
+.reveal.is-visible .reveal-stagger > * {
+  animation: smoothFadeUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes smoothFadeUp {
+  from {
+    opacity: 0.3;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Staggered Children Animation */
+.reveal-stagger > *:nth-child(1) { transition-delay: 0.05s; }
+.reveal-stagger > *:nth-child(2) { transition-delay: 0.15s; }
+.reveal-stagger > *:nth-child(3) { transition-delay: 0.25s; }
+.reveal-stagger > *:nth-child(4) { transition-delay: 0.35s; }
+.reveal-stagger > *:nth-child(5) { transition-delay: 0.45s; }
+
+/* Smooth Interactive Micro-animations for Buttons */
+.button {
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), background 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.button:hover {
+  transform: translateY(-3px) scale(1.02);
+}
+
+.button:active {
+  transform: translateY(0) scale(0.98);
+}
+
+/* Service Card Hover Micro-animations */
+.service-card {
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), background 0.3s ease, border-color 0.3s ease, box-shadow 0.4s ease;
+}
+
+.service-card:hover .service-icon-wrapper {
+  transform: scale(1.1) rotate(-4deg);
+  border-color: var(--accent);
+}
+
+.service-icon-wrapper {
+  transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.35s ease;
+}
+
+/* Portfolio Card Micro-animations */
+.portfolio-card .card-arrow-btn {
+  transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), background 0.35s ease;
+}
+
+.portfolio-card:hover .card-arrow-btn {
+  transform: rotate(45deg) scale(1.12);
+}
+
+
+/* ==========================================================================
+   100% TRANSFORM-BASED HARDWARE ACCELERATED SLIDER (NO NATIVE SCROLL JUMPING)
+   ========================================================================== */
+
+.portfolio-slider-wrapper {
+  position: relative;
+  width: 100%;
+  overflow: visible;
+}
+
+.portfolio-slider-viewport {
+  width: 100%;
+  overflow: hidden;
+  position: relative;
+  padding: 12px 0;
+}
+
+.portfolio-slider-track {
+  display: flex !important;
+  gap: 20px !important;
+  transition: transform 0.55s cubic-bezier(0.25, 1, 0.5, 1) !important;
+  will-change: transform;
+}
+
+.portfolio-slider-track .portfolio-card {
+  flex: 0 0 360px !important;
+  min-width: 360px !important;
+}
+
+@media (max-width: 640px) {
+  .portfolio-slider-track .portfolio-card {
+    flex: 0 0 280px !important;
+    min-width: 280px !important;
+  }
+}
+
+/* Static Card Content on Hover (No inner text/button jumping) */
+.portfolio-card:hover .card-arrow-btn {
+  transform: none !important;
+}
+
+.portfolio-card:hover .card-cover {
+  transform: none !important;
+}
+
+
+/* YouTube Background Video Full Bleed Iframe Fix */
+.youtube-hero-iframe {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  pointer-events: none;
+  transform: scale(1.35);
+  border: 0;
 }

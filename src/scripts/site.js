@@ -194,8 +194,6 @@ document.addEventListener('DOMContentLoaded', () => {
     reveals.forEach((el) => el.classList.add('is-visible'));
   } else {
     function createObserver() {
-      const headerH = header ? header.offsetHeight + 12 : 88;
-      const rootMargin = `-${headerH}px 0px -10% 0px`;
       const observer = new IntersectionObserver(
         (entries) => {
           entries.forEach((entry) => {
@@ -205,7 +203,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }
           });
         },
-        { threshold: 0.12, rootMargin }
+        { threshold: 0.05, rootMargin: '0px 0px 100px 0px' }
       );
       reveals.forEach((el) => observer.observe(el));
     }

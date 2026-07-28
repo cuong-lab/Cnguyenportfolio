@@ -26,6 +26,19 @@ const heroTitle = settings.hero?.title || L(hero.title, locale);
 const heroText = settings.hero?.description || L(hero.text, locale);
 const heroVideoUrl = settings.hero?.videoUrl || "/videos/showreel-preview.mp4";
 const heroPoster = settings.hero?.posterImageUrl || "/images/hero-poster.jpg";
+
+// Auto-detect YouTube URL and convert to embed format
+function getYouTubeEmbedUrl(url: string | null): string | null {
+  if (!url) return null;
+  const match = url.match(/(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=))([\w-]{11})/);
+  if (match && match[1]) {
+    const videoId = match[1];
+    return `https://www.youtube.com/embed/${videoId}?autoplay=1&mute=1&controls=0&loop=1&playlist=${videoId}&playsinline=1&modestbranding=1&rel=0`;
+  }
+  return null;
+}
+
+const youtubeEmbedUrl = getYouTubeEmbedUrl(heroVideoUrl);
 ---
 
 <BaseLayout
@@ -36,9 +49,19 @@ const heroPoster = settings.hero?.posterImageUrl || "/images/hero-poster.jpg";
     <!-- Cinematic Hero (Netflix Style Bottom-Left) -->
     <section class="hero cinematic-hero">
       <div class="cinematic-bg">
-        <video autoplay loop muted playsinline class="cinematic-video" poster={heroPoster}>
-          <source src={heroVideoUrl} type="video/mp4" />
-        </video>
+        {youtubeEmbedUrl ? (
+          <iframe
+            class="cinematic-video youtube-hero-iframe"
+            src={youtubeEmbedUrl}
+            title="Hero Background Video"
+            allow="autoplay; encrypted-media"
+            frameborder="0"
+          ></iframe>
+        ) : (
+          <video autoplay loop muted playsinline class="cinematic-video" poster={heroPoster}>
+            <source src={heroVideoUrl} type="video/mp4" />
+          </video>
+        )}
         <div class="cinematic-overlay"></div>
       </div>
       
@@ -53,7 +76,7 @@ const heroPoster = settings.hero?.posterImageUrl || "/images/hero-poster.jpg";
       </div>
     </section>
 
-    <!-- Section 01: Featured Portfolio with 2-Edge Slider Controls < > -->
+    <!-- Section 01: Featured Portfolio with 100% Transform-Based Silky Slider -->
     <section id="portfolio" class="section editorial-section reveal">
       <div class="editorial-container">
         <div class="editorial-header">
@@ -66,17 +89,19 @@ const heroPoster = settings.hero?.posterImageUrl || "/images/hero-poster.jpg";
             <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
           </button>
 
-          <div class="portfolio-grid portfolio-slider-grid reveal-stagger" id="portfolio-slider">
-            {featuredProjects.map((project, i) => (
-              <ProjectCard
-                title={project.title}
-                index={i}
-                coverImageUrl={project.coverImageUrl}
-                videoHoverUrl={project.videoHoverUrl}
-                cardClass={project.cardClass}
-                id={project.id}
-              />
-            ))}
+          <div class="portfolio-slider-viewport" id="portfolio-viewport">
+            <div class="portfolio-slider-track" id="portfolio-track">
+              {featuredProjects.map((project, i) => (
+                <ProjectCard
+                  title={project.title}
+                  index={i}
+                  coverImageUrl={project.coverImageUrl}
+                  videoHoverUrl={project.videoHoverUrl}
+                  cardClass={project.cardClass}
+                  id={project.id}
+                />
+              ))}
+            </div>
           </div>
 
           <button type="button" id="port-next" class="slider-arrow-btn arrow-next" aria-label="Next Project">
@@ -151,17 +176,31 @@ const heroPoster = settings.hero?.posterImageUrl || "/images/hero-poster.jpg";
   </main>
 
   <script>
-    // Portfolio Slider Smooth Controls < > on edges
-    const slider = document.getElementById('portfolio-slider');
+    // 100% Transform-Based Hardware-Accelerated Smooth Slider < >
+    const track = document.getElementById('portfolio-track');
+    const viewport = document.getElementById('portfolio-viewport');
     const prevBtn = document.getElementById('port-prev');
     const nextBtn = document.getElementById('port-next');
 
-    if (slider && prevBtn && nextBtn) {
-      prevBtn.addEventListener('click', () => {
-        slider.scrollBy({ left: -340, behavior: 'smooth' });
+    if (track && viewport && prevBtn && nextBtn) {
+      let currentOffset = 0;
+      const stepWidth = 380; // card width (360) + gap (20)
+
+      const getMaxOffset = () => {
+        return Math.max(0, track.scrollWidth - viewport.clientWidth);
+      };
+
+      prevBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        currentOffset = Math.max(0, currentOffset - stepWidth);
+        track.style.transform = `translateX(-${currentOffset}px)`;
       });
-      nextBtn.addEventListener('click', () => {
-        slider.scrollBy({ left: 340, behavior: 'smooth' });
+
+      nextBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        const maxOffset = getMaxOffset();
+        currentOffset = Math.min(maxOffset, currentOffset + stepWidth);
+        track.style.transform = `translateX(-${currentOffset}px)`;
       });
     }
 
