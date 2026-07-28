@@ -21,20 +21,11 @@ let hideHeaderTimeout = null;
 if (header) {
   header.addEventListener('mouseenter', () => {
     isHeaderHovered = true;
-    clearTimeout(hideHeaderTimeout);
     header.classList.remove('hidden');
   });
 
   header.addEventListener('mouseleave', () => {
     isHeaderHovered = false;
-    if (window.scrollY > 50) {
-      clearTimeout(hideHeaderTimeout);
-      hideHeaderTimeout = setTimeout(() => {
-        if (!isHeaderHovered && window.scrollY > 50) {
-          header.classList.add('hidden');
-        }
-      }, 2000);
-    }
   });
 }
 
@@ -57,17 +48,17 @@ function onScroll() {
         header.classList.remove('scrolled');
       }
 
-      // Smart Header: Hide on scroll down (> 12px), Show on scroll up (<-12px), Dead-zone < 120px
-      if (currentScrollY > 120) {
-        if (scrollDelta > 12) {
-          // Scrolling down significantly -> hide header
+      // Smart Header: 
+      // - Inside Hero Section (<= 250px): ALWAYS SHOW (Zero hiding/flickering over Hero video)
+      // - Below Hero Section (> 250px): Hide on scroll down (> 15px), Show on scroll up (<-15px)
+      if (currentScrollY > 250) {
+        if (scrollDelta > 15) {
           if (!isHeaderHovered) header.classList.add('hidden');
-        } else if (scrollDelta < -12) {
-          // Scrolling up significantly -> show header
+        } else if (scrollDelta < -15) {
           header.classList.remove('hidden');
         }
       } else {
-        // Dead-zone near top -> always show header
+        // Hero dead-zone -> always show header
         header.classList.remove('hidden');
       }
 
