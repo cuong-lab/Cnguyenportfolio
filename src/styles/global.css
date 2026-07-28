@@ -3027,3 +3027,49 @@ body::after {
     min-width: 280px !important;
   }
 }
+
+
+/* --- PORTFOLIO EDGE SLIDER & LEFT-ALIGNED HEADER FIX --- */
+.portfolio-slider-wrapper {
+  position: relative;
+  width: 100%;
+  display: flex;
+  align-items: center;
+}
+
+.portfolio-slider-wrapper .slider-arrow-btn {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 10;
+  width: 32px !important;
+  height: 32px !important;
+  min-width: 32px !important;
+  min-height: 32px !important;
+  border-radius: 50%;
+  background: rgba(10, 11, 16, 0.85);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  color: var(--text, #fff);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  transition: background 0.25s ease, border-color 0.25s ease, transform 0.25s ease;
+}
+
+.portfolio-slider-wrapper .arrow-prev {
+  left: -14px;
+}
+
+.portfolio-slider-wrapper .arrow-next {
+  right: -14px;
+}
+
+.portfolio-slider-wrapper .slider-arrow-btn:hover {
+  background: var(--accent, #c92a2a);
+  border-color: var(--accent, #c92a2a);
+  transform: translateY(-50%) scale(1.15);
+}
