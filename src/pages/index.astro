@@ -318,22 +318,27 @@ const heroVideoMime = getVideoMimeType(heroVideoUrl);
       });
     }
 
-    // CountUp Animation for Stats
+    // CountUp Animation for Stats (5 Seconds Duration)
     function animateCounterItem(el: HTMLElement) {
+      if ((el as any).__counterTimer) {
+        clearInterval((el as any).__counterTimer);
+      }
+
       const target = parseInt(el.getAttribute('data-target') || '0', 10);
       const prefix = el.getAttribute('data-prefix') || '';
       const suffix = el.getAttribute('data-suffix') || '';
       let count = 0;
-      const duration = 1200;
-      const stepTime = 20;
+      const duration = 5000; // 5 seconds
+      const stepTime = 30;
       const steps = duration / stepTime;
       const increment = target / steps;
 
-      const timer = setInterval(() => {
+      (el as any).__counterTimer = setInterval(() => {
         count += increment;
         if (count >= target) {
           count = target;
-          clearInterval(timer);
+          clearInterval((el as any).__counterTimer);
+          (el as any).__counterTimer = null;
         }
         el.textContent = `${prefix}${Math.floor(count)}${suffix}`;
       }, stepTime);
@@ -374,14 +379,17 @@ const heroVideoMime = getVideoMimeType(heroVideoUrl);
             const numEl = document.getElementById(numId) as HTMLElement;
             const lblEl = document.getElementById(lblId) as HTMLElement;
             if (numEl) {
+              const oldTarget = numEl.getAttribute('data-target');
               const numVal = val ?? 0;
               const prefVal = prefix ?? '';
               const suffVal = suffix ?? '';
               numEl.setAttribute('data-target', numVal.toString());
               numEl.setAttribute('data-prefix', prefVal);
               numEl.setAttribute('data-suffix', suffVal);
-              numEl.textContent = `${prefVal}${numVal}${suffVal}`;
-              animateCounterItem(numEl);
+
+              if (oldTarget !== numVal.toString()) {
+                animateCounterItem(numEl);
+              }
             }
             if (lblEl && label) {
               lblEl.textContent = label;
