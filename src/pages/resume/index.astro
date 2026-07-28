@@ -2,94 +2,109 @@
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import { getLocale, useTranslations, localize as L } from '../../i18n/utils';
 import { about } from '../../data';
-import { getResumeExperiences } from '../../sanity/api.js';
+import { getResumeExperiences, getResumePage } from '../../sanity/api.js';
 
 const locale = getLocale(Astro.url);
 const t = useTranslations(locale);
 
-const pad = (n: number) => String(n + 1).padStart(2, '0');
-// Experience entries come from Sanity `resume_experience` (fallback: about.json).
-// The About/Skills copy above isn't in the Sanity schema, so it stays in src/data.
-const experiences = await getResumeExperiences();
+const [experiences, resumeContent] = await Promise.all([
+  getResumeExperiences(),
+  getResumePage(),
+]);
 ---
 
 <BaseLayout
   title={L(about.meta.title, locale)}
   description={L(about.meta.description, locale)}
-  initFn="initResume"
 >
-  <main>
-    <section id="about-me" class="section about reveal">
-      <div class="section-heading">
-        <p class="eyebrow">{L(about.eyebrow, locale)}</p>
-        <h2>{L(about.title, locale)}</h2>
-      </div>
-      <div class="about-grid">
-        <div class="about-copy">
-          {about.paragraphs.map((p) => (
-            <p>{L(p, locale)}</p>
+  <main class="resume-main-wrapper">
+    <div class="resume-page-container">
+      
+      <!-- Bio & Profile Section -->
+      <section id="about-me" class="section resume-bio-section reveal">
+        <div class="bio-layout">
+          {resumeContent.avatarUrl && (
+            <div class="bio-avatar-wrapper">
+              <img src={resumeContent.avatarUrl} alt="Avatar" class="bio-avatar-img" />
+            </div>
+          )}
+          
+          <div class="bio-main-content">
+            <p class="section-tag">[ VỀ TÔI ]</p>
+            <h1 class="bio-title">{resumeContent.title}</h1>
+            
+            <div class="bio-paragraphs">
+              {resumeContent.paragraphs.map((p) => (
+                <p>{p}</p>
+              ))}
+            </div>
+            
+            <!-- Strengths integrated naturally into layout (No floating box) -->
+            <div class="strengths-block">
+              <h3 class="strengths-heading">{t('about.strengths')}</h3>
+              <ul class="strengths-list">
+                {resumeContent.strengths.map((s) => (
+                  <li><span>{s}</span></li>
+                ))}
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Skills Section -->
+      <section class="section resume-skills-section reveal">
+        <div class="section-heading">
+          <p class="section-tag">[ KỸ NĂNG ]</p>
+          <h2>{resumeContent.skillsHeading}</h2>
+        </div>
+        <div class="skills-pills reveal-stagger">
+          {resumeContent.skills.map((skill) => (
+            <span class="skill-pill">{skill}</span>
           ))}
         </div>
-        <div class="about-card">
-          <h3>{t('about.strengths')}</h3>
-          <ul>
-            {about.strengths.map((s) => (
-              <li>{L(s, locale)}</li>
-            ))}
-          </ul>
+      </section>
+
+      <!-- Experience Timeline Section -->
+      <section id="resume-experience" class="section resume-experience-section reveal">
+        <div class="section-heading">
+          <p class="section-tag">[ KINH NGHIỆM ]</p>
+          <h2>{resumeContent.experienceHeading}</h2>
         </div>
-      </div>
-    </section>
-
-    <section class="section skills-section reveal">
-      <div class="section-heading">
-        <p class="eyebrow">{L(about.skillsEyebrow, locale)}</p>
-        <h2>{L(about.skillsHeading, locale)}</h2>
-      </div>
-      <div class="skills-pills reveal-stagger">
-        {about.skills.map((skill) => (
-          <span class="skill-pill">{skill}</span>
-        ))}
-      </div>
-    </section>
-
-    <section id="resume-experience" class="section resume-section reveal">
-      <div class="section-heading">
-        <p class="eyebrow">{L(about.experienceEyebrow, locale)}</p>
-        <h2>{L(about.experienceHeading, locale)}</h2>
-      </div>
-      <div class="resume-timeline">
-        {experiences.map((exp, i) => (
-          <article class="resume-timeline-item reveal-stagger">
-            <div class="timeline-marker"></div>
-            <div class="timeline-content">
-              <div class="timeline-header">
-                <h3 class="timeline-company">{exp.company}</h3>
-                <span class="timeline-date">{exp.timeframe}</span>
-              </div>
-              <h4 class="timeline-role">{exp.role}</h4>
-              
-              <p class="timeline-desc">{exp.description}</p>
-              
-              <div class="timeline-meta">
-                <div class="meta-group">
-                  <strong>{t('resume.outcomes')}:</strong>
-                  <p>{exp.outcomes}</p>
+        <div class="resume-timeline">
+          {experiences.map((exp) => (
+            <article class="resume-timeline-item reveal-stagger">
+              <div class="timeline-marker"></div>
+              <div class="timeline-content">
+                <div class="timeline-header">
+                  <h3 class="timeline-company">{exp.company}</h3>
+                  <span class="timeline-date">{exp.timeframe}</span>
                 </div>
+                <h4 class="timeline-role">{exp.role}</h4>
                 
-                <div class="meta-group tags">
-                  <strong>{t('resume.skills')}:</strong>
-                  <div class="resume-tags">
-                    {exp.skills.map((tag) => (
-                      <span class="tag">{tag}</span>
-                    ))}
+                <p class="timeline-desc">{exp.description}</p>
+                
+                <div class="timeline-meta">
+                  <div class="meta-group">
+                    <strong>{t('resume.outcomes')}:</strong>
+                    <p>{exp.outcomes}</p>
+                  </div>
+                  
+                  <div class="meta-group tags">
+                    <strong>{t('resume.skills')}:</strong>
+                    <div class="resume-tags">
+                      {exp.skills.map((tag) => (
+                        <span class="tag">{tag}</span>
+                      ))}
+                    </div>
                   </div>
                 </div>
               </div>
-            </div>
-          </article>
-        ))}
-      </div>
-    </section>
+            </article>
+          ))}
+        </div>
+      </section>
+      
+    </div>
   </main>
 </BaseLayout>

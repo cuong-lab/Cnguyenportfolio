@@ -34,6 +34,12 @@ export default defineConfig({
               .child(
                 S.document().schemaType('homePage').documentId('homePage')
               ),
+            S.listItem()
+              .title('Trang Resume (Về tôi & Kỹ năng)')
+              .id('resume_page')
+              .child(
+                S.document().schemaType('resume_page').documentId('resume_page')
+              ),
             S.documentTypeListItem('project').title('Dự án'),
             S.documentTypeListItem('service').title('Dịch vụ'),
             S.documentTypeListItem('resume_experience').title('Kinh nghiệm'),
@@ -44,12 +50,12 @@ export default defineConfig({
   schema: {
     types: schemaTypes,
     // Hide the singletons from the global "create new" menu.
-    templates: (templates) => templates.filter((t) => t.schemaType !== 'site_settings' && t.schemaType !== 'homePage'),
+    templates: (templates) => templates.filter((t) => !['site_settings', 'homePage', 'resume_page'].includes(t.schemaType)),
   },
   document: {
-    // Prevent duplicating / creating extra site_settings or homePage documents.
+    // Prevent duplicating / creating extra singleton documents.
     actions: (actions, context) =>
-      ['site_settings', 'homePage'].includes(context.schemaType)
+      ['site_settings', 'homePage', 'resume_page'].includes(context.schemaType)
         ? actions.filter(({ action }) => action !== 'duplicate' && action !== 'delete')
         : actions,
   },

@@ -165,6 +165,37 @@ export async function getResumeExperiences() {
   }));
 }
 
+// ---------- Resume Page (singleton) ----------
+export async function getResumePage() {
+  const row = await safeFetch(
+    `*[_type == "resume_page"][0]{
+      avatar, eyebrow, title, bioText, strengths, skillsHeading, skills, experienceHeading
+    }`
+  );
+  if (row) {
+    return {
+      avatarUrl: row.avatar ? coverUrl(row.avatar, 600, 600) : null,
+      eyebrow: row.eyebrow || L(aboutData.eyebrow),
+      title: row.title || L(aboutData.title),
+      paragraphs: row.bioText && Array.isArray(row.bioText) ? [blocksToText(row.bioText)] : aboutData.paragraphs.map(L),
+      strengths: Array.isArray(row.strengths) && row.strengths.length ? row.strengths : aboutData.strengths.map(L),
+      skillsHeading: row.skillsHeading || L(aboutData.skillsHeading),
+      skills: Array.isArray(row.skills) && row.skills.length ? row.skills : aboutData.skills,
+      experienceHeading: row.experienceHeading || L(aboutData.experienceHeading),
+    };
+  }
+  return {
+    avatarUrl: null,
+    eyebrow: L(aboutData.eyebrow),
+    title: L(aboutData.title),
+    paragraphs: aboutData.paragraphs.map(L),
+    strengths: aboutData.strengths.map(L),
+    skillsHeading: L(aboutData.skillsHeading),
+    skills: aboutData.skills,
+    experienceHeading: L(aboutData.experienceHeading),
+  };
+}
+
 // ---------- Site settings (singleton) ----------
 export async function getSiteSettings() {
   const row = await safeFetch(

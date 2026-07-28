@@ -2790,3 +2790,116 @@ body::after {
 .contact-banner-action {
   margin-top: 12px;
 }
+
+
+/* ==========================================================================
+   RESUME PAGE - ALIGNMENT, AVATAR & INTEGRATED STRENGTHS LAYOUT
+   ========================================================================== */
+
+.resume-main-wrapper {
+  width: 100%;
+}
+
+.resume-page-container {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 40px 24px;
+}
+
+.bio-layout {
+  display: flex;
+  gap: 48px;
+  align-items: flex-start;
+}
+
+.bio-avatar-wrapper {
+  flex-shrink: 0;
+  width: 200px;
+  height: 200px;
+  border-radius: 24px;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.4);
+}
+
+.bio-avatar-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.bio-main-content {
+  flex: 1;
+}
+
+.bio-title {
+  font-size: clamp(2rem, 3.5vw, 3.2rem);
+  font-weight: 700;
+  color: var(--text, #f4f5f8);
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+  margin-bottom: 20px;
+}
+
+.bio-paragraphs p {
+  font-size: 1.05rem;
+  color: var(--muted, rgba(244, 245, 248, 0.7));
+  line-height: 1.7;
+  margin-bottom: 16px;
+  max-width: 800px;
+}
+
+/* Integrated Strengths Block (No floating box!) */
+.strengths-block {
+  margin-top: 32px;
+  padding-top: 24px;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.strengths-heading {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--text, #fff);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-bottom: 16px;
+}
+
+.strengths-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 16px;
+}
+
+.strengths-list li {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 0.98rem;
+  color: var(--text, #f4f5f8);
+}
+
+.strengths-list li::before {
+  content: '';
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--accent, #c92a2a);
+  flex-shrink: 0;
+  box-shadow: 0 0 8px rgba(201, 42, 42, 0.6);
+}
+
+@media (max-width: 768px) {
+  .bio-layout {
+    flex-direction: column;
+    gap: 28px;
+  }
+  .bio-avatar-wrapper {
+    width: 140px;
+    height: 140px;
+  }
+}
