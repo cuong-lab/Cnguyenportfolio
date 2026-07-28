@@ -28,6 +28,12 @@ export default defineConfig({
                 S.document().schemaType('site_settings').documentId('site_settings')
               ),
             S.divider(),
+            S.listItem()
+              .title('Trang chủ (Page Builder)')
+              .id('homePage')
+              .child(
+                S.document().schemaType('homePage').documentId('homePage')
+              ),
             S.documentTypeListItem('project').title('Dự án'),
             S.documentTypeListItem('service').title('Dịch vụ'),
             S.documentTypeListItem('resume_experience').title('Kinh nghiệm'),
@@ -37,13 +43,13 @@ export default defineConfig({
   ],
   schema: {
     types: schemaTypes,
-    // Hide the singleton from the global "create new" menu.
-    templates: (templates) => templates.filter((t) => t.schemaType !== 'site_settings'),
+    // Hide the singletons from the global "create new" menu.
+    templates: (templates) => templates.filter((t) => t.schemaType !== 'site_settings' && t.schemaType !== 'homePage'),
   },
   document: {
-    // Prevent duplicating / creating extra site_settings documents.
+    // Prevent duplicating / creating extra site_settings or homePage documents.
     actions: (actions, context) =>
-      context.schemaType === 'site_settings'
+      ['site_settings', 'homePage'].includes(context.schemaType)
         ? actions.filter(({ action }) => action !== 'duplicate' && action !== 'delete')
         : actions,
   },
