@@ -3788,3 +3788,13 @@ body::after {
 .portfolio-card:hover .card-media-wrapper {
   transform: translateY(-6px) !important;
 }
+
+/* 13. Arrow Rotation on Video Card Hover (Diagonal ↗ to Right →) */
+.card-arrow-btn svg {
+  transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1) !important;
+  transform: rotate(0deg) !important;
+}
+
+.portfolio-card:hover .card-arrow-btn svg {
+  transform: rotate(45deg) !important;
+}
