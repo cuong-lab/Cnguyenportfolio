@@ -2583,3 +2583,40 @@ body::after {
     grid-template-columns: 1fr;
   }
 }
+
+
+/* --- 50% Spacing Tightening Overhaul --- */
+.section {
+  padding: 40px 0 !important;
+}
+
+.showreel {
+  padding-top: 24px !important;
+}
+
+.teaser-block {
+  margin: 30px auto !important;
+  padding: 40px 4vw !important;
+}
+
+.teaser-block .section-heading {
+  margin-bottom: 30px !important;
+}
+
+.teaser-block .view-all-link {
+  margin-top: 30px !important;
+}
+
+.site-footer {
+  margin-top: 40px !important;
+  padding: 45px 0 25px !important;
+}
+
+.footer-grid {
+  margin-bottom: 32px !important;
+}
+
+.cinematic-stats {
+  margin-top: 32px !important;
+  padding-top: 24px !important;
+}

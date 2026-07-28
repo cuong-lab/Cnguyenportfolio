@@ -101,21 +101,6 @@ const heroStats = hero.stats.map((stat, i) => {
       </div>
     </section>
 
-    <section id="services" class="section services teaser-block reveal">
-      <div class="section-heading">
-        <p class="eyebrow">{L(servicesTeaser.eyebrow, locale)}</p>
-        <h2>{L(servicesTeaser.heading, locale)}</h2>
-      </div>
-      <div class="service-grid reveal-stagger">
-        {servicesList.map((service) => (
-          <ServiceCard title={service.title} description={service.description} iconUrl={service.iconUrl} />
-        ))}
-      </div>
-      <div class="view-all-link">
-        <a class="button ghost" href="/dich-vu/">{t('actions.viewServices')}</a>
-      </div>
-    </section>
-
     <section id="portfolio" class="section portfolio teaser-block reveal">
       <div class="section-heading portfolio-heading">
         <div>
@@ -137,6 +122,21 @@ const heroStats = hero.stats.map((stat, i) => {
       </div>
       <div class="view-all-link">
         <a class="button ghost" href="/portfolio/">{t('actions.viewAllProjects')}</a>
+      </div>
+    </section>
+
+    <section id="services" class="section services teaser-block reveal">
+      <div class="section-heading">
+        <p class="eyebrow">{L(servicesTeaser.eyebrow, locale)}</p>
+        <h2>{L(servicesTeaser.heading, locale)}</h2>
+      </div>
+      <div class="service-grid reveal-stagger">
+        {servicesList.map((service) => (
+          <ServiceCard title={service.title} description={service.description} iconUrl={service.iconUrl} />
+        ))}
+      </div>
+      <div class="view-all-link">
+        <a class="button ghost" href="/dich-vu/">{t('actions.viewServices')}</a>
       </div>
     </section>
 
