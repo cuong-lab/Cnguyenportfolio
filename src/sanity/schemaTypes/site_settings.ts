@@ -52,10 +52,13 @@ export default defineType({
         defineField({ name: 'stat1_label', title: 'Nhãn thứ 1', type: 'string', initialValue: 'Dự án hoàn thành' }),
 
         defineField({ name: 'stat2_value', title: 'Số thứ 2 (Ví dụ: 8)', type: 'number', initialValue: 8 }),
+        defineField({ name: 'stat2_prefix', title: 'Tiền tố thứ 2 (Ví dụ: +)', type: 'string', initialValue: '' }),
         defineField({ name: 'stat2_suffix', title: 'Hậu tố thứ 2 (Ví dụ: +)', type: 'string', initialValue: '+' }),
         defineField({ name: 'stat2_label', title: 'Nhãn thứ 2', type: 'string', initialValue: 'Năm kinh nghiệm' }),
 
         defineField({ name: 'stat3_value', title: 'Số thứ 3 (Ví dụ: 365)', type: 'number', initialValue: 365 }),
+        defineField({ name: 'stat3_prefix', title: 'Tiền tố thứ 3 (Ví dụ: +)', type: 'string', initialValue: '' }),
+        defineField({ name: 'stat3_suffix', title: 'Hậu tố thứ 3 (Ví dụ: +)', type: 'string', initialValue: '' }),
         defineField({ name: 'stat3_label', title: 'Nhãn thứ 3', type: 'string', initialValue: 'Ngày sáng tạo' }),
       ],
     }),

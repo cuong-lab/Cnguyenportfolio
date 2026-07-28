@@ -165,18 +165,18 @@ const heroVideoMime = getVideoMimeType(heroVideoUrl);
       <div class="editorial-container">
         <div class="stats-counter-bar">
           <div class="stat-counter-item">
-            <span class="stat-num" data-target={settings.stats.stat1_value} data-prefix={settings.stats.stat1_prefix} data-suffix={settings.stats.stat1_suffix}>0</span>
-            <span class="stat-lbl">{settings.stats.stat1_label}</span>
+            <span class="stat-num" id="stat-1-num" data-target={settings.stats.stat1_value} data-prefix={settings.stats.stat1_prefix} data-suffix={settings.stats.stat1_suffix}>0</span>
+            <span class="stat-lbl" id="stat-1-lbl">{settings.stats.stat1_label}</span>
           </div>
           <div class="stat-divider"></div>
           <div class="stat-counter-item">
-            <span class="stat-num" data-target={settings.stats.stat2_value} data-suffix={settings.stats.stat2_suffix}>0</span>
-            <span class="stat-lbl">{settings.stats.stat2_label}</span>
+            <span class="stat-num" id="stat-2-num" data-target={settings.stats.stat2_value} data-prefix={settings.stats.stat2_prefix} data-suffix={settings.stats.stat2_suffix}>0</span>
+            <span class="stat-lbl" id="stat-2-lbl">{settings.stats.stat2_label}</span>
           </div>
           <div class="stat-divider"></div>
           <div class="stat-counter-item">
-            <span class="stat-num" data-target={settings.stats.stat3_value}>0</span>
-            <span class="stat-lbl">{settings.stats.stat3_label}</span>
+            <span class="stat-num" id="stat-3-num" data-target={settings.stats.stat3_value} data-prefix={settings.stats.stat3_prefix} data-suffix={settings.stats.stat3_suffix}>0</span>
+            <span class="stat-lbl" id="stat-3-lbl">{settings.stats.stat3_label}</span>
           </div>
         </div>
       </div>
@@ -319,77 +319,111 @@ const heroVideoMime = getVideoMimeType(heroVideoUrl);
     }
 
     // CountUp Animation for Stats
+    function animateCounterItem(el: HTMLElement) {
+      const target = parseInt(el.getAttribute('data-target') || '0', 10);
+      const prefix = el.getAttribute('data-prefix') || '';
+      const suffix = el.getAttribute('data-suffix') || '';
+      let count = 0;
+      const duration = 1200;
+      const stepTime = 20;
+      const steps = duration / stepTime;
+      const increment = target / steps;
+
+      const timer = setInterval(() => {
+        count += increment;
+        if (count >= target) {
+          count = target;
+          clearInterval(timer);
+        }
+        el.textContent = `${prefix}${Math.floor(count)}${suffix}`;
+      }, stepTime);
+    }
+
     const counterItems = document.querySelectorAll('.stat-num');
     if (counterItems.length) {
       const observer = new IntersectionObserver((entries) => {
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
-            const el = entry.target as HTMLElement;
-            const target = parseInt(el.getAttribute('data-target') || '0', 10);
-            const prefix = el.getAttribute('data-prefix') || '';
-            const suffix = el.getAttribute('data-suffix') || '';
-            let count = 0;
-            const duration = 1400;
-            const stepTime = 20;
-            const steps = duration / stepTime;
-            const increment = target / steps;
-
-            const timer = setInterval(() => {
-              count += increment;
-              if (count >= target) {
-                count = target;
-                clearInterval(timer);
-              }
-              el.textContent = `${prefix}${Math.floor(count)}${suffix}`;
-            }, stepTime);
-
-            observer.unobserve(el);
+            animateCounterItem(entry.target as HTMLElement);
+            observer.unobserve(entry.target);
           }
         });
-      }, { threshold: 0.4 });
+      }, { threshold: 0.3 });
 
       counterItems.forEach(item => observer.observe(item));
     }
 
-    // Live Client-side Hero Video Sync from Sanity (Bypasses Static SSG Cache)
+    // Live Client-side Sanity Sync (Bypasses Static SSG Cache for Instant Updates)
     const projectId = 'yrg3sjk0';
-    const query = encodeURIComponent(`*[_id in ["site_settings", "drafts.site_settings"]] | order(_updatedAt desc)[0]{ hero { videoUrl, videoFile { asset-> { url } } } }`);
+    const query = encodeURIComponent(`*[_id in ["site_settings", "drafts.site_settings"]] | order(_updatedAt desc)[0]{
+      hero { videoUrl, videoFile { asset-> { url } } },
+      stats { stat1_value, stat1_prefix, stat1_suffix, stat1_label, stat2_value, stat2_prefix, stat2_suffix, stat2_label, stat3_value, stat3_prefix, stat3_suffix, stat3_label }
+    }`);
     const sanityEndpoint = `https://${projectId}.api.sanity.io/v2023-01-01/data/query/production?query=${query}`;
 
     fetch(sanityEndpoint)
       .then((res) => res.json())
       .then((data) => {
-        const heroData = data?.result?.hero;
-        if (!heroData) return;
+        const result = data?.result;
+        if (!result) return;
 
-        const liveVideoUrl = heroData.videoFile?.asset?.url || heroData.videoUrl;
-        if (!liveVideoUrl) return;
+        // 1. Live Sync Stats from Sanity Studio
+        const statsData = result.stats;
+        if (statsData) {
+          const updateStat = (numId: string, lblId: string, val: any, prefix: any, suffix: any, label: any) => {
+            const numEl = document.getElementById(numId) as HTMLElement;
+            const lblEl = document.getElementById(lblId) as HTMLElement;
+            if (numEl) {
+              const numVal = val ?? 0;
+              const prefVal = prefix ?? '';
+              const suffVal = suffix ?? '';
+              numEl.setAttribute('data-target', numVal.toString());
+              numEl.setAttribute('data-prefix', prefVal);
+              numEl.setAttribute('data-suffix', suffVal);
+              numEl.textContent = `${prefVal}${numVal}${suffVal}`;
+              animateCounterItem(numEl);
+            }
+            if (lblEl && label) {
+              lblEl.textContent = label;
+            }
+          };
 
-        const videoContainer = document.querySelector('.cinematic-bg');
-        if (!videoContainer) return;
+          updateStat('stat-1-num', 'stat-1-lbl', statsData.stat1_value, statsData.stat1_prefix, statsData.stat1_suffix, statsData.stat1_label);
+          updateStat('stat-2-num', 'stat-2-lbl', statsData.stat2_value, statsData.stat2_prefix, statsData.stat2_suffix, statsData.stat2_label);
+          updateStat('stat-3-num', 'stat-3-lbl', statsData.stat3_value, statsData.stat3_prefix, statsData.stat3_suffix, statsData.stat3_label);
+        }
 
-        const videoEl = videoContainer.querySelector('video') as HTMLVideoElement;
-        const iframeEl = videoContainer.querySelector('iframe') as HTMLIFrameElement;
-        const sources = videoEl?.querySelectorAll('source');
+        // 2. Live Sync Hero Video from Sanity Studio
+        const heroData = result.hero;
+        if (heroData) {
+          const liveVideoUrl = heroData.videoFile?.asset?.url || heroData.videoUrl;
+          if (liveVideoUrl) {
+            const videoContainer = document.querySelector('.cinematic-bg');
+            if (videoContainer) {
+              const videoEl = videoContainer.querySelector('video') as HTMLVideoElement;
+              const iframeEl = videoContainer.querySelector('iframe') as HTMLIFrameElement;
+              const sources = videoEl?.querySelectorAll('source');
 
-        // Check if YouTube link
-        const ytMatch = liveVideoUrl.match(/(?:https?:\/\/)?(?:www\.)?(?:youtube\.com\/(?:embed\/|v\/|watch\?v=|shorts\/)|youtu\.be\/)([\w-]{11})/i);
+              const ytMatch = liveVideoUrl.match(/(?:https?:\/\/)?(?:www\.)?(?:youtube\.com\/(?:embed\/|v\/|watch\?v=|shorts\/)|youtu\.be\/)([\w-]{11})/i);
 
-        if (ytMatch && ytMatch[1]) {
-          const ytEmbed = `https://www.youtube.com/embed/${ytMatch[1]}?autoplay=1&mute=1&controls=0&loop=1&playlist=${ytMatch[1]}&playsinline=1&modestbranding=1&rel=0`;
-          if (iframeEl) {
-            if (iframeEl.src !== ytEmbed) iframeEl.src = ytEmbed;
-          } else {
-            videoContainer.innerHTML = `<iframe class="cinematic-video youtube-hero-iframe" src="${ytEmbed}" title="Hero Background Video" allow="autoplay; encrypted-media" frameborder="0"></iframe><div class="cinematic-overlay"></div>`;
-          }
-        } else if (videoEl && sources && sources.length) {
-          const currentSrc = sources[0].getAttribute('src');
-          if (currentSrc !== liveVideoUrl) {
-            sources[0].setAttribute('src', liveVideoUrl);
-            sources[0].setAttribute('type', liveVideoUrl.includes('.webm') ? 'video/webm' : 'video/mp4');
-            if (sources[1]) sources[1].setAttribute('src', liveVideoUrl);
-            videoEl.load();
-            videoEl.play().catch(() => {});
+              if (ytMatch && ytMatch[1]) {
+                const ytEmbed = `https://www.youtube.com/embed/${ytMatch[1]}?autoplay=1&mute=1&controls=0&loop=1&playlist=${ytMatch[1]}&playsinline=1&modestbranding=1&rel=0`;
+                if (iframeEl) {
+                  if (iframeEl.src !== ytEmbed) iframeEl.src = ytEmbed;
+                } else {
+                  videoContainer.innerHTML = `<iframe class="cinematic-video youtube-hero-iframe" src="${ytEmbed}" title="Hero Background Video" allow="autoplay; encrypted-media" frameborder="0"></iframe><div class="cinematic-overlay"></div>`;
+                }
+              } else if (videoEl && sources && sources.length) {
+                const currentSrc = sources[0].getAttribute('src');
+                if (currentSrc !== liveVideoUrl) {
+                  sources[0].setAttribute('src', liveVideoUrl);
+                  sources[0].setAttribute('type', liveVideoUrl.includes('.webm') ? 'video/webm' : 'video/mp4');
+                  if (sources[1]) sources[1].setAttribute('src', liveVideoUrl);
+                  videoEl.load();
+                  videoEl.play().catch(() => {});
+                }
+              }
+            }
           }
         }
       })

@@ -221,10 +221,13 @@ export async function getSiteSettings() {
         stat1_label: row.stats?.stat1_label || 'Dự án hoàn thành',
 
         stat2_value: row.stats?.stat2_value ?? 8,
+        stat2_prefix: row.stats?.stat2_prefix ?? '',
         stat2_suffix: row.stats?.stat2_suffix ?? '+',
         stat2_label: row.stats?.stat2_label || 'Năm kinh nghiệm',
 
         stat3_value: row.stats?.stat3_value ?? 365,
+        stat3_prefix: row.stats?.stat3_prefix ?? '',
+        stat3_suffix: row.stats?.stat3_suffix ?? '',
         stat3_label: row.stats?.stat3_label || 'Ngày sáng tạo',
       },
       hero: {
@@ -257,8 +260,8 @@ export async function getSiteSettings() {
     address: 'Kim Hoa, Đống Đa, Hà Nội',
     stats: {
       stat1_value: 50, stat1_prefix: '+', stat1_suffix: '', stat1_label: 'Dự án hoàn thành',
-      stat2_value: 8, stat2_suffix: '+', stat2_label: 'Năm kinh nghiệm',
-      stat3_value: 365, stat3_label: 'Ngày sáng tạo',
+      stat2_value: 8, stat2_prefix: '', stat2_suffix: '+', stat2_label: 'Năm kinh nghiệm',
+      stat3_value: 365, stat3_prefix: '', stat3_suffix: '', stat3_label: 'Ngày sáng tạo',
     },
     hero: { eyebrow: null, title: null, description: null, videoUrl: null, posterImageUrl: null },
     portfolioTeaser: { tag: '[ 01 / PORTFOLIO ]', title: null },
