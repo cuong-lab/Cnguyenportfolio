@@ -322,14 +322,14 @@ img {
   padding-top: 88px;
 }
 
-/* --- Cinematic Hero --- */
+/* --- Cinematic Hero (Netflix Bottom-Left Alignment) --- */
 .cinematic-hero {
   position: relative;
   min-height: 100vh;
   display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 0 8vw;
+  align-items: flex-end;
+  justify-content: flex-start;
+  padding: 0 6vw 80px 6vw;
   margin-top: calc(-1 * var(--header-height));
   overflow: hidden;
 }
@@ -347,62 +347,75 @@ img {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  opacity: 0.6;
+  opacity: 0.75;
 }
 
+/* Vignette: dark on left & bottom for Netflix-style title readibility without blocking right video area */
 .cinematic-overlay {
   position: absolute;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  background: linear-gradient(to bottom, rgba(4, 4, 6, 0.2) 0%, rgba(4, 4, 6, 0.8) 80%, var(--bg) 100%);
+  background: 
+    linear-gradient(to right, rgba(7, 8, 10, 0.92) 0%, rgba(7, 8, 10, 0.5) 45%, rgba(7, 8, 10, 0.1) 80%, rgba(7, 8, 10, 0) 100%),
+    linear-gradient(to top, rgba(7, 8, 10, 0.95) 0%, rgba(7, 8, 10, 0.3) 40%, rgba(7, 8, 10, 0.2) 100%);
   z-index: -1;
 }
 
 .hero-content {
   position: relative;
   z-index: 1;
-  text-align: center;
-  max-width: 900px;
+  text-align: left;
+  max-width: 520px; /* 50% smaller max-width as requested */
   display: flex;
   flex-direction: column;
-  align-items: center;
-  margin-top: var(--header-height);
+  align-items: flex-start;
+  margin-top: 0;
 }
 
 .cinematic-eyebrow {
-  font-size: 1rem;
-  letter-spacing: 0.15em;
+  font-size: 0.85rem;
+  letter-spacing: 0.18em;
   color: var(--accent);
-  margin-bottom: 24px;
+  margin-bottom: 16px;
   text-transform: uppercase;
+  font-weight: 600;
 }
 
 .cinematic-title {
-  font-size: clamp(3rem, 6vw, 5.5rem);
-  line-height: 1.05;
+  font-size: clamp(2rem, 3.6vw, 3.2rem);
+  line-height: 1.1;
   letter-spacing: -0.02em;
   font-weight: 700;
-  margin-bottom: 24px;
+  margin-bottom: 18px;
   color: #fff;
-  text-shadow: 0 4px 24px rgba(0,0,0,0.5);
+  text-shadow: 0 4px 20px rgba(0,0,0,0.7);
 }
 
 .cinematic-text {
-  font-size: clamp(1.1rem, 2vw, 1.4rem);
-  color: rgba(255, 255, 255, 0.85);
-  max-width: 600px;
-  margin: 0 auto 40px;
+  font-size: clamp(0.95rem, 1.4vw, 1.1rem);
+  color: rgba(244, 245, 248, 0.75);
+  max-width: 480px;
+  margin: 0 0 28px 0;
   line-height: 1.6;
+  text-align: left;
+}
+
+.hero-actions {
+  display: flex;
+  gap: 16px;
+  justify-content: flex-start;
+  width: 100%;
 }
 
 .cinematic-stats {
-  justify-content: center;
-  margin-top: 60px;
+  justify-content: flex-start;
+  margin-top: 36px;
   border-top: 1px solid rgba(255,255,255,0.1);
-  padding-top: 40px;
+  padding-top: 24px;
   width: 100%;
+  gap: 32px;
 }
 
 
