@@ -3767,3 +3767,24 @@ body::after {
 .service-card:hover .service-card-inner {
   transform: translateY(-4px) !important;
 }
+
+/* 12. Portfolio Video Card Anti-Flicker Fix (Anchored Hit-box with Inner Lift) */
+.portfolio-card {
+  box-sizing: border-box !important;
+  transform: none !important; /* Outer container stays 100% stationary so hit-box never flickers */
+  transition: border-color 0.35s ease, box-shadow 0.35s ease !important;
+}
+
+.portfolio-card:hover {
+  transform: none !important;
+  border-color: rgba(255, 255, 255, 0.25) !important;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.45) !important;
+}
+
+.card-media-wrapper {
+  transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1) !important;
+}
+
+.portfolio-card:hover .card-media-wrapper {
+  transform: translateY(-6px) !important;
+}
