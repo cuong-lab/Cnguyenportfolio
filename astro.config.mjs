@@ -11,16 +11,16 @@ import react from '@astrojs/react';
 // valid placeholder projectId so `dev`/`build` still run before the real
 // project id is filled in — Sanity fetches simply fail and the frontend keeps
 // falling back to the src/data samples until the id is set.
-const { SANITY_PROJECT_ID, SANITY_DATASET } = loadEnv(process.env.NODE_ENV || 'development', process.cwd(), '');
-const projectId = SANITY_PROJECT_ID || 'placeholder';
-const dataset = SANITY_DATASET || 'production';
+const loadedEnv = loadEnv(process.env.NODE_ENV || 'development', process.cwd(), '');
+const projectId = process.env.SANITY_PROJECT_ID || loadedEnv.SANITY_PROJECT_ID || 'yrg3sjk0';
+const dataset = process.env.SANITY_DATASET || loadedEnv.SANITY_DATASET || 'production';
 
 // Only mount the embedded Studio when a real project id is present. A Studio
 // pointed at a nonexistent project ('placeholder') can't initialize and
 // white-screens on load, so when unconfigured we DON'T mount it — src/pages/
 // admin/[...slug].astro serves a setup notice at /admin instead (it emits no
 // route when the Studio is enabled, avoiding a collision).
-const STUDIO_ENABLED = !!SANITY_PROJECT_ID && SANITY_PROJECT_ID !== 'placeholder';
+const STUDIO_ENABLED = !!projectId && projectId !== 'placeholder';
 if (!STUDIO_ENABLED) {
   console.warn(
     '\n⚠️  [sanity] SANITY_PROJECT_ID is empty — the embedded Studio at /admin is DISABLED\n' +

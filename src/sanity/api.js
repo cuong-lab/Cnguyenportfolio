@@ -12,7 +12,7 @@ import {
 // (placeholder) or a query fails/returns nothing, every getter falls back to
 // the src/data sample content, so the site builds and renders before Sanity is
 // configured and switches over automatically once it is.
-const PROJECT_ID = import.meta.env.SANITY_PROJECT_ID;
+const PROJECT_ID = import.meta.env.SANITY_PROJECT_ID || 'yrg3sjk0';
 const CONFIGURED = !!PROJECT_ID && PROJECT_ID !== 'placeholder';
 
 // Fallback content in src/data is authored bilingually ({ vi, en }); the Sanity
