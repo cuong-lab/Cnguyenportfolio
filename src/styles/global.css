@@ -192,7 +192,7 @@ img {
   /* Frosted-glass thumb (like the reference card): a soft white sheen + a real
      backdrop blur, a luminous hairline border, and an inset top highlight /
      bottom shade so it reads as a lit pane of glass, not a flat tint. */
-  background: var(--bg-soft), rgba(255, 255, 255, 0.03));
+  background: var(--bg-soft);
   /* Glass LENS, not frost: low blur so it stays see-through, but strong
      saturate/brightness/contrast so the content behind the thumb is visibly
      lifted & vivid as it slides — that magnified pop is what reads as real
@@ -223,7 +223,7 @@ img {
   position: absolute;
   inset: 1px 2px 42% 2px;
   border-radius: 999px 999px 60% 60% / 999px 999px 100% 100%;
-  background: var(--bg-soft), rgba(255, 255, 255, 0.04));
+  background: var(--bg-soft);
   opacity: 0.85;
   pointer-events: none;
 }
@@ -685,7 +685,7 @@ h1 {
 
 .filter-pill.active {
   color: #0b0c10;
-  background: var(--accent), var(--accent-2));
+  background: var(--accent);
   border-color: transparent;
   font-weight: 600;
 }
@@ -765,11 +765,11 @@ h1 {
 
 /* Gradient placeholders for the src/data fallback (no cover image). */
 .card-1 {
-  background: var(--bg-soft), 0.24), rgba(8,10,18,0.85));
+  background: var(--bg-soft);
 }
 
 .card-2 {
-  background: var(--bg-soft), 0.24), rgba(8,10,18,0.85));
+  background: var(--bg-soft);
 }
 
 .card-3 {
@@ -888,8 +888,8 @@ h1 {
   --clip-in: 0%;
 }
 
-.resume-entry[data-index="0"] .resume-entry-visual-clip { background: var(--bg-soft), 0.24), rgba(8,10,18,0.85)); }
-.resume-entry[data-index="1"] .resume-entry-visual-clip { background: var(--bg-soft), 0.24), rgba(8,10,18,0.85)); }
+.resume-entry[data-index="0"] .resume-entry-visual-clip { background: var(--bg-soft); }
+.resume-entry[data-index="1"] .resume-entry-visual-clip { background: var(--bg-soft); }
 .resume-entry[data-index="2"] .resume-entry-visual-clip { background: linear-gradient(135deg, rgba(255,255,255,0.16), rgba(8,10,18,0.85)); }
 
 .resume-entry-desc {
@@ -985,7 +985,7 @@ h1 {
   position: absolute;
   inset: 0;
   border-radius: 14px;
-  background: var(--bg-soft), 0.22), rgba(var(--accent-2-rgb), 0.18));
+  background: var(--bg-soft);
   opacity: 0;
   pointer-events: none;
   transition: opacity 0.35s ease;
@@ -1028,8 +1028,8 @@ h1 {
   transition: transform 0.5s cubic-bezier(0.65, 0, 0.35, 1) 0.1s, opacity 0.4s ease 0.1s;
 }
 
-.resume-pagination-item[data-index="0"] .resume-pagination-item-thumb { background: var(--bg-soft), 0.24), rgba(8,10,18,0.85)); }
-.resume-pagination-item[data-index="1"] .resume-pagination-item-thumb { background: var(--bg-soft), 0.24), rgba(8,10,18,0.85)); }
+.resume-pagination-item[data-index="0"] .resume-pagination-item-thumb { background: var(--bg-soft); }
+.resume-pagination-item[data-index="1"] .resume-pagination-item-thumb { background: var(--bg-soft); }
 .resume-pagination-item[data-index="2"] .resume-pagination-item-thumb { background: linear-gradient(135deg, rgba(255,255,255,0.16), rgba(8,10,18,0.85)); }
 
 .resume-pagination-item-progress-bg {
@@ -1415,7 +1415,7 @@ body.modal-open .site-header {
   width: 11px;
   height: 40px;
   transform: translateX(-50%);
-  background: var(--accent), var(--accent-2));
+  background: var(--accent);
   border-radius: 60% 40% 55% 45% / 50% 55% 45% 50%;
   box-shadow: 0 0 14px rgba(var(--accent-rgb), 0.55), 0 6px 12px rgba(0, 0, 0, 0.45);
   animation: pmDropMorph 4.5s ease-in-out infinite;
