@@ -1,5 +1,6 @@
 ---
 import SiteHeader from '../components/SiteHeader.astro';
+import SiteFooter from '../components/SiteFooter.astro';
 import HeavyAnimationLoader from '../components/HeavyAnimationLoader.astro';
 import LoadingOverlay from '../components/LoadingOverlay.astro';
 import { getLocale, useTranslations } from '../i18n/utils';
@@ -46,9 +47,7 @@ const t = useTranslations(locale);
     
     <LoadingOverlay />
 
-    <footer class="site-footer">
-      <p>© <span id="year"></span> Cường Nguyễn Showreel. {t('footer.tagline')}</p>
-    </footer>
+    <SiteFooter />
 
     <script>
       import '../scripts/site.js';

@@ -35,16 +35,24 @@ const heroStats = hero.stats.map((stat, i) => {
 >
   <main id="hero">
     <div id="intro">
-      <section class="hero section">
-        <div class="hero-copy reveal">
-          <p class="eyebrow">{L(hero.eyebrow, locale)}</p>
-          <h1>{L(hero.title, locale)}</h1>
-          <p class="hero-text">{L(hero.text, locale)}</p>
+      <section class="hero cinematic-hero">
+        <div class="cinematic-bg">
+          <video autoplay loop muted playsinline class="cinematic-video" poster="/images/hero-poster.jpg">
+            <source src="/videos/showreel-preview.mp4" type="video/mp4" />
+          </video>
+          <div class="cinematic-overlay"></div>
+        </div>
+        
+        <div class="hero-content reveal">
+          <p class="eyebrow cinematic-eyebrow">{L(hero.eyebrow, locale)}</p>
+          <h1 class="cinematic-title">{L(hero.title, locale)}</h1>
+          <p class="hero-text cinematic-text">{L(hero.text, locale)}</p>
           <div class="hero-actions">
             <a class="button primary" href="/portfolio/">{t('actions.viewProjects')}</a>
-            <a class="button ghost" href="/lien-he/">{t('actions.contactNow')}</a>
+            <a class="button ghost light" href="/lien-he/">{t('actions.contactNow')}</a>
           </div>
-          <ul class="hero-stats reveal-stagger">
+          
+          <ul class="hero-stats cinematic-stats reveal-stagger">
             {heroStats.map((stat) => (
               <li>
                 <strong class="stat-value">{stat.value}</strong>
@@ -52,18 +60,6 @@ const heroStats = hero.stats.map((stat, i) => {
               </li>
             ))}
           </ul>
-        </div>
-
-        <div class="hero-visual reveal">
-          <div class="reel-card">
-            <div id="hero-media" class="reel-media" aria-hidden="true"></div>
-            <div class="reel-glow"></div>
-            <div class="reel-content">
-              <span class="pill">{L(hero.reelPill, locale)}</span>
-              <h3>{L(hero.reelTitle, locale)}</h3>
-              <p>{L(hero.reelMeta, locale)}</p>
-            </div>
-          </div>
         </div>
       </section>
 
@@ -98,7 +94,7 @@ const heroStats = hero.stats.map((stat, i) => {
       </div>
     </section>
 
-    <section id="services" class="section services reveal">
+    <section id="services" class="section services teaser-block reveal">
       <div class="section-heading">
         <p class="eyebrow">{L(servicesTeaser.eyebrow, locale)}</p>
         <h2>{L(servicesTeaser.heading, locale)}</h2>
@@ -113,7 +109,7 @@ const heroStats = hero.stats.map((stat, i) => {
       </div>
     </section>
 
-    <section id="portfolio" class="section portfolio reveal">
+    <section id="portfolio" class="section portfolio teaser-block reveal">
       <div class="section-heading portfolio-heading">
         <div>
           <p class="eyebrow">{L(portfolioTeaser.eyebrow, locale)}</p>

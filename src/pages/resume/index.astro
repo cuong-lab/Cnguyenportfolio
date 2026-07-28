@@ -58,62 +58,37 @@ const experiences = await getResumeExperiences();
         <p class="eyebrow">{L(about.experienceEyebrow, locale)}</p>
         <h2>{L(about.experienceHeading, locale)}</h2>
       </div>
-      <div class="resume-pin-section" id="resume-pin-section">
-        <div class="resume-pin-inner">
-          {experiences.map((exp, i) => (
-            <article class:list={['resume-entry', { active: i === 0 }]} data-index={i}>
-              <div class="resume-entry-header">
-                <p class="resume-entry-eyebrow">{t('resume.experience')} {pad(i)}</p>
-                <h3 class="resume-entry-company">{exp.company}</h3>
+      <div class="resume-timeline">
+        {experiences.map((exp, i) => (
+          <article class="resume-timeline-item reveal-stagger">
+            <div class="timeline-marker"></div>
+            <div class="timeline-content">
+              <div class="timeline-header">
+                <h3 class="timeline-company">{exp.company}</h3>
+                <span class="timeline-date">{exp.timeframe}</span>
               </div>
-              <div class="resume-entry-visual">
-                <div class="resume-entry-visual-scale">
-                  <div class="resume-entry-visual-clip"></div>
+              <h4 class="timeline-role">{exp.role}</h4>
+              
+              <p class="timeline-desc">{exp.description}</p>
+              
+              <div class="timeline-meta">
+                <div class="meta-group">
+                  <strong>{t('resume.outcomes')}:</strong>
+                  <p>{exp.outcomes}</p>
                 </div>
-              </div>
-              <div class="resume-entry-meta">
-                <div class="resume-field-block">
-                  <p class="resume-field-label">{t('resume.role')}</p>
-                  <p class="resume-field-value">{exp.role}</p>
-                </div>
-                <div class="resume-field-block">
-                  <p class="resume-field-label">{t('resume.skills')}</p>
-                  <div class="resume-entry-tags">
+                
+                <div class="meta-group tags">
+                  <strong>{t('resume.skills')}:</strong>
+                  <div class="resume-tags">
                     {exp.skills.map((tag) => (
-                      <span>{tag}</span>
+                      <span class="tag">{tag}</span>
                     ))}
                   </div>
                 </div>
-                <div class="resume-field-block">
-                  <p class="resume-field-label">{t('resume.outcomes')}</p>
-                  <p class="resume-field-value">{exp.outcomes}</p>
-                </div>
               </div>
-              <div class="resume-entry-desc">
-                <p class="resume-field-label">{t('resume.description')}</p>
-                <p class="resume-field-value">{exp.description}</p>
-              </div>
-              <div class="resume-entry-footer">
-                <p class="resume-entry-hint">{t('resume.scrollHint')}</p>
-                <p class="resume-entry-year">© <span>{exp.timeframe}</span></p>
-              </div>
-            </article>
-          ))}
-        </div>
-        <div class="resume-pagination-list">
-          {experiences.map((exp, i) => (
-            <button type="button" class:list={['resume-pagination-item', { active: i === 0 }]} data-index={i}>
-              <span class="resume-pagination-item-label">{exp.company}</span>
-              <span class="resume-pagination-item-thumb"></span>
-              <span class="resume-pagination-item-progress-bg"><span class="resume-pagination-item-progress-fill"></span></span>
-            </button>
-          ))}
-        </div>
-        <div class="resume-controls">
-          <button type="button" class="resume-arrow prev" aria-label={t('resume.prevAria')}>‹</button>
-          <span class="resume-pagination-count"><span class="resume-current">01</span> / {pad(experiences.length - 1)}</span>
-          <button type="button" class="resume-arrow next" aria-label={t('resume.nextAria')}>›</button>
-        </div>
+            </div>
+          </article>
+        ))}
       </div>
     </section>
   </main>

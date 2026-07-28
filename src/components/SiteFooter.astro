@@ -1,0 +1,43 @@
+---
+import { getLocale, useTranslations } from '../i18n/utils';
+
+const locale = getLocale(Astro.url);
+const t = useTranslations(locale);
+---
+
+<footer class="site-footer">
+  <div class="footer-inner">
+    <div class="footer-info">
+      <h3>Cường Nguyễn Showreel</h3>
+      <p>{t('footer.tagline')}</p>
+    </div>
+    
+    <div class="footer-contact">
+      <div class="contact-item">
+        <span class="label">{t('footer.phone')}</span>
+        <a href="tel:0394775656">039 477 5656</a>
+      </div>
+      <div class="contact-item">
+        <span class="label">{t('footer.email')}</span>
+        <a href="mailto:cuong@cnguyenwork.com">cuong@cnguyenwork.com</a>
+      </div>
+      <div class="contact-item">
+        <span class="label">{t('footer.address')}</span>
+        <span>Kim Hoa, Đống Đa, Hà Nội</span>
+      </div>
+    </div>
+    
+    <div class="footer-social">
+      <span class="label">{t('footer.social')}</span>
+      <div class="social-links">
+        <a href="https://facebook.com" target="_blank" rel="noopener noreferrer">Facebook</a>
+        <a href="https://instagram.com" target="_blank" rel="noopener noreferrer">Instagram</a>
+        <a href="https://vimeo.com" target="_blank" rel="noopener noreferrer">Vimeo</a>
+      </div>
+    </div>
+  </div>
+  
+  <div class="footer-bottom">
+    <p>© <span id="year"></span> Cường Nguyễn. All rights reserved.</p>
+  </div>
+</footer>

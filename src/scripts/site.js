@@ -548,19 +548,29 @@ window.initResume = function initResume() {
 // Modified clicks (cmd/ctrl/shift/alt — i.e. open-in-new-tab) are left alone.
 const logo = document.getElementById('logo');
 if (logo) {
-  const TAP_WINDOW = 450; // ms allowed between taps to still count as one gesture
+  const TAP_WINDOW = 2000; // ms allowed between first and last tap
   let tapCount = 0;
   let tapTimer = null;
   logo.addEventListener('click', (e) => {
     if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
     e.preventDefault();
     tapCount += 1;
-    clearTimeout(tapTimer);
-    tapTimer = setTimeout(() => {
-      const dest = tapCount >= 3 ? '/admin' : (logo.getAttribute('href') || '/');
+    
+    if (tapCount === 1) {
+      tapTimer = setTimeout(() => {
+        // If they didn't reach 5 taps in 2s, redirect to home
+        if (tapCount < 5) {
+          window.location.href = logo.getAttribute('href') || '/';
+        }
+        tapCount = 0;
+      }, TAP_WINDOW);
+    }
+    
+    if (tapCount >= 5) {
+      clearTimeout(tapTimer);
       tapCount = 0;
-      window.location.href = dest;
-    }, TAP_WINDOW);
+      window.location.href = '/admin';
+    }
   });
 }
 
