@@ -98,7 +98,10 @@ const [experiences, resumeContent] = await Promise.all([
         <!-- Sidebar Section (Right) -->
         <aside class="resume-sidebar reveal">
           <section class="sidebar-section">
-            <h2 class="sidebar-heading">{resumeContent.skillsHeading}</h2>
+            <div class="section-heading">
+              <p class="section-tag">[ KỸ NĂNG ]</p>
+              <h2 class="sidebar-heading">{resumeContent.skillsHeading}</h2>
+            </div>
             <ul class="sidebar-list">
               {resumeContent.skills.map((skill) => (
                 <li class="sidebar-item">
