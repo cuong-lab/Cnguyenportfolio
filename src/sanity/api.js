@@ -121,7 +121,7 @@ function mapProject(r) {
 
 export async function getProjects() {
   const rows = await safeFetch(
-    `*[_type == "project"] | order(orderRank asc, featured desc, year desc, _createdAt desc){
+    `*[_type == "project"] | order(coalesce(orderRank, "zzz") asc, featured desc, year desc, _createdAt desc){
       "id": _id, title, featured, client, year, role,
       "categories": categories[]{
         _type == "reference" => @->title,
