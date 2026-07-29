@@ -1,4 +1,4 @@
-import { sanityClient } from 'sanity:client';
+import { createClient } from '@sanity/client';
 import { urlFor } from './image.js';
 import { localize } from '../i18n/utils';
 import {
@@ -8,12 +8,16 @@ import {
   contact as contactData,
 } from '../data';
 
-// GROQ data access with graceful fallback. When SANITY_PROJECT_ID is unset
-// (placeholder) or a query fails/returns nothing, every getter falls back to
-// the src/data sample content, so the site builds and renders before Sanity is
-// configured and switches over automatically once it is.
 const PROJECT_ID = import.meta.env.SANITY_PROJECT_ID || 'yrg3sjk0';
+const DATASET = import.meta.env.SANITY_DATASET || 'production';
 const CONFIGURED = !!PROJECT_ID && PROJECT_ID !== 'placeholder';
+
+const sanityClient = createClient({
+  projectId: PROJECT_ID,
+  dataset: DATASET,
+  apiVersion: '2025-05-01',
+  useCdn: false, // Ensure realtime
+});
 
 // Fallback content in src/data is authored bilingually ({ vi, en }); the Sanity
 // schema is single-language, so collapse fallbacks to the default locale (vi).
