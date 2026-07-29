@@ -48,17 +48,20 @@ const allCategories = categoryGroups.map((g) => g.name);
                 <span class="category-group-count">{group.projects.length} dự án</span>
               </div>
               <div class="portfolio-grid reveal-stagger" data-portfolio-grid>
-                {group.projects.map((project, i) => (
-                  <ProjectCard
-                    title={project.title}
-                    index={i}
-                    coverImageUrl={project.coverImageUrl}
-                    videoHoverUrl={project.videoHoverUrl}
-                    cardClass={project.cardClass}
-                    categories={project.categories}
-                    id={project.id}
-                  />
-                ))}
+                {group.projects.map((project) => {
+                  const globalIndex = projectList.findIndex((p) => p.id === project.id);
+                  return (
+                    <ProjectCard
+                      title={project.title}
+                      index={globalIndex !== -1 ? globalIndex : 0}
+                      coverImageUrl={project.coverImageUrl}
+                      videoHoverUrl={project.videoHoverUrl}
+                      cardClass={project.cardClass}
+                      categories={project.categories}
+                      id={project.id}
+                    />
+                  );
+                })}
               </div>
             </div>
           ))}
