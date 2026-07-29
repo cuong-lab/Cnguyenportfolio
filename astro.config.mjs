@@ -82,6 +82,8 @@ const SANITY_ALIAS = [
   { find: /^styled-components$/, replacement: pkgDir('styled-components') },
 ].filter((entry) => entry.replacement);
 
+import vercel from '@astrojs/vercel';
+
 export default defineConfig({
   adapter: vercel(),
   // TODO: replace with the real production domain once deployed — required
