@@ -1427,21 +1427,23 @@ body.modal-open .site-header {
 
 .pm-info-head {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   justify-content: space-between;
   gap: 16px;
-  flex-wrap: wrap;
 }
 
 .pm-title {
   font-size: clamp(1.5rem, 3vw, 2.2rem);
   line-height: 1.15;
+  flex: 1;
 }
 
 .pm-nav {
   display: inline-flex;
   align-items: center;
   gap: 10px;
+  flex-shrink: 0;
+  margin-top: 4px;
 }
 
 .pm-counter {
