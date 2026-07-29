@@ -1,6 +1,7 @@
 import { defineConfig } from 'sanity';
 import { structureTool } from 'sanity/structure';
 import { visionTool } from '@sanity/vision';
+import { orderableDocumentListDeskItem } from '@sanity/orderable-document-list';
 import { schemaTypes } from './src/sanity/schemaTypes';
 
 // projectId / dataset are injected into the client bundle via vite.define in
@@ -16,7 +17,7 @@ export default defineConfig({
   dataset,
   plugins: [
     structureTool({
-      structure: (S) =>
+      structure: (S, context) =>
         S.list()
           .title('Nội dung')
           .items([
@@ -40,7 +41,16 @@ export default defineConfig({
               .child(
                 S.document().schemaType('resume_page').documentId('resume_page')
               ),
-            S.documentTypeListItem('project').title('Dự án'),
+            S.divider(),
+            orderableDocumentListDeskItem({
+              type: 'project',
+              title: '🎬 Sắp xếp vị trí Video (Kéo thả nút :::)',
+              id: 'orderable-projects',
+              S,
+              context,
+            }),
+            S.documentTypeListItem('project').title('Tất cả dự án'),
+            S.documentTypeListItem('category').title('Thể loại dự án'),
             S.documentTypeListItem('service').title('Dịch vụ'),
             S.documentTypeListItem('resume_experience').title('Kinh nghiệm'),
           ]),

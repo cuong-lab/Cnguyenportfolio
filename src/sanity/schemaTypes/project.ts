@@ -6,6 +6,12 @@ export default defineType({
   type: 'document',
   fields: [
     defineField({
+      name: 'orderRank',
+      title: 'Thứ tự sắp xếp',
+      type: 'string',
+      hidden: true,
+    }),
+    defineField({
       name: 'title',
       title: 'Tiêu đề',
       type: 'string',
