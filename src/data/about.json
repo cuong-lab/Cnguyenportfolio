@@ -1,113 +1,151 @@
 {
   "meta": {
     "title": {
-      "vi": "Resume | Cường Nguyễn Showreel",
-      "en": "Resume | Cường Nguyễn Showreel"
+      "vi": "Resume | Cường Nguyễn",
+      "en": "Resume | Cuong Nguyen"
     },
     "description": {
-      "vi": "Resume của Cường Nguyễn Showreel: giới thiệu bản thân, kỹ năng và hành trình nghề nghiệp trong lĩnh vực quay phim, chụp ảnh và dựng phim.",
-      "en": "Cường Nguyễn Showreel's resume: an introduction, skills and career journey in filmmaking, photography and editing."
+      "vi": "Resume của Cường Nguyễn: Videographer và Video Editor với nhiều năm kinh nghiệm thực chiến.",
+      "en": "Cuong Nguyen's resume: A full-cycle Videographer and Editor with years of practical experience."
     }
   },
   "eyebrow": { "vi": "Về tôi", "en": "About me" },
   "title": {
-    "vi": "Tôi kể chuyện bằng ánh sáng, nhịp điệu và cảm xúc.",
-    "en": "I tell stories through light, rhythm and emotion."
+    "vi": "Post-Production Specialist",
+    "en": "Post-Production Specialist"
   },
   "paragraphs": [
     {
-      "vi": "Tôi là một freelancer chuyên quay phim, chụp ảnh và dựng hình ảnh cho các dự án thương hiệu, cá nhân và sự kiện. Mỗi khung hình đều được chăm chút để giữ lại vẻ đẹp thật, cảm xúc thật và phong cách thật.",
-      "en": "I'm a freelancer specializing in filming, photography and image editing for brand, personal and event projects. Every frame is crafted to keep real beauty, real emotion and a real style."
+      "vi": "Tôi là một Videographer và Editor trọn gói (full-cycle), đam mê tạo ra những video mang lại cảm giác cao cấp và chân thực.",
+      "en": "I’m a full-cycle Videographer and Editor who loves making videos that look premium and feel authentic."
     },
     {
-      "vi": "Từ concept ban đầu đến sản phẩm cuối cùng, tôi ưu tiên sự mượt mà, tinh tế và đúng tinh thần của thương hiệu bạn muốn truyền tải.",
-      "en": "From the first concept to the final deliverable, I prioritize smoothness, refinement and staying true to the spirit of the brand you want to convey."
+      "vi": "Nhờ vào nhiều năm kinh nghiệm tại các studio doanh nghiệp kết hợp với cường độ làm việc không ngừng nghỉ của một freelancer, tôi đã làm chủ được nghệ thuật linh hoạt chuyển đổi giữa các phong cách thương hiệu, định dạng và ngân sách khác nhau.",
+      "en": "Thanks to years of corporate studio experience mixed with a non-stop freelance hustle, I’ve mastered the art of shifting gears between different brand vibes, formats, and budgets."
+    },
+    {
+      "vi": "Tôi trực tiếp xử lý mọi công đoạn từ ghi hình tại hiện trường cho đến hậu kỳ cuối cùng, luôn đảm bảo bản dựng cuối cùng chạm đúng mạch cảm xúc và bắt kịp các xu hướng nền tảng mới nhất.",
+      "en": "I handle everything from on-site shooting to final post-production, always ensuring the final cut hits the right emotional notes and platform trends."
     }
   ],
   "strengths": [
-    { "vi": "Storytelling mạnh mẽ", "en": "Strong storytelling" },
-    { "vi": "Chùm hình aesthetic, nhẹ và hiện đại", "en": "Aesthetic, light and modern imagery" },
-    { "vi": "Dựng phim đúng nhịp cảm xúc", "en": "Editing tuned to emotional rhythm" },
-    { "vi": "Phối hợp tốt với brand & creator", "en": "Great collaboration with brands & creators" }
+    { "vi": "Dựng Video (Video Editing)", "en": "Video Editing" },
+    { "vi": "Chỉnh Màu (Color Grading)", "en": "Color Grading" },
+    { "vi": "Thiết Kế Âm Thanh (Sound Design)", "en": "Sound Design" },
+    { "vi": "Đồ Họa Chuyển Động (Motion Graphics)", "en": "Motion Graphics" }
   ],
   "skillsEyebrow": { "vi": "Kỹ năng", "en": "Skills" },
   "skillsHeading": {
-    "vi": "Công cụ làm việc hằng ngày.",
-    "en": "The tools I work with every day."
+    "vi": "Bộ kỹ năng cốt lõi.",
+    "en": "Core skill set."
   },
   "skills": [
-    "Premiere Pro",
-    "After Effects",
-    "Photoshop",
-    "Illustrator",
-    "InDesign",
-    "Adobe Audition",
-    "DaVinci Resolve"
+    "Video Editing",
+    "Color Grading",
+    "Sound Design",
+    "Motion Graphics",
+    "Asset Management",
+    "Quality Assurance",
+    "Creative Collaboration",
+    "Filming"
   ],
   "experienceEyebrow": { "vi": "Kinh nghiệm", "en": "Experience" },
   "experienceHeading": {
-    "vi": "Hành trình nghề nghiệp qua từng vị trí.",
-    "en": "A career journey through each role."
+    "vi": "Hành trình nghề nghiệp.",
+    "en": "Career journey."
   },
   "experiences": [
     {
-      "id": "independent",
-      "company": { "vi": "Làm việc độc lập", "en": "Independent" },
-      "role": {
-        "vi": "Freelance Filmmaker & Photographer",
-        "en": "Freelance Filmmaker & Photographer"
-      },
+      "id": "jetdentist",
+      "company": { "vi": "JET DENTIST", "en": "JET DENTIST" },
+      "role": { "vi": "Videographer | Video Editor", "en": "Videographer | Video Editor" },
       "tags": [
-        { "vi": "Quay phim", "en": "Filming" },
-        { "vi": "Dựng phim", "en": "Editing" },
-        { "vi": "Chụp ảnh", "en": "Photography" }
+        { "vi": "Làm đẹp", "en": "Beauty" },
+        { "vi": "Nội dung thẩm mỹ", "en": "High-aesthetic" }
       ],
       "outcomes": {
-        "vi": "+50 dự án hoàn thành, hợp tác cùng 10+ thương hiệu và creator.",
-        "en": "+50 projects delivered, working with 10+ brands and creators."
+        "vi": "Thúc đẩy lượng lớn yêu cầu tư vấn và đặt lịch từ khách hàng qua các video dạng ngắn.",
+        "en": "Drove customer inquiries and bookings by churning out engaging short-form videos."
       },
       "description": {
-        "vi": "Nhận dự án quay dựng và chụp ảnh trực tiếp cho thương hiệu, creator và sự kiện, phụ trách toàn bộ quy trình từ concept đến sản phẩm cuối.",
-        "en": "Taking on filming and photography projects directly for brands, creators and events, owning the whole process from concept to final deliverable."
+        "vi": "Sản xuất nội dung cao cấp tập trung vào thay đổi nụ cười và uy tín thương hiệu. Quản lý cả quá trình ghi hình và hậu kỳ để duy trì hình ảnh sang trọng.",
+        "en": "Produced premium video content focusing on dental transformations. Managed on-site shooting and post-production to maintain a luxurious identity."
       },
-      "year": { "vi": "2023 — Hiện tại", "en": "2023 — Present" }
+      "year": { "vi": "Tháng 06/2024 — Tháng 05/2026", "en": "Jun 2024 — May 2026" }
     },
     {
-      "id": "studio-abc",
-      "company": { "vi": "Studio Sáng Tạo ABC", "en": "ABC Creative Studio" },
-      "role": { "vi": "Video Editor", "en": "Video Editor" },
+      "id": "golf1studio",
+      "company": { "vi": "GOLF 1 STUDIO", "en": "GOLF 1 STUDIO" },
+      "role": { "vi": "Videographer | Video Editor", "en": "Videographer | Video Editor" },
       "tags": [
-        { "vi": "Color grading", "en": "Color grading" },
-        { "vi": "Sound design", "en": "Sound design" },
-        { "vi": "Biên tập", "en": "Editing" }
+        { "vi": "Thể thao", "en": "Sports" },
+        { "vi": "Nhịp độ nhanh", "en": "Fast-paced" }
       ],
       "outcomes": {
-        "vi": "Biên tập hơn 100 video quảng cáo, tăng 40% lượt tương tác trung bình.",
-        "en": "Edited over 100 ad videos, raising average engagement by 40%."
+        "vi": "Xây dựng hình ảnh môn golf chuyên nghiệp, hiện đại, ngầu và dễ tiếp cận trên MXH.",
+        "en": "Made golf look cool, accessible, and high-end through engaging social media feeds."
       },
       "description": {
-        "vi": "Biên tập video quảng cáo và nội dung social cho nhiều nhãn hàng, phối hợp cùng đội quay dựng để giữ đúng nhịp kể chuyện thương hiệu.",
-        "en": "Edited ad videos and social content for many brands, working with the production team to keep the brand's storytelling rhythm."
+        "vi": "Phụ trách toàn bộ quy trình video: ghi hình thiết bị mô phỏng, kỹ năng golf và dựng video recap nhịp độ nhanh cho các giải đấu.",
+        "en": "Handled the whole video process: filming high-tech simulators, coaching tips, and fast-paced recaps of mini-tournaments."
       },
-      "year": { "vi": "2021 — 2023", "en": "2021 — 2023" }
+      "year": { "vi": "Tháng 02/2023 — Tháng 01/2024", "en": "Feb 2023 — Jan 2024" }
     },
     {
-      "id": "xyz-media",
-      "company": { "vi": "XYZ Media", "en": "XYZ Media" },
-      "role": { "vi": "Junior Videographer", "en": "Junior Videographer" },
+      "id": "kienthinhgroup",
+      "company": { "vi": "KienThinhGroup", "en": "KienThinhGroup" },
+      "role": { "vi": "Video Editor | Videographer", "en": "Video Editor | Videographer" },
       "tags": [
-        { "vi": "Quay phim sự kiện", "en": "Event filming" },
-        { "vi": "Hỗ trợ sản xuất", "en": "Production support" }
+        { "vi": "Bất động sản", "en": "Real Estate" },
+        { "vi": "Quay dựng video ngắn", "en": "Short-form video" },
+        { "vi": "TikTok/YouTube", "en": "TikTok/YouTube" }
       ],
       "outcomes": {
-        "vi": "Tham gia quay hơn 30 sự kiện, hỗ trợ sản xuất cho 5+ chiến dịch lớn.",
-        "en": "Filmed over 30 events and supported production for 5+ major campaigns."
+        "vi": "Tăng mức độ nhận diện thương hiệu với tệp khách hàng cao cấp thông qua nội dung sáng tạo trên MXH.",
+        "en": "Boosted brand awareness and connected with high-end clients through fresh social media content."
       },
       "description": {
-        "vi": "Bắt đầu sự nghiệp với vai trò trợ lý quay phim, học hỏi quy trình sản xuất chuyên nghiệp từ tiền kỳ đến hậu kỳ.",
-        "en": "Started my career as a camera assistant, learning the professional production process from pre- to post-production."
+        "vi": "Quay dựng video cao cấp giới thiệu biệt thự và thiết kế nội thất hạng sang. Duy trì phong cách kể chuyện hình ảnh trau chuốt và tinh tế.",
+        "en": "Shot and edited premium video content for luxury villas. Maintained consistently polished and sophisticated visual storytelling."
       },
-      "year": { "vi": "2019 — 2021", "en": "2019 — 2021" }
+      "year": { "vi": "Tháng 08/2021 — Tháng 02/2023", "en": "Aug 2021 — Feb 2023" }
+    },
+    {
+      "id": "media-entertainment",
+      "company": { "vi": "Media Entertainment and Solution", "en": "Media Entertainment and Solution" },
+      "role": { "vi": "Video Editor | Videographer", "en": "Video Editor | Videographer" },
+      "tags": [
+        { "vi": "Dựng phim", "en": "Video Editing" },
+        { "vi": "Quay phim", "en": "Videography" },
+        { "vi": "Web-drama", "en": "Web-drama" }
+      ],
+      "outcomes": {
+        "vi": "Sản xuất các web-drama, sitcom và phim ngắn viral chất lượng cao, thu hút lượng lớn khán giả.",
+        "en": "Produced high-quality web-dramas, sitcoms, and viral short films that drove maximum audience engagement."
+      },
+      "description": {
+        "vi": "Dẫn dắt kể chuyện bằng hình ảnh, quay dựng trực tiếp, chỉnh màu, âm thanh và phối hợp với đạo diễn để tạo ra những bản dựng hoàn hảo, chạm đúng mạch cảm xúc.",
+        "en": "Led visual storytelling, hands-on filming, color grading, sound design, and partnered with directors to deliver polished, emotional final cuts."
+      },
+      "year": { "vi": "Tháng 11/2018 — Tháng 11/2025", "en": "Nov 2018 — Nov 2025" }
+    },
+    {
+      "id": "freelance",
+      "company": { "vi": "Cnguyenwork (Freelance)", "en": "Cnguyenwork (Freelance)" },
+      "role": { "vi": "Videographer | Video Editor", "en": "Videographer | Video Editor" },
+      "tags": [
+        { "vi": "Sản xuất trọn gói", "en": "Full-cycle production" },
+        { "vi": "Đa dạng khách hàng", "en": "Diverse clients" }
+      ],
+      "outcomes": {
+        "vi": "Hoàn thành xuất sắc nhiều dự án song song đúng tiến độ với mọi loại ngân sách.",
+        "en": "Successfully delivered multiple parallel projects on schedule across any budget."
+      },
+      "description": {
+        "vi": "Cung cấp dịch vụ sản xuất video trọn gói cho cá nhân, doanh nghiệp nhỏ và công ty chuyên nghiệp. Tùy biến linh hoạt phong cách theo mọi yêu cầu.",
+        "en": "Delivered full-cycle video production for a diverse freelance portfolio. Tailored production styles to fit any budget smoothly."
+      },
+      "year": { "vi": "Tháng 02/2019 — Hiện tại", "en": "Feb 2019 — Current" }
     }
   ]
 }
