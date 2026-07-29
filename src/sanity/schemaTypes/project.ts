@@ -30,17 +30,12 @@ export default defineType({
     defineField({
       name: 'categories',
       title: 'Thể loại dự án',
-      description: 'Nhấn nút (+) để chọn nhanh thể loại đã lưu hoặc tạo mới. Hệ thống sẽ tự động ghi nhớ cho các lần sau.',
+      description: 'Nhấn nút (+) để chọn thể loại đã lưu hoặc tạo thể loại mới. Sanity sẽ tự động ghi nhớ cho các dự án sau.',
       type: 'array',
       of: [
         defineArrayMember({
           type: 'reference',
-          title: 'Thể loại (Đã lưu)',
           to: [{ type: 'category' }],
-        }),
-        defineArrayMember({
-          type: 'string',
-          title: 'Thể loại tùy chỉnh',
         }),
       ],
     }),
