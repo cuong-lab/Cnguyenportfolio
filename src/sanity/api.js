@@ -22,7 +22,8 @@ const L = (field) => (field ? localize(field, 'vi') : '');
 async function safeFetch(query, params) {
   if (!CONFIGURED) return null;
   try {
-    return await sanityClient.fetch(query, params);
+    // Disable CDN caching for fetches to get instant real-time data updates (0s delay) when published in Sanity Admin
+    return await sanityClient.fetch(query, params, { useCdn: false });
   } catch (e) {
     console.warn('[sanity] fetch failed, using src/data fallback:', e?.message || e);
     return null;
@@ -106,8 +107,12 @@ function mapProject(r) {
 export async function getProjects() {
   const rows = await safeFetch(
     `*[_type == "project"] | order(featured desc, year desc, _createdAt desc){
-      "id": _id, title, featured, client, year, role, categories, aspectRatio,
-      coverImage, videoHoverUrl, mainVideoUrl, description
+      "id": _id, title, featured, client, year, role,
+      "categories": categories[]{
+        _type == "reference" => @->title,
+        _type != "reference" => @
+      },
+      aspectRatio, coverImage, videoHoverUrl, mainVideoUrl, description
     }`
   );
   if (rows && rows.length) return rows.map(mapProject);

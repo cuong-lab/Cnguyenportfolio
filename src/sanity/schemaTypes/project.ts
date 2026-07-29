@@ -29,19 +29,20 @@ export default defineType({
     defineField({ name: 'role', title: 'Vai trò', type: 'string' }),
     defineField({
       name: 'categories',
-      title: 'Thể loại',
+      title: 'Thể loại dự án',
+      description: 'Nhấn nút (+) để chọn nhanh thể loại đã lưu hoặc tạo mới. Hệ thống sẽ tự động ghi nhớ cho các lần sau.',
       type: 'array',
-      of: [defineArrayMember({ type: 'string' })],
-      options: {
-        layout: 'tags',
-        list: [
-          { title: 'Phim ngắn', value: 'Phim ngắn' },
-          { title: 'Phóng sự doanh nghiệp', value: 'Phóng sự doanh nghiệp' },
-          { title: 'Quảng bá văn hóa', value: 'Quảng bá văn hóa' },
-          { title: 'TikTok / Reels', value: 'TikTok / Reels' },
-          { title: 'Kiến trúc', value: 'Kiến trúc' },
-        ],
-      },
+      of: [
+        defineArrayMember({
+          type: 'reference',
+          title: 'Thể loại (Đã lưu)',
+          to: [{ type: 'category' }],
+        }),
+        defineArrayMember({
+          type: 'string',
+          title: 'Thể loại tùy chỉnh',
+        }),
+      ],
     }),
     defineField({
       name: 'aspectRatio',
