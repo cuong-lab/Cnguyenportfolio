@@ -90,7 +90,7 @@ function fixLocalhostUrl(url) {
 }
 
 // Automatically extract high-quality YouTube/Vimeo CDN thumbnail (0s latency)
-function getVideoThumbnail(url) {
+async function getVideoThumbnail(url) {
   if (!url || typeof url !== 'string') return null;
   
   // YouTube
@@ -106,15 +106,24 @@ function getVideoThumbnail(url) {
   const vmMatch = url.match(vmRegExp);
   if (vmMatch && vmMatch[1]) {
     const videoId = vmMatch[1];
+    try {
+      const res = await fetch(`https://vimeo.com/api/oembed.json?url=https%3A//vimeo.com/${videoId}`);
+      if (res.ok) {
+        const data = await res.json();
+        if (data.thumbnail_url) return data.thumbnail_url;
+      }
+    } catch (e) {
+      // fallback
+    }
     return `https://vumbnail.com/${videoId}.jpg`;
   }
 
   return null;
 }
 
-function mapProject(r) {
+async function mapProject(r) {
   const manualCover = coverUrl(r.coverImage);
-  const autoVideoCover = getVideoThumbnail(r.mainVideoUrl) || getVideoThumbnail(r.videoHoverUrl);
+  const autoVideoCover = manualCover ? null : (await getVideoThumbnail(r.mainVideoUrl) || await getVideoThumbnail(r.videoHoverUrl));
 
   return {
     id: r.id,
@@ -145,7 +154,7 @@ export async function getProjects() {
       aspectRatio, coverImage, videoHoverUrl, mainVideoUrl, description
     }`
   );
-  if (rows && rows.length) return rows.map(mapProject);
+  if (rows && rows.length) return await Promise.all(rows.map(mapProject));
   return projectsData.items.map((p) => ({
     id: p.id,
     title: L(p.title),
@@ -175,14 +184,18 @@ export async function getProjectsGroupedByCategory(allProjects = null) {
   if (!allProjects) {
     allProjects = await getProjects();
   }
+  
+  const cats = await safeFetch('*[_type == "category"] | order(orderRank) { title }');
+  const orderedCatNames = cats && cats.length ? cats.map((c) => c.title) : [];
+
   const groupMap = new Map();
 
   allProjects.forEach((project) => {
-    const cats = Array.isArray(project.categories) && project.categories.length > 0
+    const catsArr = Array.isArray(project.categories) && project.categories.length > 0
       ? project.categories
       : ['Khác'];
 
-    cats.forEach((catName) => {
+    catsArr.forEach((catName) => {
       if (!groupMap.has(catName)) {
         groupMap.set(catName, []);
       }
@@ -190,10 +203,18 @@ export async function getProjectsGroupedByCategory(allProjects = null) {
     });
   });
 
-  return Array.from(groupMap.entries()).map(([name, items]) => ({
-    name,
-    projects: items,
-  }));
+  return Array.from(groupMap.entries())
+    .sort(([nameA], [nameB]) => {
+      let idxA = orderedCatNames.indexOf(nameA);
+      let idxB = orderedCatNames.indexOf(nameB);
+      if (idxA === -1) idxA = 999;
+      if (idxB === -1) idxB = 999;
+      return idxA - idxB;
+    })
+    .map(([name, items]) => ({
+      name,
+      projects: items,
+    }));
 }
 
 // ---------- Resume experiences ----------
