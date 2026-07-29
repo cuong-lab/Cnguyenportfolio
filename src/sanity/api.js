@@ -216,7 +216,7 @@ export async function getResumeExperiences() {
 export async function getResumePage() {
   const row = await safeFetch(
     `*[_type == "resume_page"][0]{
-      avatar, eyebrow, title, bioText, strengths, skillsHeading, skills, experienceHeading
+      avatar, eyebrow, title, bioText, strengths, skillsHeading, skills, languagesHeading, languages, hobbiesHeading, hobbies, experienceHeading
     }`
   );
   if (row) {
@@ -228,6 +228,10 @@ export async function getResumePage() {
       strengths: Array.isArray(row.strengths) && row.strengths.length ? row.strengths : aboutData.strengths.map(L),
       skillsHeading: row.skillsHeading || L(aboutData.skillsHeading),
       skills: Array.isArray(row.skills) && row.skills.length ? row.skills : aboutData.skills,
+      languagesHeading: row.languagesHeading || L(aboutData.languagesHeading),
+      languages: Array.isArray(row.languages) && row.languages.length ? row.languages : aboutData.languages,
+      hobbiesHeading: row.hobbiesHeading || L(aboutData.hobbiesHeading),
+      hobbies: Array.isArray(row.hobbies) && row.hobbies.length ? row.hobbies : aboutData.hobbies,
       experienceHeading: row.experienceHeading || L(aboutData.experienceHeading),
     };
   }
@@ -239,6 +243,10 @@ export async function getResumePage() {
     strengths: aboutData.strengths.map(L),
     skillsHeading: L(aboutData.skillsHeading),
     skills: aboutData.skills,
+    languagesHeading: L(aboutData.languagesHeading),
+    languages: aboutData.languages,
+    hobbiesHeading: L(aboutData.hobbiesHeading),
+    hobbies: aboutData.hobbies,
     experienceHeading: L(aboutData.experienceHeading),
   };
 }

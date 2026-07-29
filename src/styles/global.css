@@ -3938,3 +3938,95 @@ body::after {
     gap: 16px !important;
   }
 }
+
+/* 17. Resume Two-Column Layout & Skill Bars */
+.resume-two-column {
+  display: grid;
+  grid-template-columns: 1fr 340px;
+  gap: 48px;
+  margin-top: 24px;
+}
+
+@media (max-width: 900px) {
+  .resume-two-column {
+    grid-template-columns: 1fr;
+    gap: 40px;
+  }
+}
+
+.resume-sidebar {
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+}
+
+.sidebar-section {
+  display: flex;
+  flex-direction: column;
+}
+
+.sidebar-heading {
+  font-family: "Hanken Grotesk", sans-serif;
+  font-size: 1.15rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text);
+  margin-bottom: 24px;
+}
+
+.sidebar-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding: 0;
+  margin: 0;
+}
+
+.sidebar-item {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.skill-name {
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: var(--muted);
+}
+
+.skill-bars {
+  display: flex;
+  gap: 4px;
+  width: 100%;
+}
+
+.skill-bar-segment {
+  height: 6px;
+  flex: 1;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 1px;
+}
+
+.skill-bar-segment.filled {
+  background: #f59e0b; /* Amber */
+}
+
+/* Adjust hobbies list to just text */
+.sidebar-list.hobbies-list {
+  gap: 12px;
+}
+
+.hobby-item {
+  position: relative;
+  padding-left: 16px;
+}
+
+.hobby-item::before {
+  content: "•";
+  position: absolute;
+  left: 0;
+  top: 0;
+  color: var(--text);
+}

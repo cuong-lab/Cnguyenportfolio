@@ -52,58 +52,99 @@ const [experiences, resumeContent] = await Promise.all([
         </div>
       </section>
 
-      <!-- Skills Section -->
-      <section class="section resume-skills-section reveal">
-        <div class="section-heading">
-          <p class="section-tag">[ KỸ NĂNG ]</p>
-          <h2>{resumeContent.skillsHeading}</h2>
-        </div>
-        <div class="skills-pills reveal-stagger">
-          {resumeContent.skills.map((skill) => (
-            <span class="skill-pill">{skill}</span>
-          ))}
-        </div>
-      </section>
-
-      <!-- Experience Timeline Section -->
-      <section id="resume-experience" class="section resume-experience-section reveal">
-        <div class="section-heading">
-          <p class="section-tag">[ KINH NGHIỆM ]</p>
-          <h2>{resumeContent.experienceHeading}</h2>
-        </div>
-        <div class="resume-timeline">
-          {experiences.map((exp) => (
-            <article class="resume-timeline-item reveal-stagger">
-              <div class="timeline-marker"></div>
-              <div class="timeline-content">
-                <div class="timeline-header">
-                  <h3 class="timeline-company">{exp.company}</h3>
-                  <span class="timeline-date">{exp.timeframe}</span>
-                </div>
-                <h4 class="timeline-role">{exp.role}</h4>
-                
-                <p class="timeline-desc">{exp.description}</p>
-                
-                <div class="timeline-meta">
-                  <div class="meta-group">
-                    <strong>{t('resume.outcomes')}:</strong>
-                    <p>{exp.outcomes}</p>
-                  </div>
-                  
-                  <div class="meta-group tags">
-                    <strong>{t('resume.skills')}:</strong>
-                    <div class="resume-tags">
-                      {exp.skills.map((tag) => (
-                        <span class="tag">{tag}</span>
-                      ))}
+      <div class="resume-two-column">
+        <!-- Experience Timeline Section (Left) -->
+        <div class="resume-left-col">
+          <section id="resume-experience" class="section resume-experience-section reveal">
+            <div class="section-heading">
+              <p class="section-tag">[ KINH NGHIỆM ]</p>
+              <h2>{resumeContent.experienceHeading}</h2>
+            </div>
+            <div class="resume-timeline">
+              {experiences.map((exp) => (
+                <article class="resume-timeline-item reveal-stagger">
+                  <div class="timeline-marker"></div>
+                  <div class="timeline-content">
+                    <div class="timeline-header">
+                      <h3 class="timeline-company">{exp.company}</h3>
+                      <span class="timeline-date">{exp.timeframe}</span>
+                    </div>
+                    <h4 class="timeline-role">{exp.role}</h4>
+                    
+                    <p class="timeline-desc">{exp.description}</p>
+                    
+                    <div class="timeline-meta">
+                      <div class="meta-group">
+                        <strong>{t('resume.outcomes')}:</strong>
+                        <p>{exp.outcomes}</p>
+                      </div>
+                      
+                      <div class="meta-group tags">
+                        <strong>{t('resume.skills')}:</strong>
+                        <div class="resume-tags">
+                          {exp.skills.map((tag) => (
+                            <span class="tag">{tag}</span>
+                          ))}
+                        </div>
+                      </div>
                     </div>
                   </div>
-                </div>
-              </div>
-            </article>
-          ))}
+                </article>
+              ))}
+            </div>
+          </section>
         </div>
-      </section>
+
+        <!-- Sidebar Section (Right) -->
+        <aside class="resume-sidebar reveal">
+          <section class="sidebar-section">
+            <h2 class="sidebar-heading">{resumeContent.skillsHeading}</h2>
+            <ul class="sidebar-list">
+              {resumeContent.skills.map((skill) => (
+                <li class="sidebar-item">
+                  <span class="skill-name">{skill.name}</span>
+                  <div class="skill-bars" aria-label={`Level ${skill.level} out of 5`}>
+                    {[1, 2, 3, 4, 5].map((n) => (
+                      <div class:list={['skill-bar-segment', { filled: n <= skill.level }]}></div>
+                    ))}
+                  </div>
+                </li>
+              ))}
+            </ul>
+          </section>
+
+          {resumeContent.languages && resumeContent.languages.length > 0 && (
+            <section class="sidebar-section">
+              <h2 class="sidebar-heading">{resumeContent.languagesHeading}</h2>
+              <ul class="sidebar-list">
+                {resumeContent.languages.map((lang) => (
+                  <li class="sidebar-item">
+                    <span class="skill-name">{lang.name}</span>
+                    <div class="skill-bars" aria-label={`Level ${lang.level} out of 5`}>
+                      {[1, 2, 3, 4, 5].map((n) => (
+                        <div class:list={['skill-bar-segment', { filled: n <= lang.level }]}></div>
+                      ))}
+                    </div>
+                  </li>
+                ))}
+              </ul>
+            </section>
+          )}
+
+          {resumeContent.hobbies && resumeContent.hobbies.length > 0 && (
+            <section class="sidebar-section">
+              <h2 class="sidebar-heading">{resumeContent.hobbiesHeading}</h2>
+              <ul class="sidebar-list hobbies-list">
+                {resumeContent.hobbies.map((hobby) => (
+                  <li class="sidebar-item hobby-item">
+                    <span class="skill-name">{hobby}</span>
+                  </li>
+                ))}
+              </ul>
+            </section>
+          )}
+        </aside>
+      </div>
       
     </div>
   </main>

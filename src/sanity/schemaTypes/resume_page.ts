@@ -29,20 +29,64 @@ export default defineType({
       type: 'blockContent',
     }),
     defineField({
-      name: 'strengths',
-      title: 'Danh sách Điểm mạnh',
-      type: 'array',
-      of: [defineArrayMember({ type: 'string' })],
-    }),
-    defineField({
-      name: 'skillsHeading',
-      title: 'Tiêu đề Kỹ năng',
       type: 'string',
       initialValue: 'Công cụ làm việc hằng ngày.',
     }),
     defineField({
       name: 'skills',
       title: 'Danh sách Kỹ năng (Công cụ)',
+      type: 'array',
+      of: [
+        defineArrayMember({
+          type: 'object',
+          fields: [
+            defineField({ name: 'name', title: 'Tên kỹ năng', type: 'string' }),
+            defineField({
+              name: 'level',
+              title: 'Mức độ (1-5)',
+              type: 'number',
+              validation: (rule) => rule.min(1).max(5),
+            }),
+          ],
+          preview: { select: { title: 'name', subtitle: 'level' } }
+        }),
+      ],
+    }),
+    defineField({
+      name: 'languagesHeading',
+      title: 'Tiêu đề Ngôn ngữ',
+      type: 'string',
+      initialValue: 'LANGUAGES',
+    }),
+    defineField({
+      name: 'languages',
+      title: 'Ngôn ngữ',
+      type: 'array',
+      of: [
+        defineArrayMember({
+          type: 'object',
+          fields: [
+            defineField({ name: 'name', title: 'Tên ngôn ngữ', type: 'string' }),
+            defineField({
+              name: 'level',
+              title: 'Mức độ (1-5)',
+              type: 'number',
+              validation: (rule) => rule.min(1).max(5),
+            }),
+          ],
+          preview: { select: { title: 'name', subtitle: 'level' } }
+        }),
+      ],
+    }),
+    defineField({
+      name: 'hobbiesHeading',
+      title: 'Tiêu đề Sở thích',
+      type: 'string',
+      initialValue: 'Sở thích',
+    }),
+    defineField({
+      name: 'hobbies',
+      title: 'Sở thích',
       type: 'array',
       of: [defineArrayMember({ type: 'string' })],
     }),

@@ -36,18 +36,34 @@
   ],
   "skillsEyebrow": { "vi": "Kỹ năng", "en": "Skills" },
   "skillsHeading": {
-    "vi": "Bộ kỹ năng cốt lõi.",
-    "en": "Core skill set."
+    "vi": "SKILLS",
+    "en": "SKILLS"
   },
   "skills": [
-    "Video Editing",
-    "Color Grading",
-    "Sound Design",
-    "Motion Graphics",
-    "Asset Management",
-    "Quality Assurance",
-    "Creative Collaboration",
-    "Filming"
+    { "name": "Video Editing", "level": 5 },
+    { "name": "Color Grading", "level": 4 },
+    { "name": "Sound Design", "level": 3 },
+    { "name": "Motion Graphics", "level": 3 },
+    { "name": "Asset Management", "level": 5 },
+    { "name": "Quality Assurance", "level": 5 },
+    { "name": "Creative Collaboration", "level": 4 }
+  ],
+  "languagesHeading": {
+    "vi": "LANGUAGES",
+    "en": "LANGUAGES"
+  },
+  "languages": [
+    { "name": "Vietnamese", "level": 5 },
+    { "name": "English", "level": 3 }
+  ],
+  "hobbiesHeading": {
+    "vi": "HOBBIES AND INTERESTS",
+    "en": "HOBBIES AND INTERESTS"
+  },
+  "hobbies": [
+    "Filming",
+    "Movie",
+    "Music"
   ],
   "experienceEyebrow": { "vi": "Kinh nghiệm", "en": "Experience" },
   "experienceHeading": {
