@@ -89,26 +89,37 @@ function fixLocalhostUrl(url) {
   return url.replace(/^http:\/\/(localhost|127\.0\.0\.1)(:\d+)?/, '');
 }
 
-// Automatically extract high-quality YouTube CDN thumbnail (0s latency)
-function getYouTubeThumbnail(url) {
+// Automatically extract high-quality YouTube/Vimeo CDN thumbnail (0s latency)
+function getVideoThumbnail(url) {
   if (!url || typeof url !== 'string') return null;
-  const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
-  const match = url.match(regExp);
-  if (match && match[2] && match[2].length === 11) {
-    const videoId = match[2];
+  
+  // YouTube
+  const ytRegExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
+  const ytMatch = url.match(ytRegExp);
+  if (ytMatch && ytMatch[2] && ytMatch[2].length === 11) {
+    const videoId = ytMatch[2];
     return `https://img.youtube.com/vi/${videoId}/hqdefault.jpg`;
   }
+
+  // Vimeo
+  const vmRegExp = /vimeo\.com\/(?:video\/)?(\d+)/;
+  const vmMatch = url.match(vmRegExp);
+  if (vmMatch && vmMatch[1]) {
+    const videoId = vmMatch[1];
+    return `https://vumbnail.com/${videoId}.jpg`;
+  }
+
   return null;
 }
 
 function mapProject(r) {
   const manualCover = coverUrl(r.coverImage);
-  const autoYoutubeCover = getYouTubeThumbnail(r.mainVideoUrl) || getYouTubeThumbnail(r.videoHoverUrl);
+  const autoVideoCover = getVideoThumbnail(r.mainVideoUrl) || getVideoThumbnail(r.videoHoverUrl);
 
   return {
     id: r.id,
     title: r.title || '',
-    coverImageUrl: manualCover || autoYoutubeCover,
+    coverImageUrl: manualCover || autoVideoCover,
     // Hover teaser on the card; main video, structured metadata, and full
     // description feed the in-page modal (ProjectModal.astro / portfolio-modal.js).
     videoHoverUrl: fixLocalhostUrl(r.videoHoverUrl) || null,
