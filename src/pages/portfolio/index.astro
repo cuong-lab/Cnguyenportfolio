@@ -45,13 +45,23 @@ const allCategories = categoryGroups.map((g) => g.name);
         )}
 
         <div class="portfolio-category-sections" data-portfolio-sections>
-          {categoryGroups.map((group) => (
+          {categoryGroups.map((group) => {
+            const isReelGroup = group.name.toLowerCase().includes('reel');
+            return (
             <div class="category-group-block" data-category-group={group.name}>
               <div class="category-group-header">
                 <h2 class="category-group-title">[ {group.name.toUpperCase()} ]</h2>
-                <span class="category-group-count">{group.projects.length} dự án</span>
+                <div class="category-header-right">
+                  {isReelGroup && (
+                    <div class="reel-slider-nav">
+                      <button type="button" class="reel-btn reel-prev" aria-label="Previous">&lsaquo;</button>
+                      <button type="button" class="reel-btn reel-next" aria-label="Next">&rsaquo;</button>
+                    </div>
+                  )}
+                  <span class="category-group-count">{group.projects.length} dự án</span>
+                </div>
               </div>
-              <div class="portfolio-grid reveal-stagger" data-portfolio-grid>
+              <div class={isReelGroup ? "portfolio-reel-slider reveal-stagger" : "portfolio-grid reveal-stagger"} data-portfolio-grid={!isReelGroup ? "" : null} data-reel-slider={isReelGroup ? "" : null}>
                 {group.projects.map((project) => {
                   const globalIndex = projectList.findIndex((p) => p.id === project.id);
                   return (
@@ -63,12 +73,13 @@ const allCategories = categoryGroups.map((g) => g.name);
                       cardClass={project.cardClass}
                       categories={project.categories}
                       id={project.id}
+                      aspectRatio={project.aspectRatio}
                     />
                   );
                 })}
               </div>
             </div>
-          ))}
+          )})}
         </div>
       </section>
       

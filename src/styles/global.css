@@ -1409,6 +1409,57 @@ body.modal-open .site-header {
   margin-inline: auto;
 }
 
+/* Optimize layout for Reels on desktop: side-by-side */
+@media (min-width: 768px) {
+  .pm-scroll:has(.pm-player.is-vertical) {
+    display: flex;
+    flex-direction: row;
+    align-items: stretch;
+    gap: 32px;
+    height: calc(100vh - 160px); /* Fill available modal space */
+    max-height: 800px;
+  }
+  
+  .pm-scroll:has(.pm-player.is-vertical) .pm-player {
+    /* Make video fill the height and adjust width automatically */
+    flex: 0 0 auto;
+    height: 100%;
+    max-width: 55%;
+    margin-inline: 0;
+    background: #000;
+    border-radius: 12px;
+  }
+  
+  .pm-scroll:has(.pm-player.is-vertical) .pm-info {
+    margin-top: 0;
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    /* A subtle background to match the "box" feel in the sketch */
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: 12px;
+    padding: 24px;
+    overflow-y: auto; /* Allow description to scroll independently if it's too long */
+    scrollbar-width: none; /* Hide scrollbar for cleaner look */
+  }
+
+  .pm-scroll:has(.pm-player.is-vertical) .pm-info::-webkit-scrollbar {
+    display: none;
+  }
+
+  .pm-scroll:has(.pm-player.is-vertical) .pm-info-head {
+    flex-direction: column-reverse;
+    align-items: flex-end;
+    gap: 24px;
+  }
+
+  .pm-scroll:has(.pm-player.is-vertical) .pm-title {
+    align-self: flex-start;
+  }
+}
+
 .pm-player iframe,
 .pm-player video,
 .pm-player img {
@@ -3893,8 +3944,20 @@ body::after {
 
 /* 16. Category Grouping Layout & Desktop 5-Column Grid */
 .category-group-block {
-  margin-top: 160px; /* Tăng khoảng cách để tách biệt với thanh filter (Tất cả, Khác,...) */
-  margin-bottom: 80px;
+  margin-top: 80px;
+  margin-bottom: 60px;
+}
+
+/* Vertical card for Reels (9:16 aspect ratio) */
+.portfolio-card.is-vertical-card .card-media-wrapper {
+  aspect-ratio: 9 / 16;
+}
+
+.portfolio-card.is-vertical-card .card-cover,
+.portfolio-card.is-vertical-card .card-video,
+.portfolio-card.is-vertical-card .card-cover-placeholder {
+  aspect-ratio: 9 / 16;
+  object-fit: cover;
 }
 
 .category-group-header {
@@ -3929,6 +3992,84 @@ body::after {
 }
 
 /* 5-Column Desktop Grid for Portfolio */
+@media (max-width: 599px) {
+  .portfolio-grid {
+    display: grid !important;
+    grid-template-columns: repeat(1, 1fr) !important;
+    gap: 24px !important;
+  }
+}
+
+/* Reel Horizontal Slider */
+.portfolio-reel-slider {
+  display: flex;
+  overflow-x: auto;
+  gap: 16px;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  padding-bottom: 8px; /* space for potential outline/shadows */
+}
+
+.portfolio-reel-slider::-webkit-scrollbar {
+  display: none;
+}
+
+.portfolio-reel-slider .portfolio-card {
+  flex: 0 0 calc(20% - 12.8px); /* 5 cards visible (gap 16px * 4 = 64px / 5 = 12.8) */
+  scroll-snap-align: start;
+}
+
+@media (max-width: 1199px) {
+  .portfolio-reel-slider .portfolio-card {
+    flex: 0 0 calc(33.333% - 10.6px);
+  }
+}
+
+@media (max-width: 899px) {
+  .portfolio-reel-slider .portfolio-card {
+    flex: 0 0 calc(50% - 8px);
+  }
+}
+
+@media (max-width: 599px) {
+  .portfolio-reel-slider .portfolio-card {
+    flex: 0 0 75%;
+  }
+}
+
+.category-header-right {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.reel-slider-nav {
+  display: flex;
+  gap: 8px;
+}
+
+.reel-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.05);
+  color: var(--text);
+  font-size: 1.2rem;
+  line-height: 1;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.reel-btn:hover {
+  background: rgba(var(--accent-rgb), 0.2);
+  border-color: rgba(var(--accent-rgb), 0.5);
+}
+
 @media (min-width: 1200px) {
   .portfolio-grid {
     display: grid !important;

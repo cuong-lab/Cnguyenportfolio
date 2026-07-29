@@ -24,3 +24,24 @@ if (pills.length) {
     });
   });
 }
+
+// Reel Slider Navigation
+const reelSliders = document.querySelectorAll('[data-reel-slider]');
+reelSliders.forEach(slider => {
+  const block = slider.closest('.category-group-block');
+  if (!block) return;
+  const prevBtn = block.querySelector('.reel-prev');
+  const nextBtn = block.querySelector('.reel-next');
+  
+  if (prevBtn && nextBtn) {
+    const scrollAmount = 300; // rough width of a card + gap
+    
+    prevBtn.addEventListener('click', () => {
+      slider.scrollBy({ left: -scrollAmount, behavior: 'smooth' });
+    });
+    
+    nextBtn.addEventListener('click', () => {
+      slider.scrollBy({ left: scrollAmount, behavior: 'smooth' });
+    });
+  }
+});

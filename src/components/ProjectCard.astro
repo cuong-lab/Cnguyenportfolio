@@ -9,8 +9,9 @@ interface Props {
   cardClass?: string | null;
   categories?: string[];
   id?: string;
+  aspectRatio?: string | null;
 }
-const { title, index, coverImageUrl, videoHoverUrl, cardClass, categories = [], id } = Astro.props;
+const { title, index, coverImageUrl, videoHoverUrl, cardClass, categories = [], id, aspectRatio } = Astro.props;
 
 const categoryData = categories.join('|');
 const COVER_W = 1600;
@@ -19,7 +20,7 @@ const COVER_H = 900;
 
 <button
   type="button"
-  class:list={['portfolio-card', cardClass]}
+  class:list={['portfolio-card', cardClass, aspectRatio === '9:16' && 'is-vertical-card']}
   data-index={index}
   data-categories={categoryData}
   aria-label={title}
