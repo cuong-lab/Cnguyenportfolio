@@ -2484,7 +2484,7 @@ body::after {
   padding: 24px;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  justify-content: flex-end;
   z-index: 2;
   transition: opacity 0.3s ease;
 }
@@ -3869,7 +3869,8 @@ body::after {
 
 /* 16. Category Grouping Layout & Desktop 5-Column Grid */
 .category-group-block {
-  margin-bottom: 48px;
+  margin-top: 96px;
+  margin-bottom: 80px;
 }
 
 .category-group-header {
@@ -3877,8 +3878,8 @@ body::after {
   align-items: center;
   justify-content: space-between;
   gap: 16px;
-  margin-bottom: 20px;
-  padding-bottom: 12px;
+  margin-bottom: 32px;
+  padding-bottom: 16px;
   border-bottom: 1px solid rgba(255, 255, 255, 0.08);
 }
 
