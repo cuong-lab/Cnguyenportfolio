@@ -6,12 +6,15 @@ import ProjectCard from '../../components/ProjectCard.astro';
 import ProjectModal from '../../components/ProjectModal.astro';
 import { getLocale, useTranslations, localize as L } from '../../i18n/utils';
 import { projects } from '../../data';
-import { getProjects, getProjectsGroupedByCategory } from '../../sanity/api.js';
+import { getProjects, getProjectsGroupedByCategory, getPortfolioPage } from '../../sanity/api.js';
 
 const locale = getLocale(Astro.url);
 const t = useTranslations(locale);
 
-const projectList = await getProjects();
+const [projectList, portfolioPage] = await Promise.all([
+  getProjects(),
+  getPortfolioPage(),
+]);
 const categoryGroups = await getProjectsGroupedByCategory(projectList);
 
 const allCategories = categoryGroups.map((g) => g.name);
@@ -25,8 +28,11 @@ const allCategories = categoryGroups.map((g) => g.name);
     <div class="editorial-container">
       <section class="section portfolio reveal">
         <div class="editorial-header">
-          <div class="section-tag">[ PORTFOLIO ]</div>
-          <h1 class="editorial-title">{L(projects.heading, locale)}</h1>
+          <div class="section-tag">{portfolioPage.eyebrow}</div>
+          <h1 class="editorial-title">{portfolioPage.heading}</h1>
+          {portfolioPage.description && (
+            <p class="editorial-description">{portfolioPage.description}</p>
+          )}
         </div>
 
         {allCategories.length > 0 && (

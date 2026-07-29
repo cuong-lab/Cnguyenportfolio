@@ -2748,6 +2748,14 @@ body::after {
   line-height: 1.15;
 }
 
+.editorial-description {
+  font-size: 1.05rem;
+  line-height: 1.7;
+  color: var(--muted);
+  max-width: 720px;
+  margin-top: 20px;
+}
+
 .editorial-action {
   display: flex;
   justify-content: flex-start;

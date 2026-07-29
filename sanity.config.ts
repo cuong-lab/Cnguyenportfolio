@@ -41,6 +41,12 @@ export default defineConfig({
               .child(
                 S.document().schemaType('resume_page').documentId('resume_page')
               ),
+            S.listItem()
+              .title('Trang Portfolio (Dự án)')
+              .id('portfolio_page')
+              .child(
+                S.document().schemaType('portfolio_page').documentId('portfolio_page')
+              ),
             S.divider(),
             orderableDocumentListDeskItem({
               type: 'project',
@@ -60,12 +66,12 @@ export default defineConfig({
   schema: {
     types: schemaTypes,
     // Hide the singletons from the global "create new" menu.
-    templates: (templates) => templates.filter((t) => !['site_settings', 'homePage', 'resume_page'].includes(t.schemaType)),
+    templates: (templates) => templates.filter((t) => !['site_settings', 'homePage', 'resume_page', 'portfolio_page'].includes(t.schemaType)),
   },
   document: {
     // Prevent duplicating / creating extra singleton documents.
     actions: (actions, context) =>
-      ['site_settings', 'homePage', 'resume_page'].includes(context.schemaType)
+      ['site_settings', 'homePage', 'resume_page', 'portfolio_page'].includes(context.schemaType)
         ? actions.filter(({ action }) => action !== 'duplicate' && action !== 'delete')
         : actions,
   },

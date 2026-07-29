@@ -326,3 +326,24 @@ export async function getSiteSettings() {
     contactBanner: { tag: '[ 04 / CONTACT ]', title: null, text: null },
   };
 }
+
+// ---------- Portfolio Page (singleton) ----------
+export async function getPortfolioPage() {
+  const row = await safeFetch(
+    `*[_id in ["portfolio_page", "drafts.portfolio_page"]] | order(_updatedAt desc)[0]{
+      eyebrow, heading, description
+    }`
+  );
+  if (row) {
+    return {
+      eyebrow: row.eyebrow || '[ PORTFOLIO ]',
+      heading: row.heading || 'Toàn bộ dự án quay dựng và chụp ảnh.',
+      description: row.description || null,
+    };
+  }
+  return {
+    eyebrow: '[ PORTFOLIO ]',
+    heading: 'Toàn bộ dự án quay dựng và chụp ảnh.',
+    description: null,
+  };
+}
