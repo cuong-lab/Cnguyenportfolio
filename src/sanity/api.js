@@ -156,6 +156,29 @@ export async function getFeaturedProjects(limit = 3) {
   return (featured.length ? featured : all).slice(0, limit);
 }
 
+export async function getProjectsGroupedByCategory() {
+  const allProjects = await getProjects();
+  const groupMap = new Map();
+
+  allProjects.forEach((project) => {
+    const cats = Array.isArray(project.categories) && project.categories.length > 0
+      ? project.categories
+      : ['Khác'];
+
+    cats.forEach((catName) => {
+      if (!groupMap.has(catName)) {
+        groupMap.set(catName, []);
+      }
+      groupMap.get(catName).push(project);
+    });
+  });
+
+  return Array.from(groupMap.entries()).map(([name, items]) => ({
+    name,
+    projects: items,
+  }));
+}
+
 // ---------- Resume experiences ----------
 export async function getResumeExperiences() {
   const rows = await safeFetch(

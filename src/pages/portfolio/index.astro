@@ -1,16 +1,22 @@
 ---
+export const prerender = false;
+
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import ProjectCard from '../../components/ProjectCard.astro';
 import ProjectModal from '../../components/ProjectModal.astro';
 import { getLocale, useTranslations, localize as L } from '../../i18n/utils';
 import { projects } from '../../data';
-import { getProjects } from '../../sanity/api.js';
+import { getProjects, getProjectsGroupedByCategory } from '../../sanity/api.js';
 
 const locale = getLocale(Astro.url);
 const t = useTranslations(locale);
 
-const projectList = await getProjects();
-const allCategories = [...new Set(projectList.flatMap((p) => p.categories || []))];
+const [projectList, categoryGroups] = await Promise.all([
+  getProjects(),
+  getProjectsGroupedByCategory(),
+]);
+
+const allCategories = categoryGroups.map((g) => g.name);
 ---
 
 <BaseLayout
@@ -34,17 +40,27 @@ const allCategories = [...new Set(projectList.flatMap((p) => p.categories || [])
           </div>
         )}
 
-        <div class="portfolio-grid reveal-stagger" data-portfolio-grid>
-          {projectList.map((project, i) => (
-            <ProjectCard
-              title={project.title}
-              index={i}
-              coverImageUrl={project.coverImageUrl}
-              videoHoverUrl={project.videoHoverUrl}
-              cardClass={project.cardClass}
-              categories={project.categories}
-              id={project.id}
-            />
+        <div class="portfolio-category-sections" data-portfolio-sections>
+          {categoryGroups.map((group) => (
+            <div class="category-group-block" data-category-group={group.name}>
+              <div class="category-group-header">
+                <h2 class="category-group-title">[ {group.name.toUpperCase()} ]</h2>
+                <span class="category-group-count">{group.projects.length} dự án</span>
+              </div>
+              <div class="portfolio-grid reveal-stagger" data-portfolio-grid>
+                {group.projects.map((project, i) => (
+                  <ProjectCard
+                    title={project.title}
+                    index={i}
+                    coverImageUrl={project.coverImageUrl}
+                    videoHoverUrl={project.videoHoverUrl}
+                    cardClass={project.cardClass}
+                    categories={project.categories}
+                    id={project.id}
+                  />
+                ))}
+              </div>
+            </div>
           ))}
         </div>
       </section>
