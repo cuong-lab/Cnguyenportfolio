@@ -5,7 +5,7 @@ import { loadEnv } from 'vite';
 import sitemap from '@astrojs/sitemap';
 import sanity from '@sanity/astro';
 import react from '@astrojs/react';
-import node from '@astrojs/node';
+import vercel from '@astrojs/vercel';
 
 // Read Sanity env at config time. loadEnv (empty prefix) picks up SANITY_* from
 // .env even though they aren't PUBLIC_-prefixed. Falls back to a syntactically
@@ -83,7 +83,7 @@ const SANITY_ALIAS = [
 ].filter((entry) => entry.replacement);
 
 export default defineConfig({
-  adapter: node({ mode: 'standalone' }),
+  adapter: vercel(),
   // TODO: replace with the real production domain once deployed — required
   // for @astrojs/sitemap to emit absolute URLs in sitemap.xml.
   site: 'https://example.com',
