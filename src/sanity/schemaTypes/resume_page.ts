@@ -29,6 +29,8 @@ export default defineType({
       type: 'blockContent',
     }),
     defineField({
+      name: 'skillsHeading',
+      title: 'Tiêu đề Kỹ năng',
       type: 'string',
       initialValue: 'Công cụ làm việc hằng ngày.',
     }),
