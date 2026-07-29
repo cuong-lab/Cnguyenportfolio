@@ -101,8 +101,12 @@ export default defineConfig({
     sitemap({ filter: (page) => !page.includes('/admin') }),
   ],
   image: {
-    // Allow astro:assets <Image /> to optimize Sanity-hosted cover images.
-    remotePatterns: [{ protocol: 'https', hostname: 'cdn.sanity.io' }],
+    // Allow astro:assets <Image /> to optimize Sanity-hosted and YouTube cover images.
+    remotePatterns: [
+      { protocol: 'https', hostname: 'cdn.sanity.io' },
+      { protocol: 'https', hostname: 'img.youtube.com' },
+      { protocol: 'https', hostname: 'i.ytimg.com' },
+    ],
   },
   vite: {
     // Expose exactly these two non-secret values to client bundles (the

@@ -84,11 +84,26 @@ function fixLocalhostUrl(url) {
   return url.replace(/^http:\/\/(localhost|127\.0\.0\.1)(:\d+)?/, '');
 }
 
+// Automatically extract high-quality YouTube CDN thumbnail (0s latency)
+function getYouTubeThumbnail(url) {
+  if (!url || typeof url !== 'string') return null;
+  const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
+  const match = url.match(regExp);
+  if (match && match[2] && match[2].length === 11) {
+    const videoId = match[2];
+    return `https://img.youtube.com/vi/${videoId}/hqdefault.jpg`;
+  }
+  return null;
+}
+
 function mapProject(r) {
+  const manualCover = coverUrl(r.coverImage);
+  const autoYoutubeCover = getYouTubeThumbnail(r.mainVideoUrl) || getYouTubeThumbnail(r.videoHoverUrl);
+
   return {
     id: r.id,
     title: r.title || '',
-    coverImageUrl: coverUrl(r.coverImage),
+    coverImageUrl: manualCover || autoYoutubeCover,
     // Hover teaser on the card; main video, structured metadata, and full
     // description feed the in-page modal (ProjectModal.astro / portfolio-modal.js).
     videoHoverUrl: fixLocalhostUrl(r.videoHoverUrl) || null,
