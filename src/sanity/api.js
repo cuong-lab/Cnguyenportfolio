@@ -160,8 +160,10 @@ export async function getFeaturedProjects(limit = 3) {
   return (featured.length ? featured : all).slice(0, limit);
 }
 
-export async function getProjectsGroupedByCategory() {
-  const allProjects = await getProjects();
+export async function getProjectsGroupedByCategory(allProjects = null) {
+  if (!allProjects) {
+    allProjects = await getProjects();
+  }
   const groupMap = new Map();
 
   allProjects.forEach((project) => {

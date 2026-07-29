@@ -11,10 +11,8 @@ import { getProjects, getProjectsGroupedByCategory } from '../../sanity/api.js';
 const locale = getLocale(Astro.url);
 const t = useTranslations(locale);
 
-const [projectList, categoryGroups] = await Promise.all([
-  getProjects(),
-  getProjectsGroupedByCategory(),
-]);
+const projectList = await getProjects();
+const categoryGroups = await getProjectsGroupedByCategory(projectList);
 
 const allCategories = categoryGroups.map((g) => g.name);
 ---
