@@ -2151,7 +2151,7 @@ body::after {
 /* --- Resume Timeline --- */
 .resume-timeline {
   max-width: 800px;
-  margin: 0 auto;
+  margin: 0; /* Align left */
   position: relative;
   padding: 40px 0;
 }
@@ -2161,14 +2161,14 @@ body::after {
   position: absolute;
   top: 0;
   bottom: 0;
-  left: 20px;
+  left: -24px; /* Pushed outside */
   width: 2px;
   background: rgba(255, 255, 255, 0.1);
 }
 
 .resume-timeline-item {
   position: relative;
-  padding-left: 60px;
+  padding-left: 0; /* Cards align flush with heading */
   margin-bottom: 60px;
 }
 
@@ -2178,7 +2178,7 @@ body::after {
 
 .timeline-marker {
   position: absolute;
-  left: 11px;
+  left: -33px; /* -24px line + 1px center offset - 10px half width */
   top: 6px;
   width: 20px;
   height: 20px;
@@ -2277,13 +2277,13 @@ body::after {
 
 @media (max-width: 768px) {
   .resume-timeline::before {
-    left: 10px;
+    left: -16px;
   }
   .resume-timeline-item {
-    padding-left: 40px;
+    padding-left: 0;
   }
   .timeline-marker {
-    left: 1px;
+    left: -24px;
     width: 18px;
     height: 18px;
   }
