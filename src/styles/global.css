@@ -3522,7 +3522,7 @@ body::after {
   pointer-events: none;
 }
 
-/* 5. Film Grain Noise Overlay (Site-Wide High-Definition Cinematic SVG Grain) */
+/* 5. Film Grain Noise Overlay (Site-Wide High-Definition Cinematic SVG Grain - Covers Text 100%) */
 .film-grain-overlay {
   position: fixed !important;
   top: 0 !important;
@@ -3531,11 +3531,11 @@ body::after {
   height: 100vh !important;
   pointer-events: none !important;
   z-index: 9990 !important; /* Placed immediately BELOW .site-header (9999), covering all text and content */
-  opacity: 0.65 !important;
-  mix-blend-mode: overlay !important;
-  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.7' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E") !important;
+  opacity: 0.26 !important;
+  mix-blend-mode: normal !important; /* Renders grain dots directly on top of white text & dark backgrounds */
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E") !important;
   background-repeat: repeat !important;
-  background-size: 180px 180px !important;
+  background-size: 160px 160px !important;
   animation: realGrainFlicker 0.5s steps(4) infinite, cinematicFadePulse 6s ease-in-out infinite !important;
 }
 
@@ -3548,8 +3548,8 @@ body::after {
 }
 
 @keyframes cinematicFadePulse {
-  0%, 100% { opacity: 0.58; }
-  50% { opacity: 0.72; }
+  0%, 100% { opacity: 0.22; }
+  50% { opacity: 0.30; }
 }
 
 /* 6. Footer Layout: Right Cluster (Contact & Social Grouped Together) */
