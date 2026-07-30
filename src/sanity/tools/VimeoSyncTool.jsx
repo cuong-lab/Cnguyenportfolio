@@ -163,21 +163,23 @@ export function VimeoSyncTool() {
                 <Stack space={2}>
                   {result.results.map((res, idx) => (
                     <Card key={idx} padding={3} radius={2} border>
-                      <Text size={1} weight="bold">
-                        🎥 {res.vimeoInfo.title}
-                      </Text>
-                      <Text size={0} muted>
-                        URL: {res.vimeoInfo.vimeoUrl} | Khung hình: {res.vimeoInfo.aspectRatio}
-                      </Text>
-                      {res.sanityDocument?.status === 'already_exists' ? (
-                        <Text size={0} tone="caution">
-                          (Ví dụ này đã tồn tại sẵn trong Sanity, tự động bỏ qua để tránh trùng lặp)
+                      <Stack space={2}>
+                        <Text size={1} weight="bold">
+                          🎥 {res.vimeoInfo.title}
                         </Text>
-                      ) : res.sanityDocument ? (
-                        <Text size={0} tone="positive">
-                          ✨ Đã tạo bài viết mới thành công!
+                        <Text size={0} muted>
+                          URL: {res.vimeoInfo.vimeoUrl} | Khung hình: {res.vimeoInfo.aspectRatio}
                         </Text>
-                      ) : null}
+                        {res.sanityDocument?.status === 'already_exists' ? (
+                          <Text size={0} tone="caution">
+                            (Dự án này đã tồn tại sẵn trong Sanity, tự động bỏ qua để tránh trùng lặp)
+                          </Text>
+                        ) : res.sanityDocument ? (
+                          <Text size={0} tone="positive">
+                            ✨ Đã tạo bài viết mới thành công!
+                          </Text>
+                        ) : null}
+                      </Stack>
                     </Card>
                   ))}
                 </Stack>
