@@ -101,8 +101,8 @@ async function getVideoThumbnail(url) {
   }
 
   // Vimeo
-  const vmRegExp = /vimeo\.com\/(?:video\/)?(\d+)/;
-  const vmMatch = url.match(vmRegExp);
+  const vmRegExp = /vimeo\.com\/(?:.*\/)?(\d+)/;
+  const vmMatch = cleanUrl.match(vmRegExp);
   if (vmMatch && vmMatch[1]) {
     const videoId = vmMatch[1];
     try {
