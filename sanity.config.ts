@@ -4,6 +4,8 @@ import { visionTool } from '@sanity/vision';
 import { orderableDocumentListDeskItem } from '@sanity/orderable-document-list';
 import { schemaTypes } from './src/sanity/schemaTypes';
 
+import { VimeoSyncTool } from './src/sanity/tools/VimeoSyncTool';
+
 // projectId / dataset are injected into the client bundle via vite.define in
 // astro.config.mjs (they read the SANITY_* env vars). Non-secret by nature.
 const projectId = import.meta.env.SANITY_PROJECT_ID as string;
@@ -68,6 +70,14 @@ export default defineConfig({
           ]),
     }),
     visionTool({ defaultApiVersion: apiVersion }),
+  ],
+  tools: (prev) => [
+    ...prev,
+    {
+      name: 'vimeo-sync',
+      title: '🎬 Đồng bộ Vimeo',
+      component: VimeoSyncTool,
+    },
   ],
   schema: {
     types: schemaTypes,
