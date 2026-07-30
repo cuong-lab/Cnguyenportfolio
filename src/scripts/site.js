@@ -202,6 +202,8 @@ if (navToggles.length) {
       if (active) positionIndicator(active);
     });
   }
+}
+
 function onReady(fn) {
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', fn);

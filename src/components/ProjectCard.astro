@@ -1,6 +1,4 @@
 ---
-import { Image } from 'astro:assets';
-
 interface Props {
   title: string;
   index: number;
@@ -13,8 +11,6 @@ interface Props {
 const { title, index, coverImageUrl, cardClass, categories = [], id, aspectRatio } = Astro.props;
 
 const categoryData = categories.join('|');
-const COVER_W = 1600;
-const COVER_H = 900;
 ---
 
 <button
@@ -27,13 +23,12 @@ const COVER_H = 900;
 >
   <div class="card-media-wrapper">
     {coverImageUrl ? (
-      <Image
+      <img
         class="card-cover"
         src={coverImageUrl}
-        width={COVER_W}
-        height={COVER_H}
         alt={title}
         loading="lazy"
+        decoding="async"
       />
     ) : (
       <div class="card-cover-placeholder">
