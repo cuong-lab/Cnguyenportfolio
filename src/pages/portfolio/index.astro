@@ -46,39 +46,54 @@ const allCategories = categoryGroups.map((g) => g.name);
 
         <div class="portfolio-category-sections" data-portfolio-sections>
           {categoryGroups.map((group) => {
-            const isReelGroup = group.name.toLowerCase().includes('reel');
+            const totalItems = group.projects.length;
+            const pageSize = 10; // 5 cols x 2 rows = 10 items per page
+            const pages = [];
+            for (let i = 0; i < totalItems; i += pageSize) {
+              pages.push(group.projects.slice(i, i + pageSize));
+            }
+            const hasMultiplePages = pages.length > 1;
+
             return (
-            <div class="category-group-block" data-category-group={group.name}>
-              <div class="category-group-header">
-                <h2 class="category-group-title">[ {group.name.toUpperCase()} ]</h2>
-                <div class="category-header-right">
-                  {isReelGroup && (
-                    <div class="reel-slider-nav">
-                      <button type="button" class="reel-btn reel-prev" aria-label="Previous">&lsaquo;</button>
-                      <button type="button" class="reel-btn reel-next" aria-label="Next">&rsaquo;</button>
-                    </div>
-                  )}
-                  <span class="category-group-count">{group.projects.length} dự án</span>
+              <div class="category-group-block" data-category-group={group.name}>
+                <div class="category-group-header">
+                  <h2 class="category-group-title">[ {group.name.toUpperCase()} ]</h2>
+                  <div class="category-header-right">
+                    {hasMultiplePages && (
+                      <div class="category-slider-nav">
+                        <button type="button" class="category-btn category-prev" aria-label="Previous 10 projects">&lsaquo;</button>
+                        <button type="button" class="category-btn category-next" aria-label="Next 10 projects">&rsaquo;</button>
+                      </div>
+                    )}
+                    <span class="category-group-count">{totalItems} dự án</span>
+                  </div>
+                </div>
+
+                <div class="category-slider-viewport">
+                  <div class="category-slider-track" data-category-track>
+                    {pages.map((pageProjects, pageIdx) => (
+                      <div class="category-grid-page" data-page-index={pageIdx}>
+                        {pageProjects.map((project) => {
+                          const globalIndex = projectList.findIndex((p) => p.id === project.id);
+                          return (
+                            <ProjectCard
+                              title={project.title}
+                              index={globalIndex !== -1 ? globalIndex : 0}
+                              coverImageUrl={project.coverImageUrl}
+                              cardClass={project.cardClass}
+                              categories={project.categories}
+                              id={project.id}
+                              aspectRatio={project.aspectRatio}
+                            />
+                          );
+                        })}
+                      </div>
+                    ))}
+                  </div>
                 </div>
               </div>
-              <div class={isReelGroup ? "portfolio-reel-slider reveal-stagger" : "portfolio-grid reveal-stagger"} data-portfolio-grid={!isReelGroup ? "" : null} data-reel-slider={isReelGroup ? "" : null}>
-                {group.projects.map((project) => {
-                  const globalIndex = projectList.findIndex((p) => p.id === project.id);
-                  return (
-                    <ProjectCard
-                      title={project.title}
-                      index={globalIndex !== -1 ? globalIndex : 0}
-                      coverImageUrl={project.coverImageUrl}
-                      cardClass={project.cardClass}
-                      categories={project.categories}
-                      id={project.id}
-                      aspectRatio={project.aspectRatio}
-                    />
-                  );
-                })}
-              </div>
-            </div>
-          )})}
+            );
+          })}
         </div>
       </section>
       

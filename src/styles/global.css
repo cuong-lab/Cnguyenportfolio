@@ -2493,6 +2493,84 @@ body::after {
   width: 100%;
 }
 
+/* --- 2-Row Paginated Grid Slider (5 cols x 2 rows = 10 items per page) --- */
+.category-slider-viewport {
+  width: 100%;
+  overflow: hidden;
+  position: relative;
+  padding: 8px 0;
+}
+
+.category-slider-track {
+  display: flex;
+  transition: transform 0.55s cubic-bezier(0.25, 1, 0.5, 1);
+  will-change: transform;
+  width: 100%;
+}
+
+.category-grid-page {
+  flex: 0 0 100%;
+  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  grid-template-rows: repeat(2, auto);
+  gap: 20px;
+}
+
+@media (max-width: 1280px) {
+  .category-grid-page {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+@media (max-width: 992px) {
+  .category-grid-page {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (max-width: 640px) {
+  .category-grid-page {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+  }
+}
+
+/* Category Slider Navigation Buttons */
+.category-slider-nav {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-right: 12px;
+}
+
+.category-btn {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: #fff;
+  font-size: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background 0.2s ease, border-color 0.2s ease, transform 0.2s ease, opacity 0.2s ease;
+  user-select: none;
+}
+
+.category-btn:hover:not(:disabled) {
+  background: rgba(255, 255, 255, 0.18);
+  border-color: rgba(255, 255, 255, 0.3);
+  transform: scale(1.08);
+}
+
+.category-btn:disabled {
+  opacity: 0.25;
+  cursor: not-allowed;
+}
+
 .portfolio-card {
   position: relative;
   width: 100%;

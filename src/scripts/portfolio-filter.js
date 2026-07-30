@@ -25,23 +25,43 @@ if (pills.length) {
   });
 }
 
-// Reel Slider Navigation
-const reelSliders = document.querySelectorAll('[data-reel-slider]');
-reelSliders.forEach(slider => {
-  const block = slider.closest('.category-group-block');
-  if (!block) return;
-  const prevBtn = block.querySelector('.reel-prev');
-  const nextBtn = block.querySelector('.reel-next');
-  
-  if (prevBtn && nextBtn) {
-    const scrollAmount = 300; // rough width of a card + gap
-    
+// 2-Row Paginated Category Slider Navigation
+const categoryBlocks = document.querySelectorAll('.category-group-block');
+categoryBlocks.forEach((block) => {
+  const track = block.querySelector('[data-category-track]');
+  const prevBtn = block.querySelector('.category-prev');
+  const nextBtn = block.querySelector('.category-next');
+  if (!track) return;
+
+  const pages = Array.from(track.querySelectorAll('.category-grid-page'));
+  if (pages.length <= 1) return;
+
+  let currentPage = 0;
+  const maxPage = pages.length - 1;
+
+  const updateSliderState = () => {
+    track.style.transform = `translateX(-${currentPage * 100}%)`;
+    if (prevBtn) prevBtn.disabled = currentPage === 0;
+    if (nextBtn) nextBtn.disabled = currentPage === maxPage;
+  };
+
+  updateSliderState();
+
+  if (prevBtn) {
     prevBtn.addEventListener('click', () => {
-      slider.scrollBy({ left: -scrollAmount, behavior: 'smooth' });
+      if (currentPage > 0) {
+        currentPage--;
+        updateSliderState();
+      }
     });
-    
+  }
+
+  if (nextBtn) {
     nextBtn.addEventListener('click', () => {
-      slider.scrollBy({ left: scrollAmount, behavior: 'smooth' });
+      if (currentPage < maxPage) {
+        currentPage++;
+        updateSliderState();
+      }
     });
   }
 });
