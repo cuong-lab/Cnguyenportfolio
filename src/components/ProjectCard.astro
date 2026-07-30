@@ -1,5 +1,5 @@
 ---
-import { Image } from 'astro:assets';
+
 
 interface Props {
   title: string;
@@ -27,13 +27,14 @@ const COVER_H = 900;
 >
   <div class="card-media-wrapper">
     {coverImageUrl ? (
-      <Image
+      <img
         class="card-cover"
         src={coverImageUrl}
         width={COVER_W}
         height={COVER_H}
         alt={title}
         loading="lazy"
+        decoding="async"
       />
     ) : (
       <div class="card-cover-placeholder">
