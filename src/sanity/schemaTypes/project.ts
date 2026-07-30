@@ -65,12 +65,7 @@ export default defineType({
       type: 'image',
       options: { hotspot: true },
     }),
-    defineField({
-      name: 'videoHoverUrl',
-      title: 'Video hover (WebM/MP4 nhẹ)',
-      type: 'url',
-      description: 'Clip ngắn, nhẹ để preview khi rê chuột vào card.',
-    }),
+
     defineField({
       name: 'mainVideoUrl',
       title: 'Video chính (Vimeo / YouTube)',

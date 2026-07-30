@@ -309,28 +309,6 @@ function initCustomCursor() {
 }
 initCustomCursor();
 
-// Hover-to-play project preview videos. The <video> is muted/loop/playsinline
-// in markup; play on pointer-enter, pause on leave. Delegated on document so it
-// works for both the static home teaser cards and the Supabase-rendered cards
-// that gallery.js injects after this script runs.
-function initHoverVideos() {
-  document.addEventListener('mouseover', (e) => {
-    const card = e.target.closest && e.target.closest('.portfolio-card');
-    if (!card) return;
-    const video = card.querySelector('video');
-    if (video && video.paused) {
-      const p = video.play();
-      if (p && typeof p.catch === 'function') p.catch(() => {});
-    }
-  });
-  document.addEventListener('mouseout', (e) => {
-    const card = e.target.closest && e.target.closest('.portfolio-card');
-    if (!card || card.contains(e.relatedTarget)) return;
-    const video = card.querySelector('video');
-    if (video) video.pause();
-  });
-}
-initHoverVideos();
 
 // Lazy-load images and optimize decoding on supported browsers
 try {

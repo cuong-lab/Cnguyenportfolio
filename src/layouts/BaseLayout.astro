@@ -11,11 +11,15 @@ interface Props {
   description: string;
   initFn?: 'initExplore' | 'initResume';
   mediaGallery?: boolean;
+  ogImage?: string;
 }
-const { title, description, initFn, mediaGallery = false } = Astro.props;
+const { title, description, initFn, mediaGallery = false, ogImage = '/images/og-default.jpg' } = Astro.props;
 
 const locale = getLocale(Astro.url);
 const t = useTranslations(locale);
+
+const canonicalURL = new URL(Astro.url.pathname, Astro.site || Astro.url);
+const resolvedOgImage = new URL(ogImage, Astro.site || Astro.url).toString();
 ---
 
 <!DOCTYPE html>
@@ -25,6 +29,20 @@ const t = useTranslations(locale);
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="description" content={description} />
     <title>{title}</title>
+
+    <!-- Open Graph / Facebook / Zalo -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content={canonicalURL} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:image" content={resolvedOgImage} />
+
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:url" content={canonicalURL} />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={resolvedOgImage} />
     <link rel="icon" type="image/png" href="/favicon.png" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />

@@ -123,7 +123,7 @@ async function getVideoThumbnail(url) {
 
 async function mapProject(r) {
   const manualCover = coverUrl(r.coverImage);
-  const autoVideoCover = manualCover ? null : (await getVideoThumbnail(r.mainVideoUrl) || await getVideoThumbnail(r.videoHoverUrl));
+  const autoVideoCover = manualCover ? null : await getVideoThumbnail(r.mainVideoUrl);
 
   return {
     id: r.id,
@@ -131,7 +131,6 @@ async function mapProject(r) {
     coverImageUrl: manualCover || autoVideoCover,
     // Hover teaser on the card; main video, structured metadata, and full
     // description feed the in-page modal (ProjectModal.astro / portfolio-modal.js).
-    videoHoverUrl: fixLocalhostUrl(r.videoHoverUrl) || null,
     videoUrl: fixLocalhostUrl(r.mainVideoUrl) || null,
     client: r.client || null,
     year: r.year ?? null,
@@ -151,7 +150,7 @@ export async function getProjects() {
     `*[_type == "project"] | order(coalesce(orderRank, "zzz") asc, featured desc, year desc, _createdAt desc){
       "id": _id, title, featured, client, year, role,
       "categories": categories[]->{title},
-      aspectRatio, coverImage, videoHoverUrl, mainVideoUrl, description
+      aspectRatio, coverImage, mainVideoUrl, description
     }`
   );
   if (rows && rows.length) return await Promise.all(rows.map(mapProject));
@@ -159,7 +158,6 @@ export async function getProjects() {
     id: p.id,
     title: L(p.title),
     coverImageUrl: null,
-    videoHoverUrl: null,
     videoUrl: null,
     client: null,
     year: null,
