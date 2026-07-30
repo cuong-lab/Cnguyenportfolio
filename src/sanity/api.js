@@ -183,7 +183,7 @@ export async function getProjectsGroupedByCategory(allProjects = null) {
     allProjects = await getProjects();
   }
   
-  const cats = await safeFetch('*[_type == "category"] | order(orderRank) { title }');
+  const cats = await safeFetch('*[_type == "category"] | order(orderRank asc) { title }');
   const orderedCatNames = cats && cats.length ? cats.map((c) => c.title) : [];
 
   const groupMap = new Map();
