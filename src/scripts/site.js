@@ -202,9 +202,15 @@ if (navToggles.length) {
       if (active) positionIndicator(active);
     });
   }
+function onReady(fn) {
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', fn);
+  } else {
+    fn();
+  }
 }
 
-document.addEventListener('DOMContentLoaded', () => {
+onReady(() => {
   const reveals = document.querySelectorAll('.reveal');
   
   if (isLowEndDevice || isReducedMotion) {
