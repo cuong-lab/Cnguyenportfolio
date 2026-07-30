@@ -94,11 +94,10 @@ async function getVideoThumbnail(url) {
   if (!url || typeof url !== 'string') return null;
   
   // YouTube
-  const ytRegExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
-  const ytMatch = url.match(ytRegExp);
-  if (ytMatch && ytMatch[2] && ytMatch[2].length === 11) {
-    const videoId = ytMatch[2];
-    return `https://img.youtube.com/vi/${videoId}/hqdefault.jpg`;
+  const cleanUrl = url.trim();
+  const ytMatch = cleanUrl.match(/(?:https?:\/\/)?(?:www\.)?(?:youtube\.com\/(?:embed\/|v\/|watch\?v=|shorts\/)|youtu\.be\/)([\w-]{11})/i);
+  if (ytMatch && ytMatch[1]) {
+    return `https://img.youtube.com/vi/${ytMatch[1]}/hqdefault.jpg`;
   }
 
   // Vimeo
