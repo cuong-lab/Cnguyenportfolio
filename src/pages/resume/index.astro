@@ -23,14 +23,8 @@ const [experiences, resumeContent] = await Promise.all([
       <!-- Bio & Profile Section -->
       <section id="about-me" class="section resume-bio-section reveal">
         <div class="bio-layout">
-          {resumeContent.avatarUrl && (
-            <div class="bio-avatar-wrapper">
-              <img src={resumeContent.avatarUrl} alt="Avatar" class="bio-avatar-img" />
-            </div>
-          )}
-          
           <div class="bio-main-content">
-            <p class="section-tag">[ VỀ TÔI ]</p>
+            <p class="section-tag">{resumeContent.eyebrow || '[ VỀ TÔI ]'}</p>
             <h1 class="bio-title">{resumeContent.title}</h1>
             
             <div class="bio-paragraphs">
@@ -48,6 +42,16 @@ const [experiences, resumeContent] = await Promise.all([
                 ))}
               </ul>
             </div>
+          </div>
+
+          <div class="bio-avatar-wrapper">
+            {resumeContent.avatarUrl ? (
+              <img src={resumeContent.avatarUrl} alt="Cường Nguyễn Avatar" class="bio-avatar-img" />
+            ) : (
+              <div class="bio-avatar-placeholder">
+                <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+              </div>
+            )}
           </div>
         </div>
       </section>
