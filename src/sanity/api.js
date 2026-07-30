@@ -252,7 +252,7 @@ export async function getResumePage() {
   );
   if (row) {
     return {
-      avatarUrl: row.avatar ? coverUrl(row.avatar, 600, 600) : null,
+      avatarUrl: row.avatar ? coverUrl(row.avatar, 800, 800) : null,
       eyebrow: row.eyebrow || L(aboutData.eyebrow),
       title: row.title || L(aboutData.title),
       paragraphs: row.bioText && Array.isArray(row.bioText) ? [blocksToText(row.bioText)] : aboutData.paragraphs.map(L),
