@@ -45,7 +45,7 @@ function blocksToText(blocks) {
 }
 
 function coverUrl(source, w = 1600, h = 900) {
-  if (!source) return null;
+  if (!source || !source.asset || (!source.asset._ref && !source.asset.url)) return null;
   try {
     return urlFor(source).width(w).height(h).fit('crop').auto('format').url();
   } catch {
