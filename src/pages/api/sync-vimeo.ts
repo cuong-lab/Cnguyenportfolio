@@ -65,25 +65,62 @@ async function getVimeoInfo(url: string) {
   };
 }
 
+async function fetchUserVimeoVideos(username: string) {
+  const cleanName = username.trim().replace(/^https?:\/\/(www\.)?vimeo\.com\//i, '').replace(/\/.*$/, '');
+  try {
+    const res = await fetch(`https://vimeo.com/api/v2/${cleanName}/videos.json`);
+    if (res.ok) {
+      const items = await res.json();
+      if (Array.isArray(items)) {
+        return items.map((item) => ({
+          videoId: String(item.id),
+          title: item.title || `Vimeo Video ${item.id}`,
+          vimeoUrl: item.url || `https://vimeo.com/${item.id}`,
+          author: item.user_name || null,
+          aspectRatio: (item.height || 9) > (item.width || 16) ? '9:16' : '16:9',
+          thumbnailUrl: item.thumbnail_large || item.thumbnail_medium || `https://vumbnail.com/${item.id}.jpg`,
+        }));
+      }
+    }
+  } catch (e) {
+    // fallback
+  }
+  return [];
+}
+
 export const POST: APIRoute = async ({ request }) => {
   try {
     const body = await request.json();
-    const { url, urls } = body;
+    const { url, urls, username } = body;
 
-    const targetUrls: string[] = Array.isArray(urls) ? urls : url ? [url] : [];
-    if (!targetUrls.length) {
-      return new Response(
-        JSON.stringify({ error: 'Vui lòng cung cấp ít nhất một đường dẫn Vimeo (url hoặc urls).' }),
-        { status: 400, headers: { 'Content-Type': 'application/json' } }
-      );
+    let targetVideoInfos = [];
+
+    if (username && typeof username === 'string' && username.trim()) {
+      targetVideoInfos = await fetchUserVimeoVideos(username);
+      if (!targetVideoInfos.length) {
+        return new Response(
+          JSON.stringify({ error: `Không tìm thấy video công khai nào cho Kênh Vimeo "${username}". Vui lòng kiểm tra lại Tên tài khoản Vimeo!` }),
+          { status: 400, headers: { 'Content-Type': 'application/json' } }
+        );
+      }
+    } else {
+      const targetUrls: string[] = Array.isArray(urls) ? urls : url ? [url] : [];
+      if (!targetUrls.length) {
+        return new Response(
+          JSON.stringify({ error: 'Vui lòng cung cấp Tên Kênh Vimeo (username) hoặc danh sách đường dẫn Vimeo (urls).' }),
+          { status: 400, headers: { 'Content-Type': 'application/json' } }
+        );
+      }
+
+      for (const rawUrl of targetUrls) {
+        const info = await getVimeoInfo(rawUrl);
+        if (info) targetVideoInfos.push(info);
+      }
     }
 
     const importedResults = [];
 
-    for (const rawUrl of targetUrls) {
-      const info = await getVimeoInfo(rawUrl);
-      if (!info) continue;
-
+    for (const info of targetVideoInfos) {
       let sanityDoc = null;
 
       if (client) {
@@ -122,7 +159,7 @@ export const POST: APIRoute = async ({ request }) => {
         results: importedResults,
         message: client
           ? 'Đã đồng bộ thành công các video Vimeo vào Sanity CMS!'
-          : 'Đã trích xuất thông tin video Vimeo thành công! (Vui lòng cấu hình SANITY_WRITE_TOKEN để ghi trực tiếp vào Sanity)',
+          : 'Đã trích xuất danh sách video Vimeo thành công! (Vui lòng cấu hình SANITY_WRITE_TOKEN để ghi trực tiếp vào Sanity)',
       }),
       { status: 200, headers: { 'Content-Type': 'application/json' } }
     );
